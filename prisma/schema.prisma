@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipPlan {
+  MONTHLY
+  QUARTERLY
+  HALF_YEARLY
+  YEARLY
+  CUSTOM
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  ONLINE
+}
+
+enum AdminRole {
+  ADMIN
+  RECEPTIONIST
+}
+
+enum TicketStatus {
+  OPEN
+  CLOSED
+}
+
+enum NotificationType {
+  EXPIRY
+  PAYMENT
+  WORKOUT
+  ANNOUNCEMENT
+  REMINDER
+}
+
+enum FitnessGoal {
+  WEIGHT_LOSS
+  MUSCLE_GAIN
+  MAINTENANCE
+  ENDURANCE
+  GENERAL_FITNESS
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      AdminRole @default(ADMIN)
+  phone     String?
+  avatar    String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activityLogs  ActivityLog[]
+  workoutPlans  WorkoutPlan[]
+}
+
+model Member {
+  id              String        @id @default(cuid())
+  memberId        String        @unique
+  firstName       String
+  lastName        String
+  email           String?
+  phone           String        @unique
+  alternatePhone  String?
+  password        String?
+  dateOfBirth     DateTime?
+  gender          String?
+  address         String?
+  city            String?
+  state           String?
+  pincode         String?
+  emergencyName   String?
+  emergencyPhone  String?
+  emergencyRelation String?
+  photo           String?
+  notes           String?
+  status          MembershipStatus @default(PENDING)
+  joinDate        DateTime        @default(now())
+  isActive        Boolean         @default(true)
+
+  weight          Float?
+  height          Float?
+  bmi             Float?
+  goal            FitnessGoal?
+  fitnessLevel    String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  memberships     Membership[]
+  attendance      Attendance[]
+  payments        Payment[]
+  workoutPlans    WorkoutPlan[]
+  progressLogs    ProgressLog[]
+  progressPhotos  ProgressPhoto[]
+  notifications   Notification[]
+  supportTickets  SupportTicket[]
+}
+
+model Membership {
+  id             String           @id @default(cuid())
+  memberId       String
+  plan           MembershipPlan
+  startDate      DateTime
+  endDate        DateTime
+  status         MembershipStatus @default(ACTIVE)
+  amount         Float
+  discount       Float            @default(0)
+  totalAmount    Float
+  paymentStatus  PaymentStatus    @default(PENDING)
+  notes          String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  member         Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  payments       Payment[]
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  memberId   String
+  date       DateTime @default(now())
+  checkIn    DateTime @default(now())
+  checkOut   DateTime?
+  type       String   @default("check-in")
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, date])
+}
+
+model Payment {
+  id             String         @id @default(cuid())
+  memberId       String
+  membershipId   String?
+  amount         Float
+  method         PaymentMethod
+  status         PaymentStatus  @default(PAID)
+  transactionId  String?        @unique
+  razorpayOrderId String?
+  razorpayPaymentId String?
+  receiptNo      String?
+  notes          String?
+  date           DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  member         Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  membership     Membership?    @relation(fields: [membershipId], references: [id])
+}
+
+model WorkoutPlan {
+  id          String   @id @default(cuid())
+  memberId    String
+  createdBy   String
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  notes       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  createdByAdmin Admin @relation(fields: [createdBy], references: [id])
+
+  exercises   WorkoutExercise[]
+}
+
+model WorkoutExercise {
+  id            String  @id @default(cuid())
+  workoutPlanId String
+  name          String
+  sets          Int?
+  reps          Int?
+  weight        Float?
+  restTime      Int?
+  dayOfWeek     Int
+  order         Int     @default(0)
+  notes         String?
+  completed     Boolean @default(false)
+
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+}
+
+model ProgressLog {
+  id        String   @id @default(cuid())
+  memberId  String
+  weight    Float?
+  bodyFat   Float?
+  chest     Float?
+  waist     Float?
+  hips      Float?
+  arms      Float?
+  thighs    Float?
+  notes     String?
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model ProgressPhoto {
+  id       String @id @default(cuid())
+  memberId String
+  url      String
+  type     String @default("front")
+  date     DateTime @default(now())
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  memberId  String
+  title     String
+  message   String
+  type      NotificationType
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  member    Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model SupportTicket {
+  id          String       @id @default(cuid())
+  memberId    String
+  subject     String
+  message     String
+  status      TicketStatus @default(OPEN)
+  adminReply  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  member      Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model FAQ {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String
+  order     Int     @default(0)
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  admin     Admin    @relation(fields: [adminId], references: [id])
+}
+
+model Setting {
+  id    String @id @default("gym")
+  name  String @default("GymFlow")
+  address String?
+  phone String?
+  email String?
+  website String?
+  currency String @default("INR")
+  timezone String @default("Asia/Kolkata")
+  razorpayKeyId String?
+  razorpayKeySecret String?
+}
