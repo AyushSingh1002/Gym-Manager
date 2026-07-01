@@ -256,69 +256,68 @@ export default function MembersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-ink">Members</h1>
-          <p className="text-sm text-ink-muted mt-1">Manage all gym members</p>
-        </div>
-        <Button onClick={openAddModal}>
-          <Plus className="h-4 w-4" />
-          Add Member
-        </Button>
-      </div>
-
-      <Card>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1">
-              <Input
-                placeholder="Search by name, phone or email..."
-                value={search}
-                onChange={handleSearchChange}
-                icon={<Search className="h-4 w-4" />}
-              />
-            </div>
-            <div className="w-full sm:w-44">
-              <Select
-                options={statusOptions}
-                value={statusFilter}
-                onChange={handleStatusChange}
-              />
-            </div>
-            <div className="w-full sm:w-44">
-              <Select
-                options={planOptions}
-                value={planFilter}
-                onChange={handlePlanChange}
-              />
-            </div>
+    <main className="py-8">
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-ink-primary">Members</h1>
+            <p className="text-sm text-ink-subtle mt-2">Manage and organize all gym members</p>
           </div>
-        </CardContent>
-      </Card>
+          <Button onClick={openAddModal} size="lg">
+            <Plus className="h-5 w-5" />
+            Add Member
+          </Button>
+        </div>
+
+        <Card variant="elevated">
+          <CardContent>
+            <div className="flex flex-col gap-3">
+              <div className="flex-1">
+                <Input
+                  placeholder="Search by name, phone or email..."
+                  value={search}
+                  onChange={handleSearchChange}
+                  icon={<Search className="h-5 w-5" />}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-none sm:flex">
+                <Select
+                  options={statusOptions}
+                  value={statusFilter}
+                  onChange={handleStatusChange}
+                />
+                <Select
+                  options={planOptions}
+                  value={planFilter}
+                  onChange={handlePlanChange}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
       {loading ? (
-        <Card>
-          <CardHeader title="Members" description="Loading..." />
+        <Card variant="elevated">
+          <CardHeader title={`Members (${total})`} description="Loading member data..." />
           <CardContent>
             <TableSkeleton rows={5} />
           </CardContent>
         </Card>
       ) : members.length === 0 ? (
-        <Card>
+        <Card variant="elevated">
           <CardContent>
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
-                <Users className="h-8 w-8 text-ink-tertiary" />
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-surface-2 mb-4">
+                <Users className="h-10 w-10 text-ink-subtle" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-ink">No members found</h3>
-              <p className="mt-2 text-sm text-ink-muted max-w-sm">
+              <h3 className="text-lg font-semibold text-ink-primary">No members found</h3>
+              <p className="mt-2 text-sm text-ink-tertiary max-w-sm">
                 {search || statusFilter || planFilter
                   ? "No members match your search criteria. Try adjusting your filters."
                   : "Get started by adding your first member to the gym."}
               </p>
               {!search && !statusFilter && !planFilter && (
-                <Button onClick={openAddModal} className="mt-4">
+                <Button onClick={openAddModal} className="mt-6">
                   <Plus className="h-4 w-4" />
                   Add Member
                 </Button>
@@ -328,19 +327,19 @@ export default function MembersPage() {
         </Card>
       ) : (
         <>
-          <Card>
+          <Card variant="elevated">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-hairline">
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Name</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Phone</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Email</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Join Date</th>
-                      <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
+                    <tr className="border-b border-hairline bg-surface-2/30">
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Name</th>
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Phone</th>
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Email</th>
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Plan</th>
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Status</th>
+                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Join Date</th>
+                      <th className="text-right px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-hairline">
@@ -349,28 +348,28 @@ export default function MembersPage() {
                       return (
                         <tr
                           key={member.id}
-                          className="border-b border-hairline/50 hover:bg-surface-2/50 cursor-pointer transition-colors"
+                          className="border-b border-hairline/50 hover:bg-surface-2 cursor-pointer transition-colors duration-150"
                           onClick={() => router.push(`/members/${member.id}`)}
                         >
-                          <td className="px-4 py-3">
+                          <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2 text-ink">
+                              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 font-medium text-primary border border-primary/20">
                                 {(member.firstName.charAt(0) + member.lastName.charAt(0)).toUpperCase()}
                               </div>
-                              <span className="font-medium text-ink">
+                              <span className="font-medium text-ink-primary">
                                 {member.firstName} {member.lastName}
                               </span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-sm text-ink-muted">{member.phone}</td>
-                          <td className="px-4 py-3 text-sm text-ink-muted">{member.email || "-"}</td>
-                          <td className="px-4 py-3">{plan ? getPlanLabel(plan.plan) : "-"}</td>
-                          <td className="px-4 py-3">
+                          <td className="px-6 py-4 text-sm text-ink-secondary">{member.phone}</td>
+                          <td className="px-6 py-4 text-sm text-ink-secondary">{member.email || "-"}</td>
+                          <td className="px-6 py-4 text-sm font-medium">{plan ? getPlanLabel(plan.plan) : "-"}</td>
+                          <td className="px-6 py-4">
                             <Badge status={member.status}>{member.status}</Badge>
                           </td>
-                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(member.joinDate)}</td>
-                          <td className="px-4 py-3 text-right">
-                            <div className="flex items-center justify-end gap-1">
+                          <td className="px-6 py-4 text-sm text-ink-secondary">{formatDate(member.joinDate)}</td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -378,6 +377,7 @@ export default function MembersPage() {
                                   e.stopPropagation()
                                   router.push(`/members/${member.id}`)
                                 }}
+                                title="View member details"
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
@@ -388,6 +388,7 @@ export default function MembersPage() {
                                   e.stopPropagation()
                                   openEditModal(member)
                                 }}
+                                title="Edit member"
                               >
                                 <Edit2 className="h-4 w-4" />
                               </Button>

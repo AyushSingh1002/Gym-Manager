@@ -40,58 +40,68 @@ export function Navbar({ admin }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-canvas/80 backdrop-blur-md border-b border-hairline">
-      <div className="flex items-center justify-between h-full px-4 lg:px-6">
-        <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-30 h-16 bg-canvas-secondary/95 backdrop-blur-xl border-b border-hairline shadow-sm">
+      <div className="flex items-center justify-between h-full px-4 lg:px-8">
+        <div className="flex items-center gap-2">
           <button
             onClick={toggleSidebar}
-            className="p-2 rounded-[var(--radius-sm)] text-ink-muted hover:bg-surface-1 hover:text-ink lg:hidden"
+            className="p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden"
+            aria-label="Toggle menu"
           >
-            <Menu className="h-4 w-4" />
+            <Menu className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-[var(--radius-sm)] text-ink-muted hover:bg-surface-1 hover:text-ink transition-colors"
+            className="p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors"
+            aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
 
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative ml-2" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 p-1.5 rounded-[var(--radius-sm)] hover:bg-surface-1 transition-colors"
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] transition-colors",
+                showDropdown ? "bg-surface-2" : "hover:bg-surface-2"
+              )}
             >
-              <div className="w-7 h-7 rounded-full bg-surface-2 flex items-center justify-center">
-                <span className="text-xs font-medium text-ink">
+              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                <span className="text-xs font-semibold text-primary">
                   {getInitials(admin.name)}
                 </span>
               </div>
-              <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-ink">{admin.name}</p>
-                <p className="text-xs text-ink-muted capitalize">{admin.role.toLowerCase()}</p>
+              <div className="hidden md:flex items-center gap-1.5">
+                <div className="text-left">
+                  <p className="text-sm font-medium text-ink-primary leading-tight">{admin.name}</p>
+                  <p className="text-xs text-ink-tertiary capitalize">{admin.role.toLowerCase()}</p>
+                </div>
+                <ChevronDown className={cn(
+                  "h-3.5 w-3.5 text-ink-tertiary transition-transform duration-200",
+                  showDropdown && "rotate-180"
+                )} />
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-ink-tertiary" />
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 rounded-[var(--radius-lg)] border border-hairline bg-surface-1 shadow-[var(--shadow-dropdown)] py-1 animate-fade-slide-down">
-                <div className="px-4 py-2.5 border-b border-hairline">
-                  <p className="text-sm font-medium text-ink">{admin.name}</p>
-                  <p className="text-xs text-ink-muted">{admin.email}</p>
+              <div className="absolute right-0 mt-2 w-56 rounded-[var(--radius-lg)] border border-hairline bg-surface-2 shadow-[var(--shadow-dropdown)] animate-fade-slide-down overflow-hidden">
+                <div className="px-4 py-3.5 border-b border-hairline">
+                  <p className="text-sm font-semibold text-ink-primary">{admin.name}</p>
+                  <p className="text-xs text-ink-tertiary mt-0.5">{admin.email}</p>
                 </div>
-                <div className="py-1">
+                <div className="py-1.5 space-y-0.5">
                   <button
                     onClick={() => { router.push("/settings"); setShowDropdown(false) }}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-ink-muted hover:bg-surface-2 hover:text-ink transition-colors"
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-ink-secondary hover:bg-surface-3 hover:text-ink-primary transition-colors"
                   >
                     Settings
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-semantic-error hover:bg-semantic-error/10 transition-colors"
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-semantic-error hover:bg-semantic-error/10 hover:text-semantic-error-light transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign Out
