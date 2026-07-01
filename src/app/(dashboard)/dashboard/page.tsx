@@ -87,147 +87,154 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-ink">Dashboard</h1>
-          <p className="text-sm text-ink-muted mt-1">Loading your gym overview...</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <CardSkeleton key={i} />
-          ))}
-        </div>
-        <div className="mt-8">
-          <Card>
-            <CardHeader title="Recent Activity" />
-            <CardContent>
-              <div className="space-y-3">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-3 animate-pulse">
-                    <div className="h-8 w-8 rounded-full bg-surface-2" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-3 w-3/4 rounded bg-surface-2" />
-                      <div className="h-2 w-1/2 rounded bg-surface-2" />
+      <main className="py-8">
+        <div className="space-y-8">
+          <div className="space-y-2">
+            <div className="h-8 w-40 rounded-lg bg-surface-2 animate-pulse" />
+            <div className="h-4 w-56 rounded-lg bg-surface-2 animate-pulse" />
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+          <div>
+            <Card variant="elevated">
+              <CardHeader title="Recent Activity" />
+              <CardContent>
+                <div className="space-y-4">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-full bg-surface-2 animate-pulse flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-4 w-3/4 rounded-lg bg-surface-2 animate-pulse" />
+                        <div className="h-3 w-1/2 rounded-lg bg-surface-2 animate-pulse" />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      </main>
     )
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <main className="py-12 flex items-center justify-center min-h-screen">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
-            <AlertCircle className="h-8 w-8 text-semantic-error" />
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-semantic-error/10 mb-4">
+            <AlertCircle className="h-10 w-10 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load dashboard</h2>
-          <p className="mt-2 text-sm text-ink-muted">{error}</p>
+          <h2 className="text-xl font-semibold text-ink-primary">Failed to load dashboard</h2>
+          <p className="mt-2 text-sm text-ink-tertiary">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+            className="mt-6 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors"
           >
             Try again
           </button>
         </div>
-      </div>
+      </main>
     )
   }
 
   if (!data) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <main className="py-12 flex items-center justify-center min-h-screen">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
-            <Activity className="h-8 w-8 text-ink-tertiary" />
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-surface-2 mb-4">
+            <Activity className="h-10 w-10 text-ink-subtle" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-ink">No data available</h2>
-          <p className="mt-2 text-sm text-ink-muted">
+          <h2 className="text-xl font-semibold text-ink-primary">No data available</h2>
+          <p className="mt-2 text-sm text-ink-tertiary">
             Your dashboard will populate once you start adding members and recording activity.
           </p>
         </div>
-      </div>
+      </main>
     )
   }
 
   const { metrics, recentActivities } = data
 
   return (
-    <div className="space-y-6">
-      <div className="animate-fade-slide-up">
-        <h1 className="text-2xl font-bold text-ink">Dashboard</h1>
-        <p className="text-sm text-ink-muted mt-1">Overview of your gym</p>
-      </div>
+    <main className="py-8">
+      <div className="space-y-8 animate-fade-slide-up">
+        <div>
+          <h1 className="text-3xl font-bold text-ink-primary">Dashboard</h1>
+          <p className="text-sm text-ink-subtle mt-2">Welcome back! Here&apos;s your gym&apos;s overview.</p>
+        </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {metricConfig.map(({ key, icon: Icon, color, lightColor }, index) => {
-          const metric = metrics[key]
-          return (
-            <div
-              key={key}
-              className="animate-fade-slide-up"
-              style={{ animationDelay: `${index * 100}ms`, animationFillMode: "backwards" }}
-            >
-              <Card hover>
-                <CardContent>
-                  <div className="flex items-start justify-between">
-                    <div className={`rounded-lg p-2 ${lightColor}`}>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {metricConfig.map(({ key, icon: Icon, color, lightColor }, index) => {
+            const metric = metrics[key]
+            return (
+              <div
+                key={key}
+                className="animate-fade-slide-up"
+                style={{ animationDelay: `${index * 50}ms`, animationFillMode: "backwards" }}
+              >
+                <Card interactive variant="elevated">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`rounded-[var(--radius-md)] p-3 ${lightColor}`}>
                       <Icon className={`h-5 w-5 text-ink`} />
                     </div>
-                    <span className={`inline-block h-2 w-2 rounded-full ${color}`} />
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${color}`} />
                   </div>
-                  <div className="mt-4">
-                    <p className="text-2xl font-bold text-ink">
+                  <div>
+                    <p className="text-3xl font-bold text-ink-primary">
                       {getMetricValue(metric)}
                     </p>
-                    <p className="mt-1 text-xs text-ink-muted">{metric.label}</p>
+                    <p className="mt-1.5 text-xs font-medium text-ink-tertiary">{metric.label}</p>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          )
-        })}
-      </div>
+                </Card>
+              </div>
+            )
+          })}
+        </div>
 
-      <div className="animate-fade-slide-up" style={{ animationDelay: "500ms", animationFillMode: "backwards" }}>
-        <Card>
-          <CardHeader title="Recent Activity" description="Latest actions across your gym" />
-          <CardContent>
-            {recentActivities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <Activity className="h-10 w-10 text-ink-tertiary" />
-                <p className="mt-3 text-sm text-ink-muted">No recent activity</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-hairline">
-                {recentActivities.map((activity) => {
-                  const ActivityIcon = getActivityIcon(activity.action)
-                  return (
-                    <div key={activity.id} className="flex items-start gap-3 py-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2">
-                        <ActivityIcon className="h-4 w-4 text-ink-muted" />
+        <div className="animate-fade-slide-up" style={{ animationDelay: "250ms", animationFillMode: "backwards" }}>
+          <Card variant="elevated">
+            <CardHeader title="Recent Activity" description="Latest actions across your gym" />
+            <CardContent>
+              {recentActivities.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-12 h-12 rounded-full bg-surface-2 flex items-center justify-center mb-3">
+                    <Activity className="h-6 w-6 text-ink-subtle" />
+                  </div>
+                  <p className="text-sm text-ink-tertiary">No recent activity yet</p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {recentActivities.map((activity, idx) => {
+                    const ActivityIcon = getActivityIcon(activity.action)
+                    return (
+                      <div 
+                        key={activity.id} 
+                        className="flex items-start gap-3 p-3 rounded-[var(--radius-md)] hover:bg-surface-2 transition-colors group"
+                      >
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-3 group-hover:bg-primary/10 transition-colors flex-shrink-0">
+                          <ActivityIcon className={`h-4 w-4 ${activity.action === "CREATED" ? "text-semantic-success" : activity.action === "DELETED" ? "text-semantic-error" : "text-ink-tertiary"}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-ink-primary truncate">
+                            {activity.description}
+                          </p>
+                          <p className="text-xs text-ink-subtle mt-1">
+                            {activity.admin.name} &middot; {formatDateTime(activity.createdAt)}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-ink truncate">
-                          {activity.description}
-                        </p>
-                        <p className="text-xs text-ink-muted mt-0.5">
-                          by {activity.admin.name} &middot; {formatDateTime(activity.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    )
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
