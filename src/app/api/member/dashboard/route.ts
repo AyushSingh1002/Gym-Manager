@@ -79,13 +79,6 @@ export async function GET() {
         : null,
       todayAttendance: !!todayAttendance,
       monthAttendanceCount,
-      activeMembership: activeMembership
-        ? {
-            plan: activeMembership.plan,
-            startDate: activeMembership.startDate,
-            endDate: activeMembership.endDate,
-          }
-        : null,
       recentPayments,
       unreadNotifications: unreadCount,
     })

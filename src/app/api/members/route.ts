@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth, logActivity } from "@/lib/auth"
+import { PAGINATION } from "@/lib/constants"
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,8 +11,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || ""
     const status = searchParams.get("status") || ""
     const plan = searchParams.get("plan") || ""
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "10")
+    const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
+    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
@@ -88,15 +89,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const existingMember = await prisma.member.findFirst({ where: { phone } })
+    const [existingMember, count] = await Promise.all([
+      prisma.member.findFirst({ where: { phone } }),
+      prisma.member.count(),
+    ])
     if (existingMember) {
       return NextResponse.json(
         { error: "A member with this phone number already exists" },
         { status: 409 }
       )
     }
-
-    const count = await prisma.member.count()
     const memberId = `GF-${String(count + 1).padStart(6, "0")}`
 
     const member = await prisma.member.create({
@@ -116,7 +118,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    await logActivity(admin.id, "Created member", "Member", member.id, `Created member ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Created member", "Member", member.id, `Created member ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ member }, { status: 201 })
   } catch (error) {

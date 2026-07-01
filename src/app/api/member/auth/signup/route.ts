@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { prisma } from "@/lib/prisma"
-import { createMemberToken, hashPassword } from "@/lib/member-auth"
+import { createMemberToken, hashPassword, setMemberCookie } from "@/lib/member-auth"
+import { PASSWORD_MIN_LENGTH, PHONE_MIN_LENGTH } from "@/lib/constants"
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,14 +14,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (password.length < 6) {
+    if (password.length < PASSWORD_MIN_LENGTH) {
       return NextResponse.json(
-        { error: "Password must be at least 6 characters" },
+        { error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters` },
         { status: 400 }
       )
     }
 
-    if (phone.length < 10) {
+    if (phone.length < PHONE_MIN_LENGTH) {
       return NextResponse.json(
         { error: "Please enter a valid phone number" },
         { status: 400 }
@@ -53,16 +53,18 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    prisma.notification.create({
+      data: {
+        memberId: member.id,
+        title: "Welcome to GymFlow!",
+        message: "Thank you for joining. We're excited to help you on your fitness journey!",
+        type: "ANNOUNCEMENT",
+      },
+    }).catch(err => console.error("Failed to create notification:", err))
+
     const token = await createMemberToken({ id: member.id, phone: member.phone })
 
-    const cookieStore = await cookies()
-    cookieStore.set("member_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    })
+    await setMemberCookie(token)
 
     return NextResponse.json({
       id: member.id,

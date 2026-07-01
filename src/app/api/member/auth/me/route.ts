@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { getCurrentMember } from "@/lib/member-auth"
+import { NextResponse } from "next/server"
+import { getCurrentMember, clearMemberCookie } from "@/lib/member-auth"
 
 export async function GET() {
   try {
@@ -20,14 +19,7 @@ export async function GET() {
 
 export async function DELETE() {
   try {
-    const cookieStore = await cookies()
-    cookieStore.set("member_session", "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 0,
-    })
+    await clearMemberCookie()
 
     return NextResponse.json({ message: "Logged out successfully" })
   } catch (error) {

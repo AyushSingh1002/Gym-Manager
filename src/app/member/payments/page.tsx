@@ -30,7 +30,6 @@ interface MembershipInfo {
 interface DashboardData {
   member: { firstName: string; lastName: string }
   currentMembership: MembershipInfo | null
-  activeMembership: MembershipInfo | null
 }
 
 interface PaymentsResponse {
@@ -123,7 +122,7 @@ export default function MemberPayments() {
 
       const dashboardData: DashboardData = await dashboardRes.json()
       setMemberName(`${dashboardData.member.firstName} ${dashboardData.member.lastName}`)
-      const mem = dashboardData.currentMembership || dashboardData.activeMembership
+      const mem = dashboardData.currentMembership
       if (mem) setMembership(mem)
 
       if (paymentsRes.ok) {

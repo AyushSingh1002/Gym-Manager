@@ -93,7 +93,7 @@ export async function PATCH(
       },
     })
 
-    await logActivity(admin.id, "Updated member", "Member", id, `Updated member ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Updated member", "Member", id, `Updated member ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ member })
   } catch (error) {
@@ -129,7 +129,7 @@ export async function DELETE(
       data: { status: "CANCELLED", isActive: false },
     })
 
-    await logActivity(admin.id, "Deactivated member", "Member", id, `Deactivated member ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Deactivated member", "Member", id, `Deactivated member ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ message: "Member deactivated successfully", member })
   } catch (error) {

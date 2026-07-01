@@ -223,13 +223,16 @@ export default function PaymentsPage() {
   useEffect(() => {
     fetchPayments()
     fetchSummary()
-  }, [fetchPayments, fetchSummary])
+  }, [])
 
   useEffect(() => {
     if (summary && total > 0) {
-      setSummary((prev) => prev ? { ...prev, totalPayments: total } : prev)
+      setSummary((prev) => {
+        if (prev && prev.totalPayments === total) return prev
+        return prev ? { ...prev, totalPayments: total } : prev
+      })
     }
-  }, [total, summary])
+  }, [total])
 
   const openRecordModal = async () => {
     setSelectedMemberId("")

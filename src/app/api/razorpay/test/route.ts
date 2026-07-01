@@ -19,8 +19,6 @@ export async function GET(_request: NextRequest) {
 
     const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64")
     
-    // Test 1: GET /v1/payments (List payments)
-    console.log("Test 1: Checking GET /v1/payments...")
     const getResponse = await fetch("https://api.razorpay.com/v1/payments", {
       method: "GET",
       headers: {
@@ -34,8 +32,6 @@ export async function GET(_request: NextRequest) {
       statusText: getResponse.statusText,
     }
 
-    // Test 2: POST /v1/orders (Create order)
-    console.log("Test 2: Checking POST /v1/orders...")
     const postResponse = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",
       headers: {

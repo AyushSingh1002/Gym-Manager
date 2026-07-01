@@ -50,7 +50,7 @@ function SkeletonBlock() {
       <div className="h-10 w-48 bg-surface-2 rounded" />
       <div className="h-4 w-72 bg-surface-2 rounded" />
       <div className="rounded-xl border border-hairline bg-surface-1 p-6 space-y-4">
-        <div className="h-24 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-950/30 dark:to-purple-950/30 rounded-lg" />
+        <div className="h-24 bg-surface-2 rounded-lg" />
         <div className="flex gap-2">
           {Array.from({ length: 7 }).map((_, i) => (
             <div key={i} className="h-8 w-12 bg-surface-2 rounded" />
@@ -161,7 +161,7 @@ export default function MemberWorkouts() {
             <h1 className="text-2xl font-bold text-ink">My Workout Plans</h1>
             <p className="mt-1 text-sm text-ink-muted">Your personalized training program</p>
           </div>
-          <div className="rounded-xl bg-indigo-500/10 p-3 dark:bg-indigo-400/10">
+          <div className="rounded-xl bg-primary/10 p-3">
             <Dumbbell className="h-6 w-6 text-primary" />
           </div>
         </div>
@@ -195,23 +195,23 @@ export default function MemberWorkouts() {
           <h1 className="text-2xl font-bold text-ink">My Workout Plans</h1>
           <p className="mt-1 text-sm text-ink-muted">Your personalized training program</p>
         </div>
-        <div className="rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-3">
-          <Dumbbell className="h-6 w-6 text-white" />
+        <div className="rounded-xl bg-primary p-3">
+          <Dumbbell className="h-6 w-6 text-on-primary" />
         </div>
       </div>
 
       {/* Active Plan */}
       {activePlan && (
         <Card className="overflow-hidden border-0">
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-6 text-white">
+          <div className="bg-primary p-6 text-on-primary">
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-yellow-300" />
+                  <Sparkles className="h-5 w-5 text-ink-muted" />
                   <h2 className="text-xl font-bold">{activePlan.name}</h2>
                 </div>
                 {activePlan.description && (
-                  <p className="text-sm text-white/80">{activePlan.description}</p>
+                    <p className="text-sm text-on-primary/80">{activePlan.description}</p>
                 )}
               </div>
               <Badge status="ACTIVE">Active</Badge>
@@ -271,7 +271,7 @@ export default function MemberWorkouts() {
                       disabled={!hasExercises}
                       className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                         isActive
-                          ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/25 scale-105"
+                          ? "bg-primary text-on-primary shadow-[var(--shadow-card)] scale-105"
                           : hasExercises
                             ? "bg-surface-2 text-ink-muted hover:bg-surface-2"
                             : "bg-surface-2 text-ink-tertiary cursor-not-allowed"
@@ -279,7 +279,7 @@ export default function MemberWorkouts() {
                     >
                       {day}
                       {hasExercises && isActive && (
-                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-gray-900 animate-pulse" />
+                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-canvas animate-pulse" />
                       )}
                     </button>
                   )
@@ -318,7 +318,7 @@ export default function MemberWorkouts() {
                           key={exercise.id}
                           className={`group rounded-xl border transition-all duration-300 ${
                             completed
-                              ? "border-emerald-200 bg-emerald-50/50 dark:border-emerald-800/50 dark:bg-emerald-950/20"
+                              ? "border-hairline-strong bg-surface-2"
                               : "border-hairline bg-surface-1 hover:border-hairline-strong"
                           } ${isAnimating ? "scale-[0.98] opacity-80" : ""}`}
                         >
@@ -327,7 +327,7 @@ export default function MemberWorkouts() {
                               onClick={() => toggleExercise(exercise.id, completed)}
                               className={`shrink-0 transition-all duration-200 ${
                                 completed
-                                  ? "text-emerald-500 scale-110"
+                                  ? "text-semantic-success scale-110"
                                   : "text-ink-tertiary hover:text-primary"
                               }`}
                             >
@@ -342,7 +342,7 @@ export default function MemberWorkouts() {
                                 <span className="text-xs font-medium text-ink-tertiary">#{exercise.order}</span>
                                 <p className={`text-sm font-semibold truncate ${
                                   completed
-                                    ? "text-emerald-700 line-through dark:text-emerald-400"
+                                    ? "text-ink-muted line-through"
                                     : "text-ink"
                                 }`}>
                                   {exercise.name}

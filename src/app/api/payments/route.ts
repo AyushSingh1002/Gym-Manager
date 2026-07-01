@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth, logActivity } from "@/lib/auth"
 import { generateReceiptNo, getDisplayName } from "@/lib/utils"
+import { PAGINATION } from "@/lib/constants"
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,8 +13,8 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status") || ""
     const from = searchParams.get("from")
     const to = searchParams.get("to")
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "10")
+    const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
+    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
@@ -102,23 +103,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const member = await prisma.member.findUnique({ where: { id: memberId } })
+    const [member, membership] = await Promise.all([
+      prisma.member.findUnique({ where: { id: memberId } }),
+      membershipId ? prisma.membership.findUnique({ where: { id: membershipId } }) : Promise.resolve(null),
+    ])
     if (!member) {
       return NextResponse.json(
         { error: "Member not found" },
         { status: 404 }
       )
     }
-
-    let membership = null
-    if (membershipId) {
-      membership = await prisma.membership.findUnique({ where: { id: membershipId } })
-      if (!membership) {
-        return NextResponse.json(
-          { error: "Membership not found" },
-          { status: 404 }
-        )
-      }
+    if (membershipId && !membership) {
+      return NextResponse.json(
+        { error: "Membership not found" },
+        { status: 404 }
+      )
     }
 
     const receiptNo = generateReceiptNo()
@@ -136,18 +135,19 @@ export async function POST(request: NextRequest) {
     })
 
     if (membership) {
-      await prisma.membership.update({
-        where: { id: membershipId },
-        data: { status: "ACTIVE" },
-      })
-
-      await prisma.member.update({
-        where: { id: memberId },
-        data: { status: "ACTIVE" },
-      })
+      await Promise.all([
+        prisma.membership.update({
+          where: { id: membershipId },
+          data: { status: "ACTIVE" },
+        }),
+        prisma.member.update({
+          where: { id: memberId },
+          data: { status: "ACTIVE" },
+        }),
+      ])
     }
 
-    await logActivity(admin.id, "Recorded payment", "Payment", payment.id, `Recorded payment of ${amount} for ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Recorded payment", "Payment", payment.id, `Recorded payment of ${amount} for ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ payment }, { status: 201 })
   } catch (error) {

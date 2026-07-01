@@ -10,28 +10,29 @@ export async function POST(
     const admin = await requireAuth()
     const { id } = await params
 
-    const member = await prisma.member.findUnique({ where: { id } })
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const [member, existingAttendance] = await Promise.all([
+      prisma.member.findUnique({ where: { id } }),
+      prisma.attendance.findFirst({
+        where: {
+          memberId: id,
+          date: {
+            gte: today,
+            lt: tomorrow,
+          },
+        },
+      }),
+    ])
     if (!member) {
       return NextResponse.json(
         { error: "Member not found" },
         { status: 404 }
       )
     }
-
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-
-    const existingAttendance = await prisma.attendance.findFirst({
-      where: {
-        memberId: id,
-        date: {
-          gte: today,
-          lt: tomorrow,
-        },
-      },
-    })
 
     if (existingAttendance) {
       return NextResponse.json(
@@ -47,7 +48,7 @@ export async function POST(
       },
     })
 
-    await logActivity(admin.id, "Marked attendance", "Attendance", id, `Marked attendance for ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Marked attendance", "Attendance", id, `Marked attendance for ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ attendance }, { status: 201 })
   } catch (error) {

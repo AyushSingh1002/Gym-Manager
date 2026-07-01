@@ -2,10 +2,9 @@ import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 import { prisma } from "./prisma"
 import bcrypt from "bcryptjs"
+import { JWT, COOKIE_CONFIG, ADMIN_COOKIE_MAX_AGE } from "./constants"
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "gymflow-super-secret-key-change-in-production"
-)
+const JWT_SECRET = new TextEncoder().encode(JWT.ADMIN_SECRET)
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12)
@@ -19,7 +18,7 @@ export async function createToken(payload: { id: string; email: string; role: st
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(JWT.ADMIN_EXPIRY)
     .sign(JWT_SECRET)
 }
 
@@ -34,7 +33,7 @@ export async function verifyToken(token: string) {
 
 export async function getSession() {
   const cookieStore = await cookies()
-  const token = cookieStore.get("session")?.value
+  const token = cookieStore.get(JWT.ADMIN_COOKIE)?.value
   if (!token) return null
   return verifyToken(token)
 }
@@ -66,5 +65,21 @@ export async function logActivity(
 ) {
   await prisma.activityLog.create({
     data: { adminId, action, entity, entityId, details },
+  })
+}
+
+export async function setAdminCookie(token: string) {
+  const cookieStore = await cookies()
+  cookieStore.set(JWT.ADMIN_COOKIE, token, {
+    ...COOKIE_CONFIG,
+    maxAge: ADMIN_COOKIE_MAX_AGE,
+  })
+}
+
+export async function clearAdminCookie() {
+  const cookieStore = await cookies()
+  cookieStore.set(JWT.ADMIN_COOKIE, "", {
+    ...COOKIE_CONFIG,
+    maxAge: 0,
   })
 }

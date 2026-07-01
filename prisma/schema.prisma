@@ -274,14 +274,14 @@ model FAQ {
 
 model ActivityLog {
   id        String   @id @default(cuid())
-  adminId   String
+  adminId   String?
   action    String
   entity    String
   entityId  String?
   details   String?
   createdAt DateTime @default(now())
 
-  admin     Admin    @relation(fields: [adminId], references: [id])
+  admin     Admin?   @relation(fields: [adminId], references: [id])
 }
 
 model Setting {

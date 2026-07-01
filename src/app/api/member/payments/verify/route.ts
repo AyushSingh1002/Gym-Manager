@@ -69,15 +69,16 @@ export async function POST(request: NextRequest) {
 
     // Activate membership if it exists
     if (payment.membership) {
-      await prisma.membership.update({
-        where: { id: payment.membership.id },
-        data: { status: "ACTIVE" },
-      })
-
-      await prisma.member.update({
-        where: { id: member.id },
-        data: { status: "ACTIVE" },
-      })
+      await Promise.all([
+        prisma.membership.update({
+          where: { id: payment.membership.id },
+          data: { status: "ACTIVE" },
+        }),
+        prisma.member.update({
+          where: { id: member.id },
+          data: { status: "ACTIVE" },
+        }),
+      ])
     }
 
     return NextResponse.json({

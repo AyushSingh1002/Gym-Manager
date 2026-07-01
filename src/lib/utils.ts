@@ -1,12 +1,13 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { LOCALE, CURRENCY, PLAN_AMOUNTS, PLAN_LABELS, PLAN_MONTHS, STATUS_COLORS, RECEIPT_PREFIX } from "./constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export function formatDate(date: Date | string): string {
-  return new Intl.DateTimeFormat("en-IN", {
+  return new Intl.DateTimeFormat(LOCALE, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -14,7 +15,7 @@ export function formatDate(date: Date | string): string {
 }
 
 export function formatDateTime(date: Date | string): string {
-  return new Intl.DateTimeFormat("en-IN", {
+  return new Intl.DateTimeFormat(LOCALE, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -24,9 +25,9 @@ export function formatDateTime(date: Date | string): string {
 }
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-IN", {
+  return new Intl.NumberFormat(LOCALE, {
     style: "currency",
-    currency: "INR",
+    currency: CURRENCY,
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(amount)
@@ -43,21 +44,11 @@ export function getDisplayName(firstName?: string | null, lastName?: string | nu
 
 export function calculateEndDate(startDate: Date, plan: string): Date {
   const end = new Date(startDate)
-  switch (plan) {
-    case "MONTHLY":
-      end.setMonth(end.getMonth() + 1)
-      break
-    case "QUARTERLY":
-      end.setMonth(end.getMonth() + 3)
-      break
-    case "HALF_YEARLY":
-      end.setMonth(end.getMonth() + 6)
-      break
-    case "YEARLY":
-      end.setFullYear(end.getFullYear() + 1)
-      break
-    default:
-      end.setMonth(end.getMonth() + 1)
+  const months = PLAN_MONTHS[plan]
+  if (months) {
+    end.setMonth(end.getMonth() + months)
+  } else {
+    end.setMonth(end.getMonth() + 1)
   }
   return end
 }
@@ -69,37 +60,15 @@ export function getDaysRemaining(endDate: Date): number {
 }
 
 export function getPlanAmount(plan: string): number {
-  switch (plan) {
-    case "MONTHLY": return 999
-    case "QUARTERLY": return 2499
-    case "HALF_YEARLY": return 4499
-    case "YEARLY": return 7999
-    default: return 0
-  }
+  return PLAN_AMOUNTS[plan] || 0
 }
 
 export function getPlanLabel(plan: string): string {
-  const labels: Record<string, string> = {
-    MONTHLY: "Monthly",
-    QUARTERLY: "Quarterly",
-    HALF_YEARLY: "Half Yearly",
-    YEARLY: "Yearly",
-    CUSTOM: "Custom",
-  }
-  return labels[plan] || plan
+  return PLAN_LABELS[plan] || plan
 }
 
 export function getStatusColor(status: string): string {
-  const colors: Record<string, string> = {
-    ACTIVE: "bg-semantic-success/15 text-semantic-success",
-    EXPIRED: "bg-semantic-error/15 text-semantic-error",
-    CANCELLED: "bg-surface-2 text-ink-tertiary",
-    PENDING: "bg-amber-500/15 text-amber-400",
-    PAID: "bg-semantic-success/15 text-semantic-success",
-    FAILED: "bg-semantic-error/15 text-semantic-error",
-    REFUNDED: "bg-primary/15 text-primary",
-  }
-  return colors[status] || "bg-surface-2 text-ink-tertiary"
+  return STATUS_COLORS[status] || "bg-surface-2 text-ink-tertiary"
 }
 
 export function generateReceiptNo(): string {
@@ -108,5 +77,5 @@ export function generateReceiptNo(): string {
   const m = (date.getMonth() + 1).toString().padStart(2, "0")
   const d = date.getDate().toString().padStart(2, "0")
   const rand = Math.random().toString(36).substring(2, 6).toUpperCase()
-  return `GF-${y}${m}${d}-${rand}`
+  return `${RECEIPT_PREFIX}-${y}${m}${d}-${rand}`
 }

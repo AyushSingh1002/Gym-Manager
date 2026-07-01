@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/auth"
 import { getDisplayName } from "@/lib/utils"
+import { PAGINATION } from "@/lib/constants"
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,8 +10,8 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const dateParam = searchParams.get("date")
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "50")
+    const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
+    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
     const skip = (page - 1) * limit
 
     const today = new Date()
@@ -30,8 +31,12 @@ export async function GET(request: NextRequest) {
     }
 
     const where = { date: dateFilter }
+    const todayStart = new Date()
+    todayStart.setHours(0, 0, 0, 0)
+    const todayEnd = new Date(todayStart)
+    todayEnd.setDate(todayEnd.getDate() + 1)
 
-    const [attendance, total] = await Promise.all([
+    const [attendance, total, todayAttendance] = await Promise.all([
       prisma.attendance.findMany({
         where,
         skip,
@@ -51,32 +56,26 @@ export async function GET(request: NextRequest) {
         },
       }),
       prisma.attendance.count({ where }),
-    ])
-
-    const todayStart = new Date()
-    todayStart.setHours(0, 0, 0, 0)
-    const todayEnd = new Date(todayStart)
-    todayEnd.setDate(todayEnd.getDate() + 1)
-
-    const todayAttendance = await prisma.attendance.findMany({
-      where: {
-        date: { gte: todayStart, lt: todayEnd },
-      },
-      include: {
-        member: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            memberships: {
-              where: { status: "ACTIVE" },
-              select: { plan: true },
-              take: 1,
+      prisma.attendance.findMany({
+        where: {
+          date: { gte: todayStart, lt: todayEnd },
+        },
+        include: {
+          member: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              memberships: {
+                where: { status: "ACTIVE" },
+                select: { plan: true },
+                take: 1,
+              },
             },
           },
         },
-      },
-    })
+      }),
+    ])
 
     const totalCheckedIn = todayAttendance.length
 

@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireMemberAuth } from "@/lib/member-auth"
+import { PAGINATION } from "@/lib/constants"
 
 export async function GET(request: NextRequest) {
   try {
     const member = await requireMemberAuth()
 
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "10")
+    const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
+    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
     const skip = (page - 1) * limit
 
     const where = { memberId: member.id }

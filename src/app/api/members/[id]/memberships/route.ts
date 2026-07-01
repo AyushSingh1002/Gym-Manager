@@ -83,10 +83,20 @@ export async function POST(
       },
     })
 
-    await prisma.member.update({
-      where: { id },
-      data: { status: "ACTIVE" },
-    })
+    await Promise.all([
+      prisma.member.update({
+        where: { id },
+        data: { status: "ACTIVE" },
+      }),
+      prisma.notification.create({
+        data: {
+          memberId: id,
+          title: "Membership Assigned",
+          message: `A ${plan} membership has been assigned to you. Welcome aboard!`,
+          type: "ANNOUNCEMENT",
+        },
+      }),
+    ])
 
     if (paymentMethod === "ONLINE") {
       const razorpayOrder = await createRazorpayOrder(amount)
@@ -102,12 +112,12 @@ export async function POST(
         },
       })
 
-      await logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName} with online payment`)
+      logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName} with online payment`).catch(err => console.error("Failed to log activity:", err))
 
       return NextResponse.json({ membership, razorpayOrder }, { status: 201 })
     }
 
-    await logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName}`)
+    logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ membership }, { status: 201 })
   } catch (error) {

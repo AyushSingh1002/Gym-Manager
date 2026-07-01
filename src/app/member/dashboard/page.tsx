@@ -26,7 +26,6 @@ interface DashboardData {
   currentMembership: { plan: string; startDate: string; endDate: string; daysRemaining: number } | null
   todayAttendance: boolean
   monthAttendanceCount: number
-  activeMembership: { plan: string; startDate: string; endDate: string } | null
   recentPayments: RecentPayment[]
   unreadNotifications: number
 }

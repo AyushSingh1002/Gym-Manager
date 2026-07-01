@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, MembershipPlan, MembershipStatus, PaymentStatus } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
@@ -86,7 +86,7 @@ async function main() {
         phone: m.phone,
         password: memberPassword,
         gender: Math.random() > 0.5 ? "Male" : "Female",
-        status: status as any,
+            status: status as MembershipStatus,
         joinDate: startDate,
         isActive: status === "ACTIVE",
         weight: 65 + Math.floor(Math.random() * 30),
@@ -94,13 +94,13 @@ async function main() {
         goal: "GENERAL_FITNESS",
         memberships: {
           create: {
-            plan: m.plan as any,
+            plan: m.plan as MembershipPlan,
             startDate,
             endDate,
-            status: status as any,
+        status: status as MembershipStatus,
             amount,
             totalAmount: amount,
-            paymentStatus: "PAID",
+            paymentStatus: PaymentStatus.PAID,
           },
         },
       },

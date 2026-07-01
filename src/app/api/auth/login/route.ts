@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
-import { createToken } from "@/lib/auth"
+import { createToken, setAdminCookie } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,14 +38,7 @@ export async function POST(request: NextRequest) {
       role: admin.role,
     })
 
-    const cookieStore = await cookies()
-    cookieStore.set("session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    })
+    await setAdminCookie(token)
 
     const { password: _, ...adminWithoutPassword } = admin
 

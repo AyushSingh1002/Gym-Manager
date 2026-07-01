@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { prisma } from "@/lib/prisma"
-import { createMemberToken, verifyPassword } from "@/lib/member-auth"
+import { createMemberToken, verifyPassword, setMemberCookie } from "@/lib/member-auth"
+import { getAppUrl } from "@/lib/constants"
 
 export async function GET() {
-  return NextResponse.redirect(new URL("/member/login", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"))
+  return NextResponse.redirect(new URL("/member/login", getAppUrl()))
 }
 
 export async function POST(request: NextRequest) {
@@ -45,14 +45,7 @@ export async function POST(request: NextRequest) {
 
     const token = await createMemberToken({ id: member.id, phone: member.phone })
 
-    const cookieStore = await cookies()
-    cookieStore.set("member_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    })
+    await setMemberCookie(token)
 
     return NextResponse.json({
       id: member.id,

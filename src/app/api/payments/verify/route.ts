@@ -63,24 +63,25 @@ export async function POST(request: NextRequest) {
     })
 
     if (existingPayment.membership) {
-      await prisma.membership.update({
-        where: { id: existingPayment.membership.id },
-        data: { status: "ACTIVE" },
-      })
-
-      await prisma.member.update({
-        where: { id: existingPayment.memberId },
-        data: { status: "ACTIVE" },
-      })
+      await Promise.all([
+        prisma.membership.update({
+          where: { id: existingPayment.membership.id },
+          data: { status: "ACTIVE" },
+        }),
+        prisma.member.update({
+          where: { id: existingPayment.memberId },
+          data: { status: "ACTIVE" },
+        }),
+      ])
     }
 
-    await logActivity(
+    logActivity(
       admin.id,
       "Payment verified",
       "Payment",
       payment.id,
       `Payment of ${payment.amount} verified via Razorpay`
-    )
+    ).catch(err => console.error("Failed to log activity:", err))
 
     return NextResponse.json({ payment })
   } catch (error) {

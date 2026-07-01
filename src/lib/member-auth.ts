@@ -2,10 +2,9 @@ import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 import { prisma } from "./prisma"
 import bcrypt from "bcryptjs"
+import { JWT, COOKIE_CONFIG, MEMBER_COOKIE_MAX_AGE } from "./constants"
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "gymflow-super-secret-key-change-in-production"
-)
+const JWT_SECRET = new TextEncoder().encode(JWT.MEMBER_SECRET)
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12)
@@ -19,7 +18,7 @@ export async function createMemberToken(payload: { id: string; phone: string }) 
   return new SignJWT({ ...payload, type: "member" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("30d")
+    .setExpirationTime(JWT.MEMBER_EXPIRY)
     .sign(JWT_SECRET)
 }
 
@@ -35,7 +34,7 @@ export async function verifyMemberToken(token: string) {
 
 export async function getMemberSession() {
   const cookieStore = await cookies()
-  const token = cookieStore.get("member_session")?.value
+  const token = cookieStore.get(JWT.MEMBER_COOKIE)?.value
   if (!token) return null
   return verifyMemberToken(token)
 }
@@ -80,4 +79,20 @@ export async function requireMemberAuth() {
     throw new Error("Unauthorized")
   }
   return member
+}
+
+export async function setMemberCookie(token: string) {
+  const cookieStore = await cookies()
+  cookieStore.set(JWT.MEMBER_COOKIE, token, {
+    ...COOKIE_CONFIG,
+    maxAge: MEMBER_COOKIE_MAX_AGE,
+  })
+}
+
+export async function clearMemberCookie() {
+  const cookieStore = await cookies()
+  cookieStore.set(JWT.MEMBER_COOKIE, "", {
+    ...COOKIE_CONFIG,
+    maxAge: 0,
+  })
 }

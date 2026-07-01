@@ -78,6 +78,15 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    prisma.activityLog.create({
+      data: {
+        action: "CREATED",
+        entity: "SupportTicket",
+        entityId: ticket.id,
+        details: `Member created support ticket: ${subject}`,
+      },
+    }).catch(err => console.error("Failed to log activity:", err))
+
     return NextResponse.json({ ticket }, { status: 201 })
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
