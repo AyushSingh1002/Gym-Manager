@@ -14,13 +14,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-1.5">
         {label && (
-          <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor={id} className="block text-sm font-medium text-ink">
             {label}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-ink-tertiary">
               {icon}
             </div>
           )}
@@ -28,17 +28,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={id}
             ref={ref}
             className={cn(
-              "block w-full rounded-lg border bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-all duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500",
-              "dark:bg-gray-900 dark:text-gray-100 dark:border-gray-600 dark:placeholder-gray-500 dark:focus:ring-indigo-400",
-              error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-gray-300 dark:border-gray-600",
+              "block w-full rounded-[var(--radius-md)] border bg-surface-1 px-3 py-2.5 text-sm text-ink placeholder-ink-tertiary transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary-focus",
+              error ? "border-semantic-error focus:ring-semantic-error/30" : "border-hairline-strong",
               icon && "pl-10",
               className
             )}
             {...props}
           />
         </div>
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-semantic-error">{error}</p>}
       </div>
     )
   }

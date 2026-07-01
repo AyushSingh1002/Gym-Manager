@@ -43,26 +43,26 @@ export function Modal({ open, onClose, title, description, children, className, 
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
       <div
         className={cn(
-          "w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900 animate-in zoom-in-95 duration-200",
+          "w-full rounded-[var(--radius-xl)] border border-hairline bg-surface-1 p-6 shadow-[var(--shadow-modal)] animate-scale-in",
           sizes[size],
           className
         )}
       >
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            {title && <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h2>}
-            {description && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>}
+        <div className="flex items-start justify-between mb-5">
+          <div className="pr-4">
+            {title && <h2 className="text-lg font-semibold text-ink">{title}</h2>}
+            {description && <p className="text-sm text-ink-muted mt-1">{description}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            className="p-1.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors flex-shrink-0"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
         {children}

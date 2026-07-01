@@ -12,18 +12,18 @@ export default async function MemberLayout({
 
   if (!member) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        <main className="p-4 lg:p-6">{children}</main>
+      <div className="min-h-screen bg-canvas">
+        <main>{children}</main>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-canvas flex">
       <MemberSidebar member={member} />
-      <div className="lg:pl-64 transition-all duration-300">
+      <div className="flex flex-col flex-1 w-full">
         <MemberNavbar member={member} />
-        <main className="p-4 lg:p-6 pb-20 lg:pb-6">{children}</main>
+        <main className="p-5 lg:p-6 pb-16 lg:pb-6 flex-1">{children}</main>
         <MemberFooter />
       </div>
     </div>

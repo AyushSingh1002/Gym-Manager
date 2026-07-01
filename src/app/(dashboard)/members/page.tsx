@@ -242,11 +242,11 @@ export default function MembersPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-            <AlertCircle className="h-8 w-8 text-red-500" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertCircle className="h-8 w-8 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load members</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load members</h2>
+          <p className="mt-2 text-sm text-ink-muted">{error}</p>
           <Button onClick={fetchMembers} className="mt-4">
             Try again
           </Button>
@@ -259,8 +259,8 @@ export default function MembersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Members</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage all gym members</p>
+          <h1 className="text-2xl font-bold text-ink">Members</h1>
+          <p className="text-sm text-ink-muted mt-1">Manage all gym members</p>
         </div>
         <Button onClick={openAddModal}>
           <Plus className="h-4 w-4" />
@@ -308,11 +308,11 @@ export default function MembersPage() {
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                <Users className="h-8 w-8 text-gray-400" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+                <Users className="h-8 w-8 text-ink-tertiary" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No members found</h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              <h3 className="mt-4 text-lg font-semibold text-ink">No members found</h3>
+              <p className="mt-2 text-sm text-ink-muted max-w-sm">
                 {search || statusFilter || planFilter
                   ? "No members match your search criteria. Try adjusting your filters."
                   : "Get started by adding your first member to the gym."}
@@ -333,42 +333,42 @@ export default function MembersPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Name</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Phone</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Email</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Join Date</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Name</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Phone</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Email</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Join Date</th>
+                      <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {members.map((member) => {
                       const plan = activePlan(member)
                       return (
                         <tr
                           key={member.id}
-                          className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors"
+                          className="border-b border-hairline/50 hover:bg-surface-2/50 cursor-pointer transition-colors"
                           onClick={() => router.push(`/members/${member.id}`)}
                         >
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-xs font-medium text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2 text-ink">
                                 {(member.firstName.charAt(0) + member.lastName.charAt(0)).toUpperCase()}
                               </div>
-                              <span className="font-medium text-gray-900 dark:text-gray-100">
+                              <span className="font-medium text-ink">
                                 {member.firstName} {member.lastName}
                               </span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{member.phone}</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{member.email || "-"}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{member.phone}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{member.email || "-"}</td>
                           <td className="px-4 py-3">{plan ? getPlanLabel(plan.plan) : "-"}</td>
                           <td className="px-4 py-3">
                             <Badge status={member.status}>{member.status}</Badge>
                           </td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(member.joinDate)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(member.joinDate)}</td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Button
@@ -404,7 +404,7 @@ export default function MembersPage() {
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-ink-muted">
                 Showing {(page - 1) * 10 + 1}-{Math.min(page * 10, total)} of {total} members
               </p>
               <div className="flex items-center gap-2">
@@ -452,14 +452,14 @@ export default function MembersPage() {
       >
         <div className="space-y-6">
           {formError && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950 p-3 text-sm text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-2 rounded-lg bg-semantic-error/10 border border-semantic-error/20 p-3 text-sm text-semantic-error">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {formError}
             </div>
           )}
 
           <div>
-            <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Personal Information</h4>
+            <h4 className="text-sm font-medium text-ink mb-3">Personal Information</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="First Name"
@@ -513,7 +513,7 @@ export default function MembersPage() {
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Address</h4>
+            <h4 className="text-sm font-medium text-ink mb-3">Address</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <Input
@@ -545,7 +545,7 @@ export default function MembersPage() {
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Emergency Contact</h4>
+            <h4 className="text-sm font-medium text-ink mb-3">Emergency Contact</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Name"
@@ -569,7 +569,7 @@ export default function MembersPage() {
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Notes</h4>
+            <h4 className="text-sm font-medium text-ink mb-3">Notes</h4>
             <Input
               value={form.notes}
               onChange={(e) => handleFormChange("notes", e.target.value)}
@@ -577,7 +577,7 @@ export default function MembersPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
             <Button variant="secondary" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { prisma } from "@/lib/prisma"
-import { requireAuth, logActivity } from "@/lib/auth"
+import { requireMemberAuth } from "@/lib/member-auth"
 
 export async function POST(request: NextRequest) {
   try {
-    const admin = await requireAuth()
+    const member = await requireMemberAuth()
 
     const body = await request.json()
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body
@@ -42,52 +42,54 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const existingPayment = await prisma.payment.findFirst({
-      where: { razorpayOrderId: razorpay_order_id },
+    // Find the payment record
+    const payment = await prisma.payment.findFirst({
+      where: {
+        razorpayOrderId: razorpay_order_id,
+        memberId: member.id,
+      },
       include: { membership: true },
     })
 
-    if (!existingPayment) {
+    if (!payment) {
       return NextResponse.json(
         { error: "Payment record not found" },
         { status: 404 }
       )
     }
 
-    const payment = await prisma.payment.update({
-      where: { id: existingPayment.id },
+    // Update payment status
+    const updatedPayment = await prisma.payment.update({
+      where: { id: payment.id },
       data: {
         status: "PAID",
         razorpayPaymentId: razorpay_payment_id,
       },
     })
 
-    if (existingPayment.membership) {
+    // Activate membership if it exists
+    if (payment.membership) {
       await prisma.membership.update({
-        where: { id: existingPayment.membership.id },
+        where: { id: payment.membership.id },
         data: { status: "ACTIVE" },
       })
 
       await prisma.member.update({
-        where: { id: existingPayment.memberId },
+        where: { id: member.id },
         data: { status: "ACTIVE" },
       })
     }
 
-    await logActivity(
-      admin.id,
-      "Payment verified",
-      "Payment",
-      payment.id,
-      `Payment of ${payment.amount} verified via Razorpay`
-    )
-
-    return NextResponse.json({ payment })
+    return NextResponse.json({
+      success: true,
+      payment: updatedPayment,
+      message: "Payment verified successfully",
+    })
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
-    console.error("Error verifying payment:", error)
+    console.error("Error verifying member payment:", error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

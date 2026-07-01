@@ -55,28 +55,28 @@ export function MemberSidebar({ member }: MemberSidebarProps) {
     <>
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-full w-64 bg-white border-r border-gray-200 dark:bg-gray-950 dark:border-gray-800 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
+          "fixed top-0 left-0 z-50 w-64 bg-canvas border-r border-hairline flex flex-col transition-transform duration-300 h-full lg:relative lg:h-auto lg:z-auto lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between h-16 px-5 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
+        <div className="flex items-center justify-between h-14 px-5 border-b border-hairline flex-shrink-0">
           <Link href="/member/dashboard" className="flex items-center gap-2.5" onClick={() => setSidebarOpen(false)}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-sm">
-              <Dumbbell className="h-5 w-5 text-white" />
+            <div className="w-7 h-7 rounded-[var(--radius-sm)] bg-primary flex items-center justify-center">
+              <Dumbbell className="h-4 w-4 text-white" />
             </div>
-            <span className="text-lg font-bold text-gray-900 dark:text-white">GymFlow</span>
+            <span className="text-base font-semibold text-ink">GymFlow</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-800 lg:hidden transition-colors"
+            className="p-1 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-1 lg:hidden transition-colors"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
@@ -91,16 +91,16 @@ export function MemberSidebar({ member }: MemberSidebarProps) {
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
+                  "flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 dark:from-purple-500/10 dark:to-indigo-500/10 dark:text-purple-400 shadow-sm"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800/60 dark:hover:text-gray-100"
+                    ? "bg-surface-1 text-ink"
+                    : "text-ink-muted hover:bg-surface-1 hover:text-ink"
                 )}
               >
-                <item.icon className={cn("h-5 w-5 flex-shrink-0 transition-transform duration-200", isActive ? "scale-110" : "group-hover:scale-110")} />
+                <item.icon className="h-4 w-4 flex-shrink-0" />
                 <span>{item.label}</span>
                 {showBadge && (
-                  <span className="ml-auto flex-shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-[10px] font-bold text-white">
+                  <span className="ml-auto flex-shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full bg-semantic-error text-[10px] font-bold text-white">
                     3
                   </span>
                 )}
@@ -109,23 +109,23 @@ export function MemberSidebar({ member }: MemberSidebarProps) {
           })}
         </nav>
 
-        <div className="p-3 border-t border-gray-200 dark:border-gray-800 flex-shrink-0">
-          <div className="flex items-center gap-3 px-3 py-2.5 mb-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-xs font-bold text-white">
+        <div className="p-3 border-t border-hairline flex-shrink-0">
+          <div className="flex items-center gap-3 px-3 py-2 mb-2">
+            <div className="w-7 h-7 rounded-full bg-surface-2 flex items-center justify-center text-xs font-medium text-ink">
               {member.firstName.charAt(0)}{member.lastName?.charAt(0) || ""}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+              <p className="text-sm font-medium text-ink truncate">
                 {member.firstName} {member.lastName}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Member</p>
+              <p className="text-xs text-ink-muted">Member</p>
             </div>
           </div>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition-all duration-200"
+            className="flex items-center gap-3 w-full px-3 py-2 rounded-[var(--radius-sm)] text-sm font-medium text-ink-muted hover:bg-semantic-error/10 hover:text-semantic-error transition-all duration-200"
           >
-            <LogOut className="h-5 w-5 flex-shrink-0" />
+            <LogOut className="h-4 w-4 flex-shrink-0" />
             <span>Sign Out</span>
           </button>
         </div>

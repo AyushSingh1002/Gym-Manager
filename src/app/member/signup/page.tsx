@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Dumbbell, Phone, Lock, Eye, EyeOff, ArrowRight, Sparkles, User, Mail } from "lucide-react"
+import { Dumbbell, Phone, Lock, ArrowRight, User, Mail } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function MemberSignupPage() {
   const router = useRouter()
@@ -14,7 +15,6 @@ export default function MemberSignupPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -67,170 +67,151 @@ export default function MemberSignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-900 to-indigo-950 relative overflow-hidden px-4">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-purple-500/20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" />
-        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-pink-500/10 blur-3xl" />
-      </div>
-
-      <div className="w-full max-w-md animate-[fadeSlideUp_0.6s_ease-out]">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2.5 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
-              <Dumbbell className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-white tracking-tight">GymFlow</span>
+    <div className="min-h-screen bg-canvas flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm animate-fade-slide-up">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-[var(--radius-lg)] bg-primary/10 ring-1 ring-primary/20 mb-4">
+            <Dumbbell className="h-6 w-6 text-primary" />
           </div>
-          <p className="text-sm text-purple-200/80 font-medium tracking-wide">
-            Start Your Fitness Journey Today
-          </p>
+          <h1 className="text-[28px] font-semibold text-ink tracking-tight">GymFlow</h1>
+          <p className="text-sm text-ink-muted mt-1">Start your fitness journey today</p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl ring-1 ring-white/20 border border-white/10">
-          <div className="flex items-center gap-2 mb-6">
-            <Sparkles className="h-4 w-4 text-purple-300" />
-            <h1 className="text-lg font-semibold text-white">Create Account</h1>
-          </div>
+        <div className="border border-hairline rounded-[var(--radius-lg)] bg-surface-1 p-6">
+          <h2 className="text-base font-semibold text-ink mb-5">Create Account</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                  First Name <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-ink mb-1.5">
+                  First Name <span className="text-semantic-error">*</span>
                 </label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                    <User className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <User className="h-4 w-4 text-ink-tertiary" />
                   </div>
                   <input
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="First name"
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                    placeholder="First"
+                    className="w-full pl-10 pr-4 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                  Last Name <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-ink mb-1.5">
+                  Last Name <span className="text-semantic-error">*</span>
                 </label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                    <User className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <User className="h-4 w-4 text-ink-tertiary" />
                   </div>
                   <input
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Last name"
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                    placeholder="Last"
+                    className="w-full pl-10 pr-4 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                Phone Number <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Phone Number <span className="text-semantic-error">*</span>
               </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                  <Phone className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Phone className="h-4 w-4 text-ink-tertiary" />
                 </div>
-                <div className="absolute inset-y-0 left-9 flex items-center pointer-events-none border-r border-white/20 pr-2.5">
-                  <span className="text-sm text-purple-200 font-medium">+91</span>
+                <div className="absolute inset-y-0 left-9 flex items-center pointer-events-none border-r border-hairline-strong pr-2.5">
+                  <span className="text-sm text-ink-muted font-medium">+91</span>
                 </div>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter your phone number"
+                  placeholder="Phone number"
                   maxLength={10}
-                  className="w-full pl-20 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                  className="w-full pl-[76px] pr-4 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                Email (optional)
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Email <span className="text-ink-tertiary">(optional)</span>
               </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                  <Mail className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Mail className="h-4 w-4 text-ink-tertiary" />
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                  className="w-full pl-10 pr-4 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                Password <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Password <span className="text-semantic-error">*</span>
               </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                  <Lock className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Lock className="h-4 w-4 text-ink-tertiary" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a password (min 6 chars)"
-                  className="w-full pl-10 pr-11 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                  placeholder="Min 6 characters"
+                  className="w-full pl-10 pr-10 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-purple-300 hover:text-purple-200 transition-colors"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm text-primary hover:opacity-80 transition-opacity"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-purple-200 mb-1.5">
-                Confirm Password <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Confirm Password <span className="text-semantic-error">*</span>
               </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                  <Lock className="h-4 w-4 text-purple-300 group-focus-within:text-purple-200 transition-colors" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Lock className="h-4 w-4 text-ink-tertiary" />
                 </div>
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
-                  className="w-full pl-10 pr-11 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300/50 outline-none transition-all duration-200 focus:border-purple-400 focus:bg-white/15 focus:ring-2 focus:ring-purple-400/30"
+                  placeholder="Confirm password"
+                  className="w-full pl-10 pr-4 py-2.5 bg-surface-1 border border-hairline-strong rounded-[var(--radius-md)] text-ink placeholder-ink-tertiary outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 text-sm"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-purple-300 hover:text-purple-200 transition-colors"
-                >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
             </div>
 
             {error && (
-              <div className="bg-red-500/15 border border-red-400/30 rounded-xl px-4 py-2.5 text-sm text-red-200 animate-[fadeSlideUp_0.3s_ease-out]">
+              <div className="rounded-[var(--radius-md)] bg-semantic-error/10 border border-semantic-error/20 px-4 py-2.5 text-sm text-semantic-error animate-fade-in">
                 {error}
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-semibold rounded-xl transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 shadow-lg shadow-purple-500/25"
+              className="w-full h-11"
+              size="lg"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
@@ -243,33 +224,20 @@ export default function MemberSignupPage() {
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
-            </button>
+            </Button>
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-purple-300/60">
+        <p className="mt-5 text-center text-sm text-ink-muted">
           Already have an account?{" "}
           <Link
             href="/member/login"
-            className="text-purple-200/80 font-medium hover:text-purple-200 transition-colors underline underline-offset-2 decoration-purple-400/30 hover:decoration-purple-300/60"
+            className="text-primary font-medium hover:opacity-80 transition-opacity"
           >
             Sign In
           </Link>
         </p>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeSlideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   )
 }

@@ -44,16 +44,16 @@ function ProfileSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div className="flex flex-col items-center py-8">
-        <div className="h-28 w-28 rounded-full bg-gray-200 dark:bg-gray-700" />
-        <div className="mt-4 h-5 w-40 bg-gray-200 dark:bg-gray-700 rounded" />
-        <div className="mt-1 h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-28 w-28 rounded-full bg-surface-2" />
+        <div className="mt-4 h-5 w-40 bg-surface-2 rounded" />
+        <div className="mt-1 h-4 w-28 bg-surface-2 rounded" />
       </div>
-      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 space-y-4">
+      <div className="rounded-xl border border-hairline bg-surface-1 p-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="space-y-2">
-              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
-              <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded-lg" />
+              <div className="h-4 w-20 bg-surface-2 rounded" />
+              <div className="h-10 w-full bg-surface-2 rounded-lg" />
             </div>
           ))}
         </div>
@@ -251,11 +251,11 @@ export default function MemberProfile() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <div className="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
-          <AlertCircle className="h-8 w-8 text-red-500" />
+        <div className="rounded-full bg-semantic-error/10 border-semantic-error/20 p-4">
+          <AlertCircle className="h-8 w-8 text-semantic-error" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load profile</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Failed to load profile</h3>
+        <p className="mt-1 text-sm text-ink-muted">{error}</p>
         <Button onClick={fetchProfile} className="mt-4">Try Again</Button>
       </div>
     )
@@ -266,7 +266,7 @@ export default function MemberProfile() {
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg text-sm font-medium animate-in slide-in-from-top-2 ${
+          className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium animate-in slide-in-from-top-2 ${
             toast.type === "success"
               ? "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-400 dark:border-emerald-800"
               : "bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/50 dark:text-red-400 dark:border-red-800"
@@ -284,18 +284,18 @@ export default function MemberProfile() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">My Profile</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your personal information and settings</p>
+          <h1 className="text-2xl font-bold text-ink">My Profile</h1>
+          <p className="mt-1 text-sm text-ink-muted">Manage your personal information and settings</p>
         </div>
         <div className="rounded-xl bg-indigo-500/10 p-3 dark:bg-indigo-400/10">
-          <User className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <User className="h-6 w-6 text-primary" />
         </div>
       </div>
 
       {/* Profile Photo */}
       <div className="flex flex-col items-center py-6">
         <div className="relative group">
-          <div className="h-28 w-28 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg shadow-indigo-500/20 overflow-hidden">
+          <div className="h-28 w-28 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold text-white overflow-hidden">
             {profile?.photo ? (
               <img
                 src={profile.photo}
@@ -309,7 +309,7 @@ export default function MemberProfile() {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="absolute bottom-1 right-1 rounded-full bg-white dark:bg-gray-800 p-2 shadow-md border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors disabled:opacity-50"
+            className="absolute bottom-1 right-1 rounded-full bg-surface-1 p-2 border border-hairline text-ink-muted hover:text-primary transition-colors disabled:opacity-50"
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -325,10 +325,10 @@ export default function MemberProfile() {
             onChange={handlePhotoUpload}
           />
         </div>
-        <h2 className="mt-4 text-xl font-bold text-gray-900 dark:text-gray-100">
+        <h2 className="mt-4 text-xl font-bold text-ink">
           {profile?.firstName} {profile?.lastName}
         </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Member ID: {memberId}</p>
+        <p className="text-sm text-ink-muted">Member ID: {memberId}</p>
       </div>
 
       {/* Personal Information */}
@@ -364,7 +364,7 @@ export default function MemberProfile() {
               value={profile?.phone || ""}
               icon={<Phone className="h-4 w-4" />}
               readOnly
-              className="text-gray-400 dark:text-gray-500"
+              className="text-ink-tertiary"
             />
             <Input
               id="alternatePhone"
@@ -533,7 +533,7 @@ export default function MemberProfile() {
             />
           </div>
           {passwordError && (
-            <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-semantic-error/10 border-semantic-error/20 p-3 text-sm text-semantic-error">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {passwordError}
             </div>

@@ -65,8 +65,8 @@ export default function SettingsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your gym configuration</p>
+          <h1 className="text-2xl font-bold text-ink">Settings</h1>
+          <p className="text-sm text-ink-muted mt-1">Manage your gym configuration</p>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
           <CardSkeleton />
@@ -79,17 +79,17 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your gym configuration</p>
+        <h1 className="text-2xl font-bold text-ink">Settings</h1>
+        <p className="text-sm text-ink-muted mt-1">Manage your gym configuration</p>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 dark:bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
+        <div className="rounded-lg bg-semantic-error/10 border border-semantic-error/20 p-4 text-sm text-semantic-error">
           {error}
         </div>
       )}
       {success && (
-        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400">
+        <div className="rounded-lg bg-semantic-success/15 p-4 text-sm text-semantic-success">
           {success}
         </div>
       )}
@@ -158,7 +158,7 @@ export default function SettingsPage() {
               placeholder="Enter secret key"
             />
             <div className="pt-2">
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-ink-muted">
                 Your Razorpay keys are stored securely and used only for payment processing.
               </p>
             </div>

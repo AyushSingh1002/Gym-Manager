@@ -33,10 +33,10 @@ interface DashboardData {
 
 function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 animate-pulse">
-      <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded mb-3" />
-      <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-2" />
-      <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+    <div className="rounded-xl border border-hairline bg-surface-1 p-6 animate-pulse">
+      <div className="h-4 w-24 bg-surface-2 rounded mb-3" />
+      <div className="h-8 w-32 bg-surface-2 rounded mb-2" />
+      <div className="h-3 w-20 bg-surface-2 rounded" />
     </div>
   )
 }
@@ -60,19 +60,19 @@ function GradientCard({
 }) {
   return (
     <div
-      className={`relative rounded-xl border border-gray-200/50 p-6 shadow-sm dark:border-gray-700/50 dark:bg-gray-900 overflow-hidden transition-all duration-300 hover:shadow-md ${
-        gradient || "bg-white dark:bg-gray-900"
+      className={`relative rounded-xl border border-hairline/50 p-6 dark:bg-surface-1 overflow-hidden transition-all duration-300 hover:shadow-md ${
+        gradient || "bg-surface-1"
       }`}
       style={glow ? { boxShadow: `0 0 24px ${glow}` } : undefined}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{label}</p>
-          <p className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">{value}</p>
-          {subtext && <p className="text-xs text-gray-400 dark:text-gray-500">{subtext}</p>}
+          <p className="text-sm font-medium text-ink-muted">{label}</p>
+          <p className="text-3xl font-bold tracking-tight text-ink">{value}</p>
+          {subtext && <p className="text-xs text-ink-tertiary">{subtext}</p>}
         </div>
         <div className="rounded-xl bg-indigo-500/10 p-3 dark:bg-indigo-400/10">
-          <Icon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <Icon className="h-5 w-5 text-primary" />
         </div>
       </div>
       {children}
@@ -141,8 +141,8 @@ export default function MemberDashboard() {
     return (
       <div className="space-y-6 animate-in fade-in">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded" />
-          <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-8 w-64 bg-surface-2 rounded" />
+          <div className="h-4 w-48 bg-surface-2 rounded" />
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
@@ -158,11 +158,11 @@ export default function MemberDashboard() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <div className="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
-          <AlertCircle className="h-8 w-8 text-red-500" />
+        <div className="rounded-full bg-semantic-error/10 border-semantic-error/20 p-4">
+          <AlertCircle className="h-8 w-8 text-semantic-error" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load dashboard</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Failed to load dashboard</h3>
+        <p className="mt-1 text-sm text-ink-muted">{error}</p>
         <Button onClick={fetchData} className="mt-4">
           Try Again
         </Button>
@@ -173,9 +173,9 @@ export default function MemberDashboard() {
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <Dumbbell className="h-12 w-12 text-gray-300 dark:text-gray-600" />
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No data available</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Your dashboard will appear here once you have an active membership.</p>
+        <Dumbbell className="h-12 w-12 text-ink-tertiary" />
+        <h3 className="mt-4 text-lg font-semibold text-ink">No data available</h3>
+        <p className="mt-1 text-sm text-ink-muted">Your dashboard will appear here once you have an active membership.</p>
       </div>
     )
   }
@@ -189,10 +189,10 @@ export default function MemberDashboard() {
       {/* Welcome Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-bold text-ink">
             Welcome back, {member.firstName}
           </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-ink-muted">
             {formatDateStr(currentTime)} &middot; {formatTime(currentTime)}
           </p>
         </div>
@@ -212,7 +212,7 @@ export default function MemberDashboard() {
       </div>
 
       {/* Motivational Message */}
-      <div className="rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 text-white shadow-lg">
+      <div className="rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 text-white">
         <div className="flex items-center gap-3">
           <Zap className="h-6 w-6 text-yellow-300 shrink-0" />
           <p className="text-sm font-medium">
@@ -227,7 +227,7 @@ export default function MemberDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Membership Status Card */}
         <div
-          className={`relative rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md cursor-pointer ${getStatusGradient(
+          className={`relative rounded-xl p-6 transition-all duration-300 hover:shadow-md cursor-pointer ${getStatusGradient(
             currentMembership ? "ACTIVE" : "EXPIRED"
           )}`}
           onClick={() => router.push("/member/membership")}
@@ -269,7 +269,7 @@ export default function MemberDashboard() {
           value={`${monthAttendanceCount} of 30`}
           subtext={`${Math.round(progressPercent)}% attendance rate`}
         >
-          <div className="mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+          <div className="mt-4 w-full bg-surface-2 rounded-full h-2 overflow-hidden">
             <div
               className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700 ease-out"
               style={{ width: `${progressPercent}%` }}
@@ -278,8 +278,8 @@ export default function MemberDashboard() {
         </GradientCard>
 
         {/* Quick Actions */}
-        <div className="rounded-xl border border-gray-200/50 bg-white p-6 shadow-sm dark:border-gray-700/50 dark:bg-gray-900">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">Quick Actions</p>
+        <div className="rounded-xl border border-hairline/50 bg-surface-1 p-6">
+          <p className="text-sm font-medium text-ink-muted mb-4">Quick Actions</p>
           <div className="space-y-2">
             <Button
               variant="ghost"
@@ -312,9 +312,9 @@ export default function MemberDashboard() {
       {/* Recent Activity Section */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Recent Payments */}
-        <div className="rounded-xl border border-gray-200/50 bg-white p-6 shadow-sm dark:border-gray-700/50 dark:bg-gray-900">
+        <div className="rounded-xl border border-hairline/50 bg-surface-1 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Recent Payments</h3>
+            <h3 className="text-base font-semibold text-ink">Recent Payments</h3>
             <Button
               variant="ghost"
               size="sm"
@@ -326,15 +326,15 @@ export default function MemberDashboard() {
           </div>
           {recentPayments.length === 0 ? (
             <div className="flex flex-col items-center py-6 text-center">
-              <IndianRupee className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-2" />
-              <p className="text-sm text-gray-500 dark:text-gray-400">No payments yet</p>
+              <IndianRupee className="h-8 w-8 text-ink-tertiary mb-2" />
+              <p className="text-sm text-ink-muted">No payments yet</p>
             </div>
           ) : (
             <div className="space-y-3">
               {recentPayments.slice(0, 3).map((payment) => (
                 <div
                   key={payment.id}
-                  className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="flex items-center justify-between rounded-lg bg-surface-2 p-3 transition-colors hover:bg-surface-2"
                 >
                   <div className="flex items-center gap-3">
                     <div className="rounded-full bg-indigo-500/10 p-2 dark:bg-indigo-400/10">
@@ -345,10 +345,10 @@ export default function MemberDashboard() {
                       )}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <p className="text-sm font-medium text-ink">
                         {formatCurrency(payment.amount)}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-ink-muted">
                         {formatDate(new Date(payment.date))}
                       </p>
                     </div>
@@ -367,9 +367,9 @@ export default function MemberDashboard() {
         </div>
 
         {/* Recent Attendance */}
-        <div className="rounded-xl border border-gray-200/50 bg-white p-6 shadow-sm dark:border-gray-700/50 dark:bg-gray-900">
+        <div className="rounded-xl border border-hairline/50 bg-surface-1 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Recent Attendance</h3>
+            <h3 className="text-base font-semibold text-ink">Recent Attendance</h3>
             <Button
               variant="ghost"
               size="sm"
@@ -381,25 +381,25 @@ export default function MemberDashboard() {
           </div>
           {recentAttendance.length === 0 ? (
             <div className="flex flex-col items-center py-6 text-center">
-              <CalendarCheck className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-2" />
-              <p className="text-sm text-gray-500 dark:text-gray-400">No attendance records this month</p>
+              <CalendarCheck className="h-8 w-8 text-ink-tertiary mb-2" />
+              <p className="text-sm text-ink-muted">No attendance records this month</p>
             </div>
           ) : (
             <div className="space-y-3">
               {recentAttendance.slice(0, 3).map((record) => (
                 <div
                   key={record.id}
-                  className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="flex items-center justify-between rounded-lg bg-surface-2 p-3 transition-colors hover:bg-surface-2"
                 >
                   <div className="flex items-center gap-3">
                     <div className="rounded-full bg-emerald-500/10 p-2 dark:bg-emerald-400/10">
                       <CheckCircle className="h-4 w-4 text-emerald-500" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <p className="text-sm font-medium text-ink">
                         {formatDate(new Date(record.date))}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-ink-muted">
                         In: {new Date(record.checkIn).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                         {record.checkOut && (
                           <> &middot; Out: {new Date(record.checkOut).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</>
@@ -407,7 +407,7 @@ export default function MemberDashboard() {
                       </p>
                     </div>
                   </div>
-                  <Dumbbell className="h-4 w-4 text-gray-400" />
+                  <Dumbbell className="h-4 w-4 text-ink-tertiary" />
                 </div>
               ))}
             </div>

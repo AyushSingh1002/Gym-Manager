@@ -52,24 +52,24 @@ const MEASUREMENT_FIELDS: MeasurementField[] = [
 
 function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 animate-pulse space-y-4">
-      <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
-      <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
-      <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded" />
+    <div className="rounded-xl border border-hairline bg-surface-1 p-6 animate-pulse space-y-4">
+      <div className="h-4 w-24 bg-surface-2 rounded" />
+      <div className="h-8 w-16 bg-surface-2 rounded" />
+      <div className="h-3 w-12 bg-surface-2 rounded" />
     </div>
   )
 }
 
 function TrendingIndicator({ current, previous, improving }: { current: number; previous: number | null; improving: "lower" | "higher" }) {
-  if (previous === null) return <Minus className="h-4 w-4 text-gray-400" />
+  if (previous === null) return <Minus className="h-4 w-4 text-ink-tertiary" />
   const diff = current - previous
   const isGood = improving === "lower" ? diff < 0 : diff > 0
   const isNeutral = diff === 0
-  if (isNeutral) return <Minus className="h-4 w-4 text-gray-400" />
+  if (isNeutral) return <Minus className="h-4 w-4 text-ink-tertiary" />
   return isGood ? (
     <TrendingDown className="h-4 w-4 text-emerald-500" />
   ) : (
-    <TrendingUp className="h-4 w-4 text-red-500" />
+    <TrendingUp className="h-4 w-4 text-semantic-error" />
   )
 }
 
@@ -115,8 +115,8 @@ function WeightChart({ logs }: { logs: ProgressLog[] }) {
 
       {yTicks.map((tick, i) => (
         <g key={i}>
-          <line x1={padding.left} y1={tick.y} x2={width - padding.right} y2={tick.y} stroke="#e5e7eb" strokeWidth="1" />
-          <text x={padding.left - 8} y={tick.y + 4} textAnchor="end" className="text-[10px] fill-gray-400">{tick.label}</text>
+          <line x1={padding.left} y1={tick.y} x2={width - padding.right} y2={tick.y} stroke="#23252a" strokeWidth="1" />
+          <text x={padding.left - 8} y={tick.y + 4} textAnchor="end" className="text-[10px] fill-ink-tertiary">{tick.label}</text>
         </g>
       ))}
 
@@ -132,7 +132,7 @@ function WeightChart({ logs }: { logs: ProgressLog[] }) {
       ))}
 
       {xLabels.map((p, i) => (
-        <text key={i} x={p.x} y={height - 5} textAnchor="middle" className="text-[10px] fill-gray-400">
+        <text key={i} x={p.x} y={height - 5} textAnchor="middle" className="text-[10px] fill-ink-tertiary">
           {new Date(p.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
         </text>
       ))}
@@ -222,8 +222,8 @@ export default function MemberProgress() {
     return (
       <div className="space-y-6 animate-in fade-in">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
-          <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-8 w-48 bg-surface-2 rounded" />
+          <div className="h-4 w-64 bg-surface-2 rounded" />
         </div>
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
@@ -238,11 +238,11 @@ export default function MemberProgress() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <div className="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
-          <AlertCircle className="h-8 w-8 text-red-500" />
+        <div className="rounded-full bg-semantic-error/10 border-semantic-error/20 p-4">
+          <AlertCircle className="h-8 w-8 text-semantic-error" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load progress</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Failed to load progress</h3>
+        <p className="mt-1 text-sm text-ink-muted">{error}</p>
         <Button onClick={fetchData} className="mt-4">Try Again</Button>
       </div>
     )
@@ -270,12 +270,12 @@ export default function MemberProgress() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="flex items-start gap-4">
-          <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-3 shadow-lg shrink-0">
+          <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-3 shrink-0">
             <BarChart3 className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">My Progress</h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Track your fitness journey</p>
+            <h1 className="text-2xl font-bold text-ink">My Progress</h1>
+            <p className="mt-1 text-sm text-ink-muted">Track your fitness journey</p>
           </div>
         </div>
         <Button onClick={() => setShowModal(true)} className="shrink-0">
@@ -289,36 +289,36 @@ export default function MemberProgress() {
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
           <Card>
             <CardContent className="space-y-1">
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Latest Weight</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <p className="text-xs font-medium text-ink-muted">Latest Weight</p>
+              <p className="text-2xl font-bold text-ink">
                 {latestLog.weight != null ? `${latestLog.weight} kg` : "—"}
               </p>
               <div className="flex items-center gap-1">
                 <TrendingIndicator current={latestLog.weight ?? 0} previous={getPreviousVal("weight")} improving="lower" />
-                <span className="text-xs text-gray-400">vs last</span>
+                <span className="text-xs text-ink-tertiary">vs last</span>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="space-y-1">
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Starting Weight</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <p className="text-xs font-medium text-ink-muted">Starting Weight</p>
+              <p className="text-2xl font-bold text-ink">
                 {firstLog?.weight != null ? `${firstLog.weight} kg` : "—"}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-ink-tertiary">
                 {firstLog ? formatDate(firstLog.date) : ""}
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="space-y-1">
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Total Change</p>
+              <p className="text-xs font-medium text-ink-muted">Total Change</p>
               <p className={`text-2xl font-bold ${
                 latestLog.weight != null && firstLog?.weight != null
                   ? latestLog.weight < firstLog.weight
                     ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-red-600 dark:text-red-400"
-                  : "text-gray-900 dark:text-gray-100"
+                    : "text-semantic-error"
+                  : "text-ink"
               }`}>
                 {latestLog.weight != null && firstLog?.weight != null
                   ? `${(latestLog.weight - firstLog.weight) > 0 ? "+" : ""}${(latestLog.weight - firstLog.weight).toFixed(1)} kg`
@@ -328,19 +328,19 @@ export default function MemberProgress() {
                 {latestLog.weight != null && firstLog?.weight != null && (
                   latestLog.weight < firstLog.weight
                     ? <TrendingDown className="h-4 w-4 text-emerald-500" />
-                    : <TrendingUp className="h-4 w-4 text-red-500" />
+                    : <TrendingUp className="h-4 w-4 text-semantic-error" />
                 )}
-                <span className="text-xs text-gray-400">overall</span>
+                <span className="text-xs text-ink-tertiary">overall</span>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="space-y-1">
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Last Updated</p>
-              <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <p className="text-xs font-medium text-ink-muted">Last Updated</p>
+              <p className="text-lg font-bold text-ink">
                 {latestLog ? formatDate(latestLog.date) : "—"}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-ink-tertiary">
                 {latestLog ? `${sortedLogs.length} log${sortedLogs.length !== 1 ? "s" : ""} total` : ""}
               </p>
             </CardContent>
@@ -350,11 +350,11 @@ export default function MemberProgress() {
 
       {!data || (logs.length === 0 && photos.length === 0) ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="rounded-full bg-gray-100 p-6 dark:bg-gray-800">
-            <Activity className="h-12 w-12 text-gray-300 dark:text-gray-600" />
+          <div className="rounded-full bg-surface-2 p-6">
+            <Activity className="h-12 w-12 text-ink-tertiary" />
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No progress data yet</h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 text-center max-w-md">
+          <h3 className="mt-4 text-lg font-semibold text-ink">No progress data yet</h3>
+          <p className="mt-1 text-sm text-ink-muted text-center max-w-md">
             Start logging your measurements to see your progress over time.
           </p>
           <Button onClick={() => setShowModal(true)} className="mt-4">
@@ -376,11 +376,11 @@ export default function MemberProgress() {
                   return (
                     <div
                       key={field.key}
-                      className="rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30 p-4 transition-all duration-200 hover:shadow-sm hover:border-gray-200 dark:hover:border-gray-600"
+                      className="rounded-xl border border-hairline bg-surface-2 p-4 transition-all duration-200 hover:border-hairline-strong"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="rounded-lg bg-indigo-500/10 p-2 dark:bg-indigo-400/10">
-                          <field.icon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                          <field.icon className="h-4 w-4 text-primary" />
                         </div>
                         {current != null && previous != null && (
                           <TrendingIndicator
@@ -390,11 +390,11 @@ export default function MemberProgress() {
                           />
                         )}
                       </div>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      <p className="text-2xl font-bold text-ink">
                         {current != null ? current : "—"}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                        {field.label} <span className="text-gray-400">({field.unit})</span>
+                      <p className="text-xs text-ink-muted mt-0.5">
+                        {field.label} <span className="text-ink-tertiary">({field.unit})</span>
                       </p>
                     </div>
                   )
@@ -428,9 +428,9 @@ export default function MemberProgress() {
             <CardContent>
               {photos.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-center">
-                  <Camera className="h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" />
-                  <p className="text-sm text-gray-500 dark:text-gray-400">No progress photos yet</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Upload photos to see your before/after transformation</p>
+                  <Camera className="h-10 w-10 text-ink-tertiary mb-3" />
+                  <p className="text-sm text-ink-muted">No progress photos yet</p>
+                  <p className="text-xs text-ink-tertiary mt-1">Upload photos to see your before/after transformation</p>
                   <Button size="sm" variant="outline" onClick={() => setShowPhotoUpload(true)} className="mt-3">
                     <Upload className="h-4 w-4" />
                     Upload First Photo
@@ -439,7 +439,7 @@ export default function MemberProgress() {
               ) : (
                 <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
                   {photos.map((photo) => (
-                    <div key={photo.id} className="group relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 aspect-[3/4]">
+                    <div key={photo.id} className="group relative rounded-xl overflow-hidden border border-hairline bg-surface-1 aspect-[3/4]">
                       <img
                         src={photo.url}
                         alt={`Progress photo ${photo.type}`}
@@ -461,28 +461,28 @@ export default function MemberProgress() {
             <CardHeader title="Progress History" description="All your logged measurements" />
             <CardContent>
               {sortedLogs.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No logs recorded yet</p>
+                <p className="text-sm text-ink-muted text-center py-4">No logs recorded yet</p>
               ) : (
                 <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                   {sortedLogs.map((log) => (
                     <div
                       key={log.id}
-                      className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-800/50 p-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                      className="flex items-center justify-between rounded-lg bg-surface-2 p-3 transition-colors hover:bg-surface-2 cursor-pointer"
                       onClick={() => setSelectedLog(selectedLog?.id === log.id ? null : log)}
                     >
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-indigo-500/10 p-2 dark:bg-indigo-400/10">
-                          <Calendar className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                          <Calendar className="h-4 w-4 text-primary" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{formatDate(log.date)}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className="text-sm font-medium text-ink">{formatDate(log.date)}</p>
+                          <p className="text-xs text-ink-muted">
                             W: {log.weight ?? "—"} kg
                             {log.bodyFat != null && ` · BF: ${log.bodyFat}%`}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${selectedLog?.id === log.id ? "rotate-90" : ""}`} />
+                      <ChevronRight className={`h-4 w-4 text-ink-tertiary transition-transform duration-200 ${selectedLog?.id === log.id ? "rotate-90" : ""}`} />
                     </div>
                   ))}
                 </div>
@@ -506,9 +506,9 @@ export default function MemberProgress() {
                   {MEASUREMENT_FIELDS.map((field) => {
                     const val = selectedLog[field.key]
                     return (
-                      <div key={field.key} className="rounded-lg bg-gray-50 dark:bg-gray-800/50 p-3">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{field.label}</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      <div key={field.key} className="rounded-lg bg-surface-2 p-3">
+                        <p className="text-xs text-ink-muted">{field.label}</p>
+                        <p className="text-lg font-semibold text-ink">
                           {val != null ? `${val} ${field.unit}` : "—"}
                         </p>
                       </div>
@@ -516,9 +516,9 @@ export default function MemberProgress() {
                   })}
                 </div>
                 {selectedLog.notes && (
-                  <div className="mt-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 p-3">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Notes</p>
-                    <p className="text-sm text-gray-900 dark:text-gray-100">{selectedLog.notes}</p>
+                  <div className="mt-3 rounded-lg bg-surface-2 p-3">
+                    <p className="text-xs text-ink-muted mb-1">Notes</p>
+                    <p className="text-sm text-ink">{selectedLog.notes}</p>
                   </div>
                 )}
               </CardContent>
@@ -546,13 +546,13 @@ export default function MemberProgress() {
             ))}
           </div>
           <div>
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            <label htmlFor="notes" className="block text-sm font-medium text-ink-muted mb-1.5">
               Notes
             </label>
             <textarea
               id="notes"
               rows={3}
-              className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-600 dark:placeholder-gray-500 dark:focus:ring-indigo-400"
+              className="block w-full rounded-lg border border-hairline bg-surface-1 px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
               placeholder="How was your workout today?"
               value={form.notes}
               onChange={(e) => handleFormChange("notes", e.target.value)}
@@ -573,7 +573,7 @@ export default function MemberProgress() {
       {/* Photo Upload Modal */}
       <Modal open={showPhotoUpload} onClose={() => setShowPhotoUpload(false)} title="Upload Progress Photo" description="Share your transformation">
         <div className="space-y-4">
-          <div className="rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 p-8 text-center hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors">
+          <div className="rounded-xl border-2 border-dashed border-hairline p-8 text-center hover:border-primary transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -583,10 +583,10 @@ export default function MemberProgress() {
             />
             <label htmlFor="photoInput" className="cursor-pointer space-y-2">
               <div className="rounded-full bg-indigo-500/10 p-3 w-fit mx-auto dark:bg-indigo-400/10">
-                <Upload className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                <Upload className="h-6 w-6 text-primary" />
               </div>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Click to upload a photo</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">JPG, PNG or WEBP (max 5MB)</p>
+              <p className="text-sm font-medium text-ink-muted">Click to upload a photo</p>
+              <p className="text-xs text-ink-muted">JPG, PNG or WEBP (max 5MB)</p>
             </label>
           </div>
           <div className="flex justify-end">

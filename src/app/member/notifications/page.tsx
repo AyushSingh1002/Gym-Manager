@@ -33,11 +33,11 @@ const NOTIFICATION_ICONS: Record<string, React.ElementType> = {
 }
 
 const ICON_COLORS: Record<string, string> = {
-  EXPIRY: "bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400",
-  PAYMENT: "bg-emerald-100 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400",
-  WORKOUT: "bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400",
-  ANNOUNCEMENT: "bg-purple-100 text-purple-600 dark:bg-purple-950/30 dark:text-purple-400",
-  REMINDER: "bg-amber-100 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400",
+  EXPIRY: "bg-surface-2 text-ink",
+  PAYMENT: "bg-surface-2 text-ink",
+  WORKOUT: "bg-surface-2 text-ink",
+  ANNOUNCEMENT: "bg-surface-2 text-ink",
+  REMINDER: "bg-surface-2 text-ink",
 }
 
 function getTimeAgo(dateStr: string): string {
@@ -63,14 +63,14 @@ function getTimeAgo(dateStr: string): string {
 function NotificationSkeleton() {
   return (
     <div className="flex items-start gap-4 p-4 animate-pulse">
-      <div className="h-10 w-10 rounded-xl bg-gray-200 dark:bg-gray-700 shrink-0" />
+      <div className="h-10 w-10 rounded-xl bg-surface-2 shrink-0" />
       <div className="flex-1 space-y-2">
         <div className="flex items-center gap-2">
-          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
-          <div className="h-2 w-2 rounded-full bg-gray-200 dark:bg-gray-700" />
+          <div className="h-4 w-32 bg-surface-2 rounded" />
+          <div className="h-2 w-2 rounded-full bg-surface-2" />
         </div>
-        <div className="h-3 w-64 bg-gray-200 dark:bg-gray-700 rounded" />
-        <div className="h-2 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-3 w-64 bg-surface-2 rounded" />
+        <div className="h-2 w-20 bg-surface-2 rounded" />
       </div>
     </div>
   )
@@ -146,12 +146,12 @@ export default function MemberNotifications() {
       <div className="space-y-6 animate-in fade-in">
         <div className="flex items-center justify-between">
           <div className="animate-pulse space-y-2">
-            <div className="h-8 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
+            <div className="h-8 w-36 bg-surface-2 rounded" />
+            <div className="h-4 w-48 bg-surface-2 rounded" />
           </div>
-          <div className="h-9 w-36 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+          <div className="h-9 w-36 bg-surface-2 rounded-lg animate-pulse" />
         </div>
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
+        <div className="rounded-xl border border-hairline bg-surface-1 divide-y divide-hairline">
           {Array.from({ length: 5 }).map((_, i) => <NotificationSkeleton key={i} />)}
         </div>
       </div>
@@ -161,11 +161,11 @@ export default function MemberNotifications() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <div className="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
-          <AlertCircle className="h-8 w-8 text-red-500" />
+        <div className="rounded-full bg-semantic-error/10 border-semantic-error/20 p-4">
+          <AlertCircle className="h-8 w-8 text-semantic-error" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load notifications</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Failed to load notifications</h3>
+        <p className="mt-1 text-sm text-ink-muted">{error}</p>
         <Button onClick={fetchNotifications} className="mt-4">Try Again</Button>
       </div>
     )
@@ -175,14 +175,14 @@ export default function MemberNotifications() {
     <div className="space-y-6 animate-in fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Notifications</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <h1 className="text-2xl font-bold text-ink">Notifications</h1>
+          <p className="mt-1 text-sm text-ink-muted">
             Stay updated with your gym activity
           </p>
         </div>
         <div className="flex items-center gap-3">
           {unreadCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-medium text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
               {unreadCount} unread
             </span>
@@ -201,17 +201,17 @@ export default function MemberNotifications() {
       </div>
 
       {notifications.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-white py-20 dark:border-gray-700 dark:bg-gray-900">
-          <div className="rounded-full bg-gray-100 p-6 dark:bg-gray-800">
-            <Bell className="h-12 w-12 text-gray-300 dark:text-gray-600" />
+        <div className="flex flex-col items-center justify-center rounded-xl border border-hairline bg-surface-1 py-20">
+          <div className="rounded-full bg-surface-2 p-6">
+            <Bell className="h-12 w-12 text-ink-tertiary" />
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No notifications yet</h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 text-center max-w-sm">
+          <h3 className="mt-4 text-lg font-semibold text-ink">No notifications yet</h3>
+          <p className="mt-1 text-sm text-ink-muted text-center max-w-sm">
             We'll notify you about membership updates, workout reminders, and gym announcements here.
           </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800 overflow-hidden shadow-sm">
+        <div className="rounded-xl border border-hairline bg-surface-1 divide-y divide-hairline overflow-hidden">
           {notifications.map((notification) => {
             const Icon = NOTIFICATION_ICONS[notification.type] || Bell
             const colorClass = ICON_COLORS[notification.type] || ICON_COLORS.REMINDER
@@ -219,8 +219,8 @@ export default function MemberNotifications() {
               <button
                 key={notification.id}
                 onClick={() => !notification.read && handleMarkRead(notification.id)}
-                className={`w-full flex items-start gap-4 p-4 sm:p-5 text-left transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
-                  !notification.read ? "bg-indigo-50/40 dark:bg-indigo-950/10" : ""
+                className={`w-full flex items-start gap-4 p-4 sm:p-5 text-left transition-all duration-200 hover:bg-surface-2 ${
+                  !notification.read ? "bg-surface-2" : ""
                 }`}
               >
                 <div className={`shrink-0 rounded-xl p-2.5 ${colorClass}`}>
@@ -232,8 +232,8 @@ export default function MemberNotifications() {
                       <p
                         className={`text-sm truncate ${
                           !notification.read
-                            ? "font-semibold text-gray-900 dark:text-gray-100"
-                            : "font-medium text-gray-600 dark:text-gray-400"
+                            ? "font-semibold text-ink"
+                            : "font-medium text-ink-muted"
                         }`}
                       >
                         {notification.title}
@@ -243,18 +243,18 @@ export default function MemberNotifications() {
                       )}
                     </div>
                   </div>
-                  <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                  <p className="mt-0.5 text-sm text-ink-muted line-clamp-2">
                     {notification.message}
                   </p>
                   <div className="mt-1.5 flex items-center gap-1.5">
-                    <Clock className="h-3 w-3 text-gray-400" />
-                    <span className="text-xs text-gray-400 dark:text-gray-500">
+                    <Clock className="h-3 w-3 text-ink-tertiary" />
+                    <span className="text-xs text-ink-tertiary">
                       {getTimeAgo(notification.createdAt)}
                     </span>
                   </div>
                 </div>
                 {notification.link && (
-                  <ChevronRight className="h-4 w-4 text-gray-300 dark:text-gray-600 shrink-0 mt-1" />
+                  <ChevronRight className="h-4 w-4 text-ink-tertiary shrink-0 mt-1" />
                 )}
               </button>
             )

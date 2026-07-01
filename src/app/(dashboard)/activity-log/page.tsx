@@ -61,19 +61,19 @@ const actionIcons: Record<string, React.ElementType> = {
 }
 
 const actionColors: Record<string, string> = {
-  CREATED: "text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950",
-  UPDATED: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950",
-  DELETED: "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950",
-  MARKED: "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950",
-  RECORDED: "text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-950",
-  ASSIGNED: "text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-950",
+  CREATED: "text-semantic-success bg-semantic-success/15",
+  UPDATED: "text-ink-muted bg-surface-2",
+  DELETED: "text-semantic-error bg-semantic-error/10",
+  MARKED: "text-primary bg-primary/15",
+  RECORDED: "text-primary bg-primary/15",
+  ASSIGNED: "text-primary bg-primary/15",
 }
 
 const entityBadgeColors: Record<string, string> = {
-  MEMBER: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-  MEMBERSHIP: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-  ATTENDANCE: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  PAYMENT: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  MEMBER: "bg-primary/15 text-primary",
+  MEMBERSHIP: "bg-primary/10 text-primary",
+  ATTENDANCE: "bg-semantic-success/15 text-semantic-success",
+  PAYMENT: "bg-surface-2 text-ink-muted",
 }
 
 function getActionIcon(action: string): React.ElementType {
@@ -81,11 +81,11 @@ function getActionIcon(action: string): React.ElementType {
 }
 
 function getActionColor(action: string): string {
-  return actionColors[action] || "text-gray-600 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+  return actionColors[action] || "text-ink-muted bg-surface-2"
 }
 
 function getEntityBadgeColor(entity: string): string {
-  return entityBadgeColors[entity] || "bg-gray-500/10 text-gray-600 dark:text-gray-400"
+  return entityBadgeColors[entity] || "bg-surface-2 text-ink-muted"
 }
 
 function getRelativeTime(dateStr: string): string {
@@ -168,17 +168,17 @@ export default function ActivityLogPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Activity Log</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Track all actions performed in the system</p>
+          <h1 className="text-2xl font-bold text-ink">Activity Log</h1>
+          <p className="text-sm text-ink-muted mt-1">Track all actions performed in the system</p>
         </div>
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-                <History className="h-8 w-8 text-red-500" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+                <History className="h-8 w-8 text-semantic-error" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load activity log</h2>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+              <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load activity log</h2>
+              <p className="mt-2 text-sm text-ink-muted">{error}</p>
               <Button onClick={fetchActivities} className="mt-4">
                 Try again
               </Button>
@@ -192,8 +192,8 @@ export default function ActivityLogPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Activity Log</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Track all actions performed in the system</p>
+        <h1 className="text-2xl font-bold text-ink">Activity Log</h1>
+        <p className="text-sm text-ink-muted mt-1">Track all actions performed in the system</p>
       </div>
 
       <Card>
@@ -240,11 +240,11 @@ export default function ActivityLogPage() {
             <TableSkeleton rows={8} />
           ) : activities.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                <History className="h-8 w-8 text-gray-400" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+                <History className="h-8 w-8 text-ink-tertiary" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No activities found</h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              <h3 className="mt-4 text-lg font-semibold text-ink">No activities found</h3>
+              <p className="mt-2 text-sm text-ink-muted max-w-sm">
                 {actionFilter || entityFilter || fromDate || toDate
                   ? "No activities match your filter criteria. Try adjusting your filters."
                   : "No activity has been recorded yet. Actions will appear here as they happen."}
@@ -259,7 +259,7 @@ export default function ActivityLogPage() {
                     <div
                       key={activity.id}
                       className={`flex items-start gap-4 py-4 ${
-                        idx < activities.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""
+                        idx < activities.length - 1 ? "border-b border-hairline" : ""
                       }`}
                     >
                       <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getActionColor(activity.action)}`}>
@@ -267,7 +267,7 @@ export default function ActivityLogPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          <p className="text-sm font-medium text-ink">
                             {activity.description}
                           </p>
                           <Badge status={activity.entity} className={getEntityBadgeColor(activity.entity)}>
@@ -275,11 +275,11 @@ export default function ActivityLogPage() {
                           </Badge>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-ink-muted">
                             by {activity.admin.name}
                           </span>
-                          <span className="text-xs text-gray-400 dark:text-gray-500">&middot;</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-ink-tertiary">&middot;</span>
+                          <span className="text-xs text-ink-muted">
                             {getRelativeTime(activity.createdAt)}
                           </span>
                         </div>
@@ -290,8 +290,8 @@ export default function ActivityLogPage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center justify-between mt-6 pt-4 border-t border-hairline">
+                  <p className="text-sm text-ink-muted">
                     Showing {(page - 1) * 20 + 1}-{Math.min(page * 20, total)} of {total} activities
                   </p>
                   <div className="flex items-center gap-2">

@@ -89,8 +89,8 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Loading your gym overview...</p>
+          <h1 className="text-2xl font-bold text-ink">Dashboard</h1>
+          <p className="text-sm text-ink-muted mt-1">Loading your gym overview...</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -104,10 +104,10 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="flex items-center gap-3 animate-pulse">
-                    <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-8 w-8 rounded-full bg-surface-2" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
-                      <div className="h-2 w-1/2 rounded bg-gray-200 dark:bg-gray-700" />
+                      <div className="h-3 w-3/4 rounded bg-surface-2" />
+                      <div className="h-2 w-1/2 rounded bg-surface-2" />
                     </div>
                   </div>
                 ))}
@@ -123,14 +123,14 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-            <AlertCircle className="h-8 w-8 text-red-500" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertCircle className="h-8 w-8 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load dashboard</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load dashboard</h2>
+          <p className="mt-2 text-sm text-ink-muted">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+            className="mt-4 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
           >
             Try again
           </button>
@@ -143,11 +143,11 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-            <Activity className="h-8 w-8 text-gray-400" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+            <Activity className="h-8 w-8 text-ink-tertiary" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No data available</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          <h2 className="mt-4 text-lg font-semibold text-ink">No data available</h2>
+          <p className="mt-2 text-sm text-ink-muted">
             Your dashboard will populate once you start adding members and recording activity.
           </p>
         </div>
@@ -159,9 +159,9 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="animate-in fade-in slide-in-from-top-2 duration-500">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Overview of your gym</p>
+      <div className="animate-fade-slide-up">
+        <h1 className="text-2xl font-bold text-ink">Dashboard</h1>
+        <p className="text-sm text-ink-muted mt-1">Overview of your gym</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
@@ -170,22 +170,22 @@ export default function DashboardPage() {
           return (
             <div
               key={key}
-              className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+              className="animate-fade-slide-up"
               style={{ animationDelay: `${index * 100}ms`, animationFillMode: "backwards" }}
             >
               <Card hover>
                 <CardContent>
                   <div className="flex items-start justify-between">
                     <div className={`rounded-lg p-2 ${lightColor}`}>
-                      <Icon className={`h-5 w-5 ${color.replace("bg-", "text-")}`} />
+                      <Icon className={`h-5 w-5 text-ink`} />
                     </div>
                     <span className={`inline-block h-2 w-2 rounded-full ${color}`} />
                   </div>
                   <div className="mt-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-2xl font-bold text-ink">
                       {getMetricValue(metric)}
                     </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{metric.label}</p>
+                    <p className="mt-1 text-xs text-ink-muted">{metric.label}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -194,29 +194,29 @@ export default function DashboardPage() {
         })}
       </div>
 
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: "500ms", animationFillMode: "backwards" }}>
+      <div className="animate-fade-slide-up" style={{ animationDelay: "500ms", animationFillMode: "backwards" }}>
         <Card>
           <CardHeader title="Recent Activity" description="Latest actions across your gym" />
           <CardContent>
             {recentActivities.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <Activity className="h-10 w-10 text-gray-300 dark:text-gray-600" />
-                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">No recent activity</p>
+                <Activity className="h-10 w-10 text-ink-tertiary" />
+                <p className="mt-3 text-sm text-ink-muted">No recent activity</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+              <div className="divide-y divide-hairline">
                 {recentActivities.map((activity) => {
                   const ActivityIcon = getActivityIcon(activity.action)
                   return (
                     <div key={activity.id} className="flex items-start gap-3 py-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                        <ActivityIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2">
+                        <ActivityIcon className="h-4 w-4 text-ink-muted" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                        <p className="text-sm font-medium text-ink truncate">
                           {activity.description}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        <p className="text-xs text-ink-muted mt-0.5">
                           by {activity.admin.name} &middot; {formatDateTime(activity.createdAt)}
                         </p>
                       </div>

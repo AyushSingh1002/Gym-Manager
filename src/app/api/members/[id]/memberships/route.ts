@@ -132,21 +132,34 @@ async function createRazorpayOrder(amount: number) {
 
   const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64")
 
-  const response = await fetch("https://api.razorpay.com/v1/orders", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Basic ${auth}`,
-    },
-    body: JSON.stringify({
-      amount: amount * 100,
-      currency: "INR",
-      receipt: `mem_${Date.now()}`,
-    }),
-  })
+  let response
+  try {
+    response = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+      body: JSON.stringify({
+        amount: amount * 100,
+        currency: "INR",
+        receipt: `mem_${Date.now()}`,
+      }),
+    })
+  } catch (error) {
+    console.error("Network error connecting to Razorpay:", error)
+    throw new Error("Network error: Unable to connect to Razorpay. Please check your connection.")
+  }
 
   if (!response.ok) {
-    throw new Error("Failed to create Razorpay order")
+    const errorText = await response.text()
+    console.error(`Razorpay API error (${response.status}):`, errorText)
+    
+    if (response.status === 401 || response.status === 403) {
+      throw new Error("Razorpay credentials are invalid")
+    }
+    
+    throw new Error(`Razorpay API error: ${errorText || response.statusText}`)
   }
 
   return response.json()

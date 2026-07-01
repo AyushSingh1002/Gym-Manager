@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useAppStore } from "@/store/app-store"
-import { Menu, Sun, Moon, Search, Bell, LogOut, User, ChevronDown } from "lucide-react"
-import { cn, getInitials } from "@/lib/utils"
+import { Menu, Sun, Moon, Bell, LogOut, ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface Member {
   id: string
@@ -55,48 +55,39 @@ export function MemberNavbar({ member }: MemberNavbarProps) {
   const pageTitle = pageTitles[pathname] || "Member Portal"
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50">
+    <header className="sticky top-0 z-30 h-14 bg-canvas/70 backdrop-blur-xl border-b border-hairline/50">
       <div className="flex items-center justify-between h-full px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <button
             onClick={toggleSidebar}
-            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-300 lg:hidden transition-colors"
+            className="p-2 rounded-[var(--radius-sm)] text-ink-muted hover:bg-surface-1 hover:text-ink lg:hidden transition-colors"
             aria-label="Toggle sidebar"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-4 w-4" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
+            <h1 className="text-sm font-semibold text-ink">{pageTitle}</h1>
+            <p className="text-xs text-ink-muted hidden sm:block">
               Welcome back, {member.firstName}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-56 pl-9 pr-3 py-2 text-sm rounded-xl border border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 outline-none transition-all duration-200 focus:w-64 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:border-indigo-500"
-            />
-          </div>
-
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-300 transition-colors"
+            className="p-2 rounded-[var(--radius-sm)] text-ink-muted hover:bg-surface-1 hover:text-ink transition-colors"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
           <button
-            className="relative p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-300 transition-colors"
+            className="relative p-2 rounded-[var(--radius-sm)] text-ink-muted hover:bg-surface-1 hover:text-ink transition-colors"
             aria-label="Notifications"
           >
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-rose-500 text-[9px] font-bold text-white flex items-center justify-center">
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full bg-semantic-error text-[8px] font-bold text-white flex items-center justify-center">
               3
             </span>
           </button>
@@ -104,37 +95,36 @@ export function MemberNavbar({ member }: MemberNavbarProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="flex items-center gap-2 p-1.5 rounded-[var(--radius-sm)] hover:bg-surface-1 transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">
-                  {getInitials(member.firstName, member.lastName)}
+              <div className="w-7 h-7 rounded-full bg-surface-2 flex items-center justify-center">
+                <span className="text-xs font-medium text-ink">
+                  {member.firstName.charAt(0)}{member.lastName?.charAt(0) || ""}
                 </span>
               </div>
-              <ChevronDown className="h-4 w-4 text-gray-400 hidden sm:block" />
+              <ChevronDown className="h-3.5 w-3.5 text-ink-tertiary hidden sm:block" />
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-gray-200/50 bg-white shadow-xl py-1.5 dark:border-gray-700/50 dark:bg-gray-900 animate-in slide-in-from-top-2 duration-200">
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              <div className="absolute right-0 mt-2 w-56 rounded-[var(--radius-lg)] border border-hairline bg-surface-1 shadow-[var(--shadow-dropdown)] py-1.5 animate-fade-slide-down">
+                <div className="px-4 py-3 border-b border-hairline">
+                  <p className="text-sm font-semibold text-ink">
                     {member.firstName} {member.lastName}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  <p className="text-xs text-ink-muted mt-0.5">
                     {member.email || "Member"}
                   </p>
                 </div>
                 <div className="py-1">
                   <button
                     onClick={() => { router.push("/member/profile"); setShowDropdown(false) }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-ink-muted hover:bg-surface-2 hover:text-ink transition-colors"
                   >
-                    <User className="h-4 w-4" />
                     My Profile
                   </button>
                   <button
                     onClick={handleSignOut}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 transition-colors"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-semantic-error hover:bg-semantic-error/10 transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign Out

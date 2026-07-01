@@ -114,14 +114,14 @@ const statusOptions = [
 ]
 
 const methodConfig: Record<string, { icon: React.ElementType; color: string; bgColor: string; label: string }> = {
-  CASH: { icon: Banknote, color: "text-emerald-600", bgColor: "bg-emerald-50 dark:bg-emerald-950", label: "Cash" },
-  UPI: { icon: Smartphone, color: "text-blue-600", bgColor: "bg-blue-50 dark:bg-blue-950", label: "UPI" },
-  CARD: { icon: CreditCard, color: "text-purple-600", bgColor: "bg-purple-50 dark:bg-purple-950", label: "Card" },
-  ONLINE: { icon: Wallet, color: "text-amber-600", bgColor: "bg-amber-50 dark:bg-amber-950", label: "Online" },
+  CASH: { icon: Banknote, color: "text-semantic-success", bgColor: "bg-semantic-success/15", label: "Cash" },
+  UPI: { icon: Smartphone, color: "text-primary", bgColor: "bg-primary/15", label: "UPI" },
+  CARD: { icon: CreditCard, color: "text-primary", bgColor: "bg-primary/15", label: "Card" },
+  ONLINE: { icon: Wallet, color: "text-ink-muted", bgColor: "bg-surface-2", label: "Online" },
 }
 
 function getMethodConfig(method: string) {
-  return methodConfig[method] || { icon: CreditCard, color: "text-gray-600", bgColor: "bg-gray-50 dark:bg-gray-800", label: method }
+  return methodConfig[method] || { icon: CreditCard, color: "text-ink-muted", bgColor: "bg-surface-2", label: method }
 }
 
 function getSummaryIcon(key: string) {
@@ -135,10 +135,10 @@ function getSummaryIcon(key: string) {
 
 function getSummaryColor(key: string) {
   switch (key) {
-    case "monthlyRevenue": return { bg: "bg-violet-50 dark:bg-violet-950", icon: "text-violet-600" }
-    case "totalPayments": return { bg: "bg-blue-50 dark:bg-blue-950", icon: "text-blue-600" }
-    case "pendingPayments": return { bg: "bg-amber-50 dark:bg-amber-950", icon: "text-amber-600" }
-    default: return { bg: "bg-gray-50 dark:bg-gray-800", icon: "text-gray-600" }
+    case "monthlyRevenue": return { bg: "bg-surface-2", icon: "text-ink" }
+    case "totalPayments": return { bg: "bg-surface-2", icon: "text-ink" }
+    case "pendingPayments": return { bg: "bg-surface-2", icon: "text-ink" }
+    default: return { bg: "bg-surface-2", icon: "text-ink" }
   }
 }
 
@@ -440,7 +440,7 @@ export default function PaymentsPage() {
           contact: members.find((m) => m.id === selectedMemberId)?.phone || "",
         },
         theme: {
-          color: "#4f46e5",
+          color: "#5e6ad2",
         },
         modal: {
           ondismiss: function () {
@@ -484,11 +484,11 @@ export default function PaymentsPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-            <AlertCircle className="h-8 w-8 text-red-500" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertCircle className="h-8 w-8 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load payments</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load payments</h2>
+          <p className="mt-2 text-sm text-ink-muted">{error}</p>
           <Button onClick={() => { fetchPayments(); fetchSummary() }} className="mt-4">
             Try again
           </Button>
@@ -501,8 +501,8 @@ export default function PaymentsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Payments</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage payments and generate receipts</p>
+          <h1 className="text-2xl font-bold text-ink">Payments</h1>
+          <p className="text-sm text-ink-muted mt-1">Manage payments and generate receipts</p>
         </div>
         <Button onClick={openRecordModal}>
           <Plus className="h-4 w-4" />
@@ -523,8 +523,8 @@ export default function PaymentsPage() {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{label}</p>
+                  <p className="text-2xl font-bold text-ink">{value}</p>
+                  <p className="mt-1 text-xs text-ink-muted">{label}</p>
                 </div>
               </CardContent>
             </Card>
@@ -588,11 +588,11 @@ export default function PaymentsPage() {
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                <Receipt className="h-8 w-8 text-gray-400" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+                <Receipt className="h-8 w-8 text-ink-tertiary" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No payments found</h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              <h3 className="mt-4 text-lg font-semibold text-ink">No payments found</h3>
+              <p className="mt-2 text-sm text-ink-muted max-w-sm">
                 {search || methodFilter || statusFilter || fromDate || toDate
                   ? "No payments match your search criteria. Try adjusting your filters."
                   : "No payments have been recorded yet."}
@@ -613,41 +613,41 @@ export default function PaymentsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Receipt No</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Member Name</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Method</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Date</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Receipt No</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Member Name</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Method</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
+                      <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {payments.map((payment) => {
                       const method = getMethodConfig(payment.method)
                       const MethodIcon = method.icon
                       return (
                         <tr
                           key={payment.id}
-                          className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                          className="border-b border-hairline/50 hover:bg-surface-2/50 transition-colors"
                         >
                           <td className="px-4 py-3">
-                            <span className="font-mono text-xs font-medium text-gray-900 dark:text-gray-100">
+                            <span className="font-mono text-xs font-medium text-ink">
                               {payment.receiptNo || "—"}
                             </span>
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-xs font-medium text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2 text-ink">
                                 {payment.member.name.charAt(0).toUpperCase()}
                               </div>
-                              <span className="font-medium text-gray-900 dark:text-gray-100">
+                              <span className="text-sm font-medium text-ink">
                                 {payment.member.name}
                               </span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                          <td className="px-4 py-3 text-sm font-medium text-ink">
                             {formatCurrency(payment.amount)}
                           </td>
                           <td className="px-4 py-3">
@@ -655,13 +655,13 @@ export default function PaymentsPage() {
                               <div className={`rounded-full p-1.5 ${method.bgColor}`}>
                                 <MethodIcon className={`h-3.5 w-3.5 ${method.color}`} />
                               </div>
-                              <span className="text-gray-700 dark:text-gray-300">{method.label}</span>
+                              <span className="text-sm text-ink-muted">{method.label}</span>
                             </div>
                           </td>
                           <td className="px-4 py-3">
                             <Badge status={payment.status}>{payment.status}</Badge>
                           </td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                          <td className="px-4 py-3 text-sm text-ink-muted">
                             {formatDate(payment.date || payment.createdAt)}
                           </td>
                           <td className="px-4 py-3 text-right">
@@ -685,7 +685,7 @@ export default function PaymentsPage() {
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-ink-muted">
                 Showing {(page - 1) * 10 + 1}-{Math.min(page * 10, total)} of {total} payments
               </p>
               <div className="flex items-center gap-2">
@@ -733,14 +733,14 @@ export default function PaymentsPage() {
       >
         <div className="space-y-6">
           {formError && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950 p-3 text-sm text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-2 rounded-lg bg-semantic-error/10 border border-semantic-error/20 p-3 text-sm text-semantic-error">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {formError}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Member</label>
+            <label className="block text-sm font-medium text-ink mb-1.5">Member</label>
             <Input
               placeholder="Search members..."
               value={memberSearch}
@@ -754,26 +754,26 @@ export default function PaymentsPage() {
               icon={<Search className="h-4 w-4" />}
             />
             {memberSearch && filteredMembers.length > 0 && (
-              <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-800">
+              <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-hairline divide-y divide-hairline">
                 {filteredMembers.map((m) => (
                   <button
                     key={m.id}
                     type="button"
-                    className={`w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                      className={`w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-surface-2 ${
                       selectedMemberId === m.id
-                        ? "bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400"
-                        : "text-gray-900 dark:text-gray-100"
+                        ? "bg-surface-2 text-ink"
+                        : "text-ink"
                     }`}
                     onClick={() => handleMemberSelect(m)}
                   >
                     <span className="font-medium">{m.name}</span>
-                    <span className="text-gray-500 dark:text-gray-400 ml-2">{m.phone}</span>
+                    <span className="text-ink-muted ml-2">{m.phone}</span>
                   </button>
                 ))}
               </div>
             )}
             {memberSearch && filteredMembers.length === 0 && (
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">No members found</p>
+              <p className="mt-2 text-sm text-ink-muted">No members found</p>
             )}
           </div>
 
@@ -822,7 +822,7 @@ export default function PaymentsPage() {
               onChange={(e) => setPaymentDate(e.target.value)}
             />
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Notes</label>
+              <label className="block text-sm font-medium text-ink mb-1.5">Notes</label>
               <Input
                 value={paymentNotes}
                 onChange={(e) => setPaymentNotes(e.target.value)}
@@ -831,7 +831,7 @@ export default function PaymentsPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
             <Button variant="secondary" onClick={() => setRecordModalOpen(false)}>
               Cancel
             </Button>
@@ -860,57 +860,57 @@ export default function PaymentsPage() {
       >
         {receiptLoading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="animate-spin h-6 w-6 border-2 border-indigo-500 border-t-transparent rounded-full" />
+            <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
           </div>
         ) : selectedReceipt ? (
           <div className="space-y-6" id="receipt-content">
-            <div className="text-center border-b border-gray-200 dark:border-gray-700 pb-4">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">GymFlow</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Payment Receipt</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Receipt No: {selectedReceipt.receiptNo}</p>
+            <div className="text-center border-b border-hairline pb-4">
+              <h3 className="text-lg font-bold text-ink">GymFlow</h3>
+              <p className="text-xs text-ink-muted mt-0.5">Payment Receipt</p>
+              <p className="text-xs text-ink-muted">Receipt No: {selectedReceipt.receiptNo}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-xs">Member</p>
-                <p className="font-medium text-gray-900 dark:text-gray-100">{selectedReceipt.member.name}</p>
-                <p className="text-gray-600 dark:text-gray-400">{selectedReceipt.member.phone}</p>
+                <p className="text-ink-muted text-xs">Member</p>
+                <p className="font-medium text-ink">{selectedReceipt.member.name}</p>
+                <p className="text-ink-muted">{selectedReceipt.member.phone}</p>
                 {selectedReceipt.member.email && (
-                  <p className="text-gray-600 dark:text-gray-400">{selectedReceipt.member.email}</p>
+                  <p className="text-ink-muted">{selectedReceipt.member.email}</p>
                 )}
               </div>
               <div className="text-right">
-                <p className="text-gray-500 dark:text-gray-400 text-xs">Date</p>
-                <p className="font-medium text-gray-900 dark:text-gray-100">{formatDate(selectedReceipt.date)}</p>
-                <p className="text-gray-500 dark:text-gray-400 text-xs mt-2">Status</p>
+                <p className="text-ink-muted text-xs">Date</p>
+                <p className="font-medium text-ink">{formatDate(selectedReceipt.date)}</p>
+                <p className="text-ink-muted text-xs mt-2">Status</p>
                 <Badge status={selectedReceipt.status}>{selectedReceipt.status}</Badge>
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-800">
+            <div className="rounded-lg border border-hairline divide-y divide-hairline">
               <div className="flex items-center justify-between px-4 py-3">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Amount</span>
-                <span className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                <span className="text-sm text-ink-muted">Amount</span>
+                <span className="text-lg font-bold text-ink">
                   {formatCurrency(selectedReceipt.amount)}
                 </span>
               </div>
               <div className="flex items-center justify-between px-4 py-3">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Payment Method</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                <span className="text-sm text-ink-muted">Payment Method</span>
+                <span className="text-sm font-medium text-ink">
                   {getMethodConfig(selectedReceipt.method).label}
                 </span>
               </div>
               {selectedReceipt.membership && (
                 <>
                   <div className="flex items-center justify-between px-4 py-3">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Plan</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <span className="text-sm text-ink-muted">Plan</span>
+                    <span className="text-sm font-medium text-ink">
                       {getPlanLabel(selectedReceipt.membership.plan)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between px-4 py-3">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Plan Period</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <span className="text-sm text-ink-muted">Plan Period</span>
+                    <span className="text-sm font-medium text-ink">
                       {formatDate(selectedReceipt.membership.startDate)} - {formatDate(selectedReceipt.membership.endDate)}
                     </span>
                   </div>
@@ -918,15 +918,15 @@ export default function PaymentsPage() {
               )}
               {selectedReceipt.razorpayPaymentId && (
                 <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Transaction ID</span>
-                  <span className="text-xs font-mono font-medium text-gray-900 dark:text-gray-100">
+                  <span className="text-sm text-ink-muted">Transaction ID</span>
+                  <span className="text-xs font-mono font-medium text-ink">
                     {selectedReceipt.razorpayPaymentId}
                   </span>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
               <Button variant="secondary" size="sm" onClick={printReceipt}>
                 <Download className="h-4 w-4" />
                 Print
@@ -937,7 +937,7 @@ export default function PaymentsPage() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-center py-8 text-sm text-ink-muted">
             Receipt data not available
           </div>
         )}

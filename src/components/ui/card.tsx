@@ -13,8 +13,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900",
-          hover && "transition-all duration-200 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600",
+          "rounded-[var(--radius-lg)] border border-hairline bg-surface-1 p-5",
+          hover && "transition-all duration-200 hover:bg-surface-2 hover:border-hairline-strong",
           className
         )}
         {...props}
@@ -37,8 +37,8 @@ function CardHeader({ className, title, description, action, children }: CardHea
     <div className={cn("flex items-center justify-between mb-4", className)}>
       {children || (
         <div>
-          {title && <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>}
-          {description && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{description}</p>}
+          {title && <h3 className="text-[15px] font-semibold text-ink">{title}</h3>}
+          {description && <p className="text-sm text-ink-muted mt-0.5">{description}</p>}
         </div>
       )}
       {action && <div>{action}</div>}

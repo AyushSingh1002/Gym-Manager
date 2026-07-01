@@ -91,15 +91,15 @@ export function getPlanLabel(plan: string): string {
 
 export function getStatusColor(status: string): string {
   const colors: Record<string, string> = {
-    ACTIVE: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    EXPIRED: "bg-red-500/10 text-red-600 dark:text-red-400",
-    CANCELLED: "bg-gray-500/10 text-gray-600 dark:text-gray-400",
-    PENDING: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-    PAID: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    FAILED: "bg-red-500/10 text-red-600 dark:text-red-400",
-    REFUNDED: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+    ACTIVE: "bg-semantic-success/15 text-semantic-success",
+    EXPIRED: "bg-semantic-error/15 text-semantic-error",
+    CANCELLED: "bg-surface-2 text-ink-tertiary",
+    PENDING: "bg-amber-500/15 text-amber-400",
+    PAID: "bg-semantic-success/15 text-semantic-success",
+    FAILED: "bg-semantic-error/15 text-semantic-error",
+    REFUNDED: "bg-primary/15 text-primary",
   }
-  return colors[status] || "bg-gray-500/10 text-gray-600 dark:text-gray-400"
+  return colors[status] || "bg-surface-2 text-ink-tertiary"
 }
 
 export function generateReceiptNo(): string {

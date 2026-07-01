@@ -74,9 +74,9 @@ const assignPlanOptions = [
 ]
 
 function getDaysColor(days: number): string {
-  if (days > 30) return "text-emerald-600 dark:text-emerald-400"
-  if (days >= 7) return "text-amber-600 dark:text-amber-400"
-  return "text-red-600 dark:text-red-400"
+  if (days > 30) return "text-semantic-success"
+  if (days >= 7) return "text-ink-muted"
+  return "text-semantic-error"
 }
 
 export default function MembershipsPage() {
@@ -222,11 +222,11 @@ export default function MembershipsPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-            <AlertCircle className="h-8 w-8 text-red-500" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertCircle className="h-8 w-8 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load memberships</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load memberships</h2>
+          <p className="mt-2 text-sm text-ink-muted">{error}</p>
           <Button onClick={fetchMemberships} className="mt-4">
             Try again
           </Button>
@@ -239,8 +239,8 @@ export default function MembershipsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Memberships</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage all memberships and assign new plans</p>
+          <h1 className="text-2xl font-bold text-ink">Memberships</h1>
+          <p className="text-sm text-ink-muted mt-1">Manage all memberships and assign new plans</p>
         </div>
         <Button onClick={openAssignModal}>
           <Plus className="h-4 w-4" />
@@ -288,11 +288,11 @@ export default function MembershipsPage() {
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                <CreditCard className="h-8 w-8 text-gray-400" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+                <CreditCard className="h-8 w-8 text-ink-tertiary" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No memberships found</h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              <h3 className="mt-4 text-lg font-semibold text-ink">No memberships found</h3>
+              <p className="mt-2 text-sm text-ink-muted max-w-sm">
                 {search || planFilter || statusFilter
                   ? "No memberships match your search criteria. Try adjusting your filters."
                   : "Get started by assigning a membership to a member."}
@@ -313,47 +313,47 @@ export default function MembershipsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Member Name</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Phone</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Start Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">End Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Days Remaining</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Member Name</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Phone</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Start Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">End Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Days Remaining</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                      <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {memberships.map((membership) => {
                       const daysRemaining = getDaysRemaining(new Date(membership.endDate))
                       return (
                         <tr
                           key={membership.id}
-                          className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors"
+                          className="border-b border-hairline/50 hover:bg-surface-2/50 cursor-pointer transition-colors"
                           onClick={() => router.push(`/members/${membership.memberId}`)}
                         >
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-xs font-medium text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2 text-ink">
                                 {membership.member.name.charAt(0).toUpperCase()}
                               </div>
-                              <span className="font-medium text-gray-900 dark:text-gray-100">
+                              <span className="text-sm font-medium text-ink">
                                 {membership.member.name}
                               </span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{membership.member.phone}</td>
-                          <td className="px-4 py-3">{getPlanLabel(membership.plan)}</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(membership.startDate)}</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(membership.endDate)}</td>
-                          <td className="px-4 py-3">
+                          <td className="px-4 py-3 text-sm text-ink-muted">{membership.member.phone}</td>
+                          <td className="px-4 py-3 text-sm">{getPlanLabel(membership.plan)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(membership.startDate)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(membership.endDate)}</td>
+                          <td className="px-4 py-3 text-sm">
                             <span className={`font-medium ${getDaysColor(daysRemaining)}`}>
                               {daysRemaining}d
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-gray-900 dark:text-gray-100 font-medium">
+                          <td className="px-4 py-3 text-sm text-ink font-medium">
                             {formatCurrency(membership.totalAmount || membership.amount)}
                           </td>
                           <td className="px-4 py-3">
@@ -384,7 +384,7 @@ export default function MembershipsPage() {
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-ink-muted">
                 Showing {(page - 1) * 10 + 1}-{Math.min(page * 10, total)} of {total} memberships
               </p>
               <div className="flex items-center gap-2">
@@ -432,14 +432,14 @@ export default function MembershipsPage() {
       >
         <div className="space-y-6">
           {formError && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950 p-3 text-sm text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-2 rounded-lg bg-semantic-error/10 border border-semantic-error/20 p-3 text-sm text-semantic-error">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {formError}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Member</label>
+              <label className="block text-sm font-medium text-ink mb-1.5">Member</label>
             <Input
               placeholder="Search members..."
               value={memberSearch}
@@ -450,15 +450,15 @@ export default function MembershipsPage() {
               icon={<Search className="h-4 w-4" />}
             />
             {memberSearch && filteredMembers.length > 0 && (
-              <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-800">
+              <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-hairline divide-y divide-hairline">
                 {filteredMembers.map((m) => (
                   <button
                     key={m.id}
                     type="button"
-                    className={`w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                      className={`w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-surface-2 ${
                       selectedMemberId === m.id
-                        ? "bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400"
-                        : "text-gray-900 dark:text-gray-100"
+                        ? "bg-surface-2 text-ink"
+                        : "text-ink"
                     }`}
                     onClick={() => {
                       setSelectedMemberId(m.id)
@@ -466,13 +466,13 @@ export default function MembershipsPage() {
                     }}
                   >
                     <span className="font-medium">{m.name}</span>
-                    <span className="text-gray-500 dark:text-gray-400 ml-2">{m.phone}</span>
+                    <span className="text-ink-muted ml-2">{m.phone}</span>
                   </button>
                 ))}
               </div>
             )}
             {memberSearch && filteredMembers.length === 0 && (
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">No members found</p>
+              <p className="mt-2 text-sm text-ink-muted">No members found</p>
             )}
           </div>
 
@@ -501,8 +501,8 @@ export default function MembershipsPage() {
               placeholder="0"
             />
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
-              <div className="block w-full rounded-lg border border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-600 px-3 py-2 text-sm text-gray-900 dark:text-gray-100">
+              <label className="block text-sm font-medium text-ink">Amount</label>
+              <div className="block w-full rounded-[var(--radius-md)] border border-hairline bg-surface-1 px-3 py-2 text-sm text-ink">
                 {assignPlan === "CUSTOM"
                   ? "Custom pricing"
                   : formatCurrency(calculatedAmount)}
@@ -519,7 +519,7 @@ export default function MembershipsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-hairline">
             <Button variant="secondary" onClick={() => setAssignModalOpen(false)}>
               Cancel
             </Button>

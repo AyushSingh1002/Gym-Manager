@@ -148,7 +148,7 @@ export default function MemberDetailPage() {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Loading...</h1>
+            <h1 className="text-2xl font-bold text-ink">Loading...</h1>
           </div>
         </div>
         <Card>
@@ -164,11 +164,11 @@ export default function MemberDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-            <AlertTriangle className="h-8 w-8 text-red-500" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertTriangle className="h-8 w-8 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load member</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load member</h2>
+          <p className="mt-2 text-sm text-ink-muted">{error}</p>
           <Button onClick={() => router.back()} className="mt-4">
             Go back
           </Button>
@@ -181,11 +181,11 @@ export default function MemberDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-            <User className="h-8 w-8 text-gray-400" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+            <User className="h-8 w-8 text-ink-tertiary" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Member not found</h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">The member you are looking for does not exist.</p>
+          <h2 className="mt-4 text-lg font-semibold text-ink">Member not found</h2>
+          <p className="mt-2 text-sm text-ink-muted">The member you are looking for does not exist.</p>
           <Button onClick={() => router.push("/members")} className="mt-4">
             Back to Members
           </Button>
@@ -202,7 +202,7 @@ export default function MemberDetailPage() {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold text-ink">
               {member.firstName} {member.lastName}
             </h1>
           </div>
@@ -222,32 +222,32 @@ export default function MemberDetailPage() {
       <Card>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-start gap-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-indigo-50 text-2xl font-bold text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400 shrink-0">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-surface-2 text-ink text-xl font-semibold shrink-0">
               {getInitials(member.firstName, member.lastName)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-semibold text-ink">
                   {member.firstName} {member.lastName}
                 </h2>
                 <Badge status={member.status}>{member.status}</Badge>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-ink-muted mt-1">
                 Member since {formatDate(member.joinDate)}
               </p>
               <div className="flex flex-wrap gap-4 mt-3">
                 {member.email && (
-                  <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-1.5 text-sm text-ink-muted">
                     <Mail className="h-3.5 w-3.5" />
                     {member.email}
                   </div>
                 )}
-                <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-1.5 text-sm text-ink-muted">
                   <Phone className="h-3.5 w-3.5" />
                   {member.phone}
                 </div>
                 {member.city && (
-                  <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-1.5 text-sm text-ink-muted">
                     <MapPin className="h-3.5 w-3.5" />
                     {member.city}{member.state ? `, ${member.state}` : ""}
                   </div>
@@ -258,15 +258,15 @@ export default function MemberDetailPage() {
         </CardContent>
       </Card>
 
-      <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+      <div className="flex gap-1 border-b border-hairline overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? "border-indigo-600 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                ? "border-primary text-primary"
+                : "border-transparent text-ink-muted hover:text-ink"
             }`}
           >
             {tab.icon}
@@ -283,16 +283,16 @@ export default function MemberDetailPage() {
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Full Name</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.firstName} {member.lastName}</p>
+                    <p className="text-xs text-ink-muted">Full Name</p>
+                    <p className="text-sm font-medium text-ink">{member.firstName} {member.lastName}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Gender</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.gender || "-"}</p>
+                    <p className="text-xs text-ink-muted">Gender</p>
+                    <p className="text-sm font-medium text-ink">{member.gender || "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Date of Birth</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <p className="text-xs text-ink-muted">Date of Birth</p>
+                    <p className="text-sm font-medium text-ink">
                       {member.dateOfBirth ? formatDate(member.dateOfBirth) : "-"}
                     </p>
                   </div>
@@ -305,16 +305,16 @@ export default function MemberDetailPage() {
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.email || "-"}</p>
+                    <p className="text-xs text-ink-muted">Email</p>
+                    <p className="text-sm font-medium text-ink">{member.email || "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Phone</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.phone}</p>
+                    <p className="text-xs text-ink-muted">Phone</p>
+                    <p className="text-sm font-medium text-ink">{member.phone}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Alternate Phone</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.alternatePhone || "-"}</p>
+                    <p className="text-xs text-ink-muted">Alternate Phone</p>
+                    <p className="text-sm font-medium text-ink">{member.alternatePhone || "-"}</p>
                   </div>
                 </div>
               </CardContent>
@@ -326,20 +326,20 @@ export default function MemberDetailPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Address</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.address}</p>
+                      <p className="text-xs text-ink-muted">Address</p>
+                      <p className="text-sm font-medium text-ink">{member.address}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">City</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.city || "-"}</p>
+                      <p className="text-xs text-ink-muted">City</p>
+                      <p className="text-sm font-medium text-ink">{member.city || "-"}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">State</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.state || "-"}</p>
+                      <p className="text-xs text-ink-muted">State</p>
+                      <p className="text-sm font-medium text-ink">{member.state || "-"}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Pincode</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.pincode || "-"}</p>
+                      <p className="text-xs text-ink-muted">Pincode</p>
+                      <p className="text-sm font-medium text-ink">{member.pincode || "-"}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -352,16 +352,16 @@ export default function MemberDetailPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Name</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.emergencyName}</p>
+                      <p className="text-xs text-ink-muted">Name</p>
+                      <p className="text-sm font-medium text-ink">{member.emergencyName}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Phone</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.emergencyPhone || "-"}</p>
+                      <p className="text-xs text-ink-muted">Phone</p>
+                      <p className="text-sm font-medium text-ink">{member.emergencyPhone || "-"}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Relation</p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{member.emergencyRelation || "-"}</p>
+                      <p className="text-xs text-ink-muted">Relation</p>
+                      <p className="text-sm font-medium text-ink">{member.emergencyRelation || "-"}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -372,7 +372,7 @@ export default function MemberDetailPage() {
               <Card>
                 <CardHeader title="Notes" />
                 <CardContent>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{member.notes}</p>
+                  <p className="text-sm text-ink-muted whitespace-pre-wrap">{member.notes}</p>
                 </CardContent>
               </Card>
             )}
@@ -381,12 +381,12 @@ export default function MemberDetailPage() {
           <div className="space-y-4">
             <Card hover className="cursor-pointer" onClick={() => setActiveTab("attendance")}>
               <CardContent className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950">
-                  <Calendar className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-semantic-success/15 text-semantic-success">
+                  <Calendar className="h-6 w-6 text-semantic-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{member.attendance.length}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Total Attendance</p>
+                  <p className="text-2xl font-bold text-ink">{member.attendance.length}</p>
+                  <p className="text-xs text-ink-muted">Total Attendance</p>
                 </div>
               </CardContent>
             </Card>
@@ -397,8 +397,8 @@ export default function MemberDetailPage() {
                   <Dumbbell className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{member.memberships.length}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Memberships</p>
+                  <p className="text-2xl font-bold text-ink">{member.memberships.length}</p>
+                  <p className="text-xs text-ink-muted">Memberships</p>
                 </div>
               </CardContent>
             </Card>
@@ -409,8 +409,8 @@ export default function MemberDetailPage() {
                   <CreditCard className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{member.payments.length}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Payments</p>
+                  <p className="text-2xl font-bold text-ink">{member.payments.length}</p>
+                  <p className="text-xs text-ink-muted">Payments</p>
                 </div>
               </CardContent>
             </Card>
@@ -433,8 +433,8 @@ export default function MemberDetailPage() {
           <CardContent className="p-0">
             {member.attendance.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center px-6">
-                <Clock className="h-10 w-10 text-gray-300 dark:text-gray-600" />
-                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">No attendance records found</p>
+                <Clock className="h-10 w-10 text-ink-tertiary" />
+                <p className="mt-3 text-sm text-ink-muted">No attendance records found</p>
                 <Button variant="outline" size="sm" className="mt-3" onClick={handleQuickCheckIn} loading={checkingIn}>
                   <Plus className="h-4 w-4" />
                   Record First Check-in
@@ -444,19 +444,19 @@ export default function MemberDetailPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Check In</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Check Out</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Type</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Check In</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Check Out</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Type</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {member.attendance.map((record) => (
                       <tr key={record.id}>
-                        <td className="px-4 py-3 text-gray-900 dark:text-gray-100">{formatDate(record.date)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDateTime(record.checkIn)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                        <td className="px-4 py-3 text-sm text-ink">{formatDate(record.date)}</td>
+                        <td className="px-4 py-3 text-sm text-ink-muted">{formatDateTime(record.checkIn)}</td>
+                        <td className="px-4 py-3 text-sm text-ink-muted">
                           {record.checkOut ? formatDateTime(record.checkOut) : "-"}
                         </td>
                         <td className="px-4 py-3">
@@ -489,31 +489,31 @@ export default function MemberDetailPage() {
           <CardContent className="p-0">
             {member.payments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center px-6">
-                <CreditCard className="h-10 w-10 text-gray-300 dark:text-gray-600" />
-                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">No payment records found</p>
+                <CreditCard className="h-10 w-10 text-ink-tertiary" />
+                <p className="mt-3 text-sm text-ink-muted">No payment records found</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Method</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Receipt</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Method</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Receipt</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {member.payments.map((payment) => (
                       <tr key={payment.id}>
-                        <td className="px-4 py-3 text-gray-900 dark:text-gray-100">{formatDate(payment.date)}</td>
-                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{formatCurrency(payment.amount)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{payment.method}</td>
-                        <td className="px-4 py-3">
+<td className="px-4 py-3 text-sm text-ink">{formatDate(payment.date)}</td>
+                          <td className="px-4 py-3 text-sm font-medium text-ink">{formatCurrency(payment.amount)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{payment.method}</td>
+                          <td className="px-4 py-3">
                           <Badge status={payment.status}>{payment.status}</Badge>
                         </td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{payment.receiptNo || "-"}</td>
+                        <td className="px-4 py-3 text-sm text-ink-muted">{payment.receiptNo || "-"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -539,32 +539,32 @@ export default function MemberDetailPage() {
           <CardContent className="p-0">
             {member.memberships.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center px-6">
-                <Dumbbell className="h-10 w-10 text-gray-300 dark:text-gray-600" />
-                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">No memberships found</p>
+                <Dumbbell className="h-10 w-10 text-ink-tertiary" />
+                <p className="mt-3 text-sm text-ink-muted">No memberships found</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Start Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">End Date</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Payment</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Start Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">End Date</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Payment</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {member.memberships.map((membership) => (
                       <tr key={membership.id}>
-                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{getPlanLabel(membership.plan)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(membership.startDate)}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{formatDate(membership.endDate)}</td>
-                        <td className="px-4 py-3">
+<td className="px-4 py-3 text-sm font-medium text-ink">{getPlanLabel(membership.plan)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(membership.startDate)}</td>
+                          <td className="px-4 py-3 text-sm text-ink-muted">{formatDate(membership.endDate)}</td>
+                          <td className="px-4 py-3">
                           <Badge status={membership.status}>{membership.status}</Badge>
                         </td>
-                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{formatCurrency(membership.totalAmount)}</td>
+                        <td className="px-4 py-3 text-sm font-medium text-ink">{formatCurrency(membership.totalAmount)}</td>
                         <td className="px-4 py-3">
                           <Badge status={membership.paymentStatus}>{membership.paymentStatus}</Badge>
                         </td>
@@ -585,10 +585,10 @@ export default function MemberDetailPage() {
         description="Update member information"
         size="xl"
       >
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-ink-muted">
           Edit form content would go here, reusing the same pattern from the members page.
         </p>
-        <div className="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-hairline">
           <Button variant="secondary" onClick={() => setEditModalOpen(false)}>
             Cancel
           </Button>

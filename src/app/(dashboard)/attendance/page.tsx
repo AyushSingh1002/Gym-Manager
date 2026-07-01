@@ -46,15 +46,15 @@ interface SearchMember {
 }
 
 const planCardColors: Record<string, string> = {
-  MONTHLY: "bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400",
-  QUARTERLY: "bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400",
-  HALF_YEARLY: "bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400",
-  YEARLY: "bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400",
-  CUSTOM: "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400",
+  MONTHLY: "bg-surface-2 text-ink",
+  QUARTERLY: "bg-surface-2 text-ink",
+  HALF_YEARLY: "bg-surface-2 text-ink",
+  YEARLY: "bg-surface-2 text-ink",
+  CUSTOM: "bg-surface-2 text-ink",
 }
 
 function getPlanCardColor(plan: string): string {
-  return planCardColors[plan] || "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+  return planCardColors[plan] || "bg-surface-2 text-ink-muted"
 }
 
 export default function AttendancePage() {
@@ -166,17 +166,17 @@ export default function AttendancePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Attendance</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Track and manage daily member attendance</p>
+          <h1 className="text-2xl font-bold text-ink">Attendance</h1>
+          <p className="text-sm text-ink-muted mt-1">Track and manage daily member attendance</p>
         </div>
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-                <CalendarCheck className="h-8 w-8 text-red-500" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
+                <CalendarCheck className="h-8 w-8 text-semantic-error" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load attendance</h2>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+              <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load attendance</h2>
+              <p className="mt-2 text-sm text-ink-muted">{error}</p>
               <Button onClick={fetchAttendance} className="mt-4">
                 Try again
               </Button>
@@ -190,12 +190,12 @@ export default function AttendancePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Attendance</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Track and manage daily member attendance</p>
+        <h1 className="text-2xl font-bold text-ink">Attendance</h1>
+        <p className="text-sm text-ink-muted mt-1">Track and manage daily member attendance</p>
       </div>
 
       {isToday && (
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-2 text-sm text-ink-muted">
           <CalendarCheck className="h-4 w-4" />
           <span>
             {new Date().toLocaleDateString("en-IN", {
@@ -213,12 +213,12 @@ export default function AttendancePage() {
           <Card>
             <CardContent>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950">
-                  <UserCheck className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-2">
+                  <UserCheck className="h-5 w-5 text-ink" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{summary.totalCheckedIn}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Checked In Today</p>
+                  <p className="text-2xl font-bold text-ink">{summary.totalCheckedIn}</p>
+                  <p className="text-xs text-ink-muted">Checked In Today</p>
                 </div>
               </div>
             </CardContent>
@@ -231,8 +231,8 @@ export default function AttendancePage() {
                     <CalendarCheck className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{count}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{getPlanLabel(plan)}</p>
+                    <p className="text-2xl font-bold text-ink">{count}</p>
+                    <p className="text-xs text-ink-muted">{getPlanLabel(plan)}</p>
                   </div>
                 </div>
               </CardContent>
@@ -254,18 +254,18 @@ export default function AttendancePage() {
               />
               {searching && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                 </div>
               )}
             </div>
 
             {searchResults.length > 0 && !selectedMember && (
-              <div className="max-h-48 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-800">
+              <div className="max-h-48 overflow-y-auto rounded-lg border border-hairline divide-y divide-hairline">
                 {searchResults.map((member) => (
                   <button
                     key={member.id}
                     type="button"
-                    className="w-full text-left px-3 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors"
+                    className="w-full text-left px-3 py-2.5 text-sm hover:bg-surface-2 text-ink transition-colors"
                     onClick={() => {
                       setSelectedMember(member)
                       setSearchQuery(member.name)
@@ -273,9 +273,9 @@ export default function AttendancePage() {
                     }}
                   >
                     <span className="font-medium">{member.name}</span>
-                    <span className="text-gray-500 dark:text-gray-400 ml-2">{member.phone}</span>
+                    <span className="text-ink-muted ml-2">{member.phone}</span>
                     {member.memberships?.[0] && (
-                      <span className="text-gray-400 dark:text-gray-500 ml-2 text-xs">
+                      <span className="text-ink-tertiary ml-2 text-xs">
                         {getPlanLabel(member.memberships[0].plan)}
                       </span>
                     )}
@@ -285,17 +285,17 @@ export default function AttendancePage() {
             )}
 
             {searchQuery && !searching && searchResults.length === 0 && !selectedMember && (
-              <p className="text-sm text-gray-500 dark:text-gray-400">No members found</p>
+              <p className="text-sm text-ink-muted">No members found</p>
             )}
 
             {selectedMember && (
-              <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+              <div className="rounded-lg border border-hairline p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">{selectedMember.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{selectedMember.phone}</p>
+                    <p className="font-medium text-ink">{selectedMember.name}</p>
+                    <p className="text-sm text-ink-muted">{selectedMember.phone}</p>
                     {selectedMember.memberships?.[0] && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-ink-muted">
                         Plan: {getPlanLabel(selectedMember.memberships[0].plan)}
                       </p>
                     )}
@@ -312,8 +312,8 @@ export default function AttendancePage() {
               <div
                 className={`flex items-center gap-2 rounded-lg p-3 text-sm ${
                   feedback.type === "success"
-                    ? "bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
-                    : "bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400"
+                    ? "bg-semantic-success/15 text-semantic-success"
+                    : "bg-semantic-error/10 border border-semantic-error/20 text-semantic-error"
                 }`}
               >
                 {feedback.type === "success" ? (
@@ -356,11 +356,11 @@ export default function AttendancePage() {
             <TableSkeleton rows={5} />
           ) : attendance.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
-                <Clock className="h-8 w-8 text-gray-400" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
+                <Clock className="h-8 w-8 text-ink-tertiary" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">No attendance records</h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              <h3 className="mt-4 text-lg font-semibold text-ink">No attendance records</h3>
+              <p className="mt-2 text-sm text-ink-muted max-w-sm">
                 {isToday
                   ? "No one has checked in yet today. Use the quick check-in above to mark attendance."
                   : "No attendance records found for the selected date."}
@@ -371,33 +371,33 @@ export default function AttendancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Member Name</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Phone</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Check-in Time</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                    <tr className="border-b border-hairline">
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Member Name</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Phone</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Check-in Time</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  <tbody className="divide-y divide-hairline">
                     {attendance.map((record) => (
                       <tr
                         key={record.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                        className="border-b border-hairline/50 hover:bg-surface-2/50 transition-colors"
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-xs font-medium text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-2 text-ink">
                               {record.member.name.charAt(0).toUpperCase()}
                             </div>
-                            <span className="font-medium text-gray-900 dark:text-gray-100">
+                            <span className="text-sm font-medium text-ink">
                               {record.member.name}
                             </span>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{record.member.phone}</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">&mdash;</td>
-                        <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                        <td className="px-4 py-3 text-sm text-ink-muted">{record.member.phone}</td>
+                        <td className="px-4 py-3 text-sm text-ink-muted">&mdash;</td>
+                        <td className="px-4 py-3 text-sm text-ink-muted">
                           <div className="flex items-center gap-1.5">
                             <Clock className="h-3.5 w-3.5" />
                             {formatDateTime(record.date)}
@@ -413,8 +413,8 @@ export default function AttendancePage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-ink-muted">
                     Showing {(page - 1) * 10 + 1}-{Math.min(page * 10, total)} of {total} records
                   </p>
                   <div className="flex items-center gap-2">

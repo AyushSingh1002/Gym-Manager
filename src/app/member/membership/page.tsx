@@ -52,13 +52,13 @@ const PLAN_OPTIONS = [
 function SkeletonMembershipPage() {
   return (
     <div className="space-y-6 animate-pulse">
-      <div className="h-64 rounded-xl bg-gray-200 dark:bg-gray-700" />
+      <div className="h-64 rounded-xl bg-surface-2" />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-xl bg-gray-200 dark:bg-gray-700 p-6 h-24" />
+          <div key={i} className="rounded-xl bg-surface-2 p-6 h-24" />
         ))}
       </div>
-      <div className="rounded-xl bg-gray-200 dark:bg-gray-700 p-6 h-48" />
+      <div className="rounded-xl bg-surface-2 p-6 h-48" />
     </div>
   )
 }
@@ -185,11 +185,11 @@ export default function MemberMembership() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 animate-in fade-in">
-        <div className="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
-          <AlertTriangle className="h-8 w-8 text-red-500" />
+        <div className="rounded-full bg-semantic-error/10 border-semantic-error/20 p-4">
+          <AlertTriangle className="h-8 w-8 text-semantic-error" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Failed to load membership</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Failed to load membership</h3>
+        <p className="mt-1 text-sm text-ink-muted">{error}</p>
         <Button onClick={fetchData} className="mt-4">Try Again</Button>
       </div>
     )
@@ -202,13 +202,13 @@ export default function MemberMembership() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">My Membership</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your gym membership and renewals</p>
+          <h1 className="text-2xl font-bold text-ink">My Membership</h1>
+          <p className="mt-1 text-sm text-ink-muted">Manage your gym membership and renewals</p>
         </div>
       </div>
 
       {/* Digital Membership Card */}
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-6 sm:p-8 text-white shadow-xl">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-6 sm:p-8 text-white">
         {/* Watermark */}
         <div className="absolute top-0 right-0 w-48 h-48 translate-x-12 -translate-y-12 opacity-5">
           <DumbbellIcon className="w-full h-full" />
@@ -300,42 +300,42 @@ export default function MemberMembership() {
       {/* Membership Details */}
       <Card>
         <div className="flex items-center gap-2 mb-4">
-          <Shield className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Membership Details</h2>
+          <Shield className="h-5 w-5 text-primary" />
+          <h2 className="text-lg font-semibold text-ink">Membership Details</h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Current Plan</p>
-            <p className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">Current Plan</p>
+            <p className="mt-1 text-base font-semibold text-ink">
               {membership ? getPlanLabel(membership.plan) : "None"}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Start Date</p>
-            <p className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">Start Date</p>
+            <p className="mt-1 text-base font-semibold text-ink">
               {membership ? formatDate(new Date(membership.startDate)) : "—"}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">End Date</p>
-            <p className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">End Date</p>
+            <p className="mt-1 text-base font-semibold text-ink">
               {membership ? formatDate(new Date(membership.endDate)) : "—"}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Days Remaining</p>
-            <p className={`mt-1 text-base font-semibold ${membership ? getDaysColor(daysRemaining) : "text-gray-400"}`}>
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">Days Remaining</p>
+            <p className={`mt-1 text-base font-semibold ${membership ? getDaysColor(daysRemaining) : "text-ink-muted"}`}>
               {membership ? `${daysRemaining} days` : "—"}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Amount Paid</p>
-            <p className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">Amount Paid</p>
+            <p className="mt-1 text-base font-semibold text-ink">
               {membership ? formatCurrency(getPlanAmount(membership.plan)) : "—"}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</p>
+          <div className="rounded-lg bg-surface-2 p-4">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wider">Status</p>
             <div className="mt-1">
               {membership ? (
                 <Badge status={membership.status}>{membership.status}</Badge>
@@ -355,14 +355,14 @@ export default function MemberMembership() {
               {daysRemaining > 0 ? (
                 <Clock className={`h-5 w-5 ${getDaysColor(daysRemaining)}`} />
               ) : (
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+                <AlertTriangle className="h-5 w-5 text-semantic-error" />
               )}
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-semibold text-ink">
                 {daysRemaining > 0 ? "Renew Your Membership" : "Membership Expired"}
               </h2>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-sm text-ink-muted">
                 {daysRemaining > 0
                   ? `Your membership expires in ${daysRemaining} days. Renew now to avoid interruption.`
                   : "Your membership has expired. Choose a plan to continue your fitness journey."}
@@ -374,7 +374,7 @@ export default function MemberMembership() {
                   {daysRemaining > 0 ? "Renew Now" : "Get New Plan"}
                 </Button>
               ) : (
-                <div className="mt-4 space-y-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                <div className="mt-4 space-y-4 rounded-lg bg-surface-2 p-4">
                   <Select
                     label="Select Plan"
                     value={selectedPlan}
@@ -382,8 +382,8 @@ export default function MemberMembership() {
                     options={PLAN_OPTIONS}
                   />
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Amount to pay:</span>
-                    <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                    <span className="text-sm text-ink-muted">Amount to pay:</span>
+                    <span className="text-xl font-bold text-ink">
                       {formatCurrency(renewalAmount)}
                     </span>
                   </div>
@@ -413,41 +413,41 @@ export default function MemberMembership() {
       <Card>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Membership History</h2>
+            <Calendar className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold text-ink">Membership History</h2>
           </div>
         </div>
 
         {historyItems.length === 0 ? (
           <div className="flex flex-col items-center py-10 text-center">
-            <CreditCard className="h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">No membership history found</p>
+            <CreditCard className="h-10 w-10 text-ink-tertiary mb-3" />
+            <p className="text-sm text-ink-muted">No membership history found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="py-3 pr-4 text-left font-medium text-gray-500 dark:text-gray-400">Plan</th>
-                  <th className="py-3 pr-4 text-left font-medium text-gray-500 dark:text-gray-400">Start Date</th>
-                  <th className="py-3 pr-4 text-left font-medium text-gray-500 dark:text-gray-400">End Date</th>
-                  <th className="py-3 pr-4 text-right font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                  <th className="py-3 text-right font-medium text-gray-500 dark:text-gray-400">Status</th>
+                <tr className="border-b border-hairline">
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Plan</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Start Date</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">End Date</th>
+                  <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Amount</th>
+                  <th className="text-right px-4 py-3 text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {historyItems.map((payment) => (
                   <tr
                     key={payment.id}
-                    className="border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    className="border-b border-hairline/50 hover:bg-surface-2/50 transition-colors"
                   >
-                    <td className="py-3 pr-4 text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-3 text-sm text-ink">
                       {payment.membership?.plan ? getPlanLabel(payment.membership.plan) : "—"}
                     </td>
-                    <td className="py-3 pr-4 text-gray-600 dark:text-gray-400">
+                    <td className="px-4 py-3 text-sm text-ink-muted">
                       {formatDate(new Date(payment.date))}
                     </td>
-                    <td className="py-3 pr-4 text-gray-600 dark:text-gray-400">
+                    <td className="px-4 py-3 text-sm text-ink-muted">
                       {payment.membership?.plan
                         ? (() => {
                             const d = new Date(payment.date)
@@ -456,10 +456,10 @@ export default function MemberMembership() {
                           })()
                         : "—"}
                     </td>
-                    <td className="py-3 pr-4 text-right font-medium text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-3 text-sm text-right font-medium text-ink">
                       {formatCurrency(payment.amount)}
                     </td>
-                    <td className="py-3 text-right">
+                    <td className="px-4 py-3 text-sm text-right">
                       <Badge status={payment.status}>{payment.status}</Badge>
                     </td>
                   </tr>
