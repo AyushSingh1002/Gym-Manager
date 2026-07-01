@@ -23,6 +23,7 @@ interface PaymentMembership {
   plan: string
   startDate: string
   endDate: string
+  status?: string
 }
 
 interface Payment {
@@ -335,19 +336,56 @@ export default function PaymentsPage() {
     }
   }
 
-  const viewReceipt = async (paymentId: string) => {
+  const viewReceipt = (paymentId: string) => {
+    const payment = payments.find((p) => p.id === paymentId)
+    if (!payment) return
+    setSelectedReceipt({
+      receiptNo: payment.receiptNo || payment.id.slice(0, 8).toUpperCase(),
+      paymentId: payment.id,
+      amount: payment.amount,
+      method: payment.method,
+      status: payment.status,
+      date: payment.createdAt,
+      member: {
+        id: payment.member.id,
+        name: payment.member.name,
+        phone: payment.member.phone,
+        email: payment.member.email,
+        address: payment.member.email,
+      },
+      membership: payment.membership
+        ? {
+            id: payment.membership.id,
+            plan: payment.membership.plan,
+            startDate: payment.membership.startDate,
+            endDate: payment.membership.endDate,
+            status: payment.membership.status || "ACTIVE",
+          }
+        : null,
+      razorpayPaymentId: payment.razorpayPaymentId,
+      razorpayOrderId: payment.razorpayOrderId,
+    })
+    setReceiptModalOpen(true)
+  }
+
+  const handleDownloadReceipt = async (paymentId: string) => {
     try {
-      setReceiptLoading(true)
-      setSelectedReceipt(null)
       const res = await fetch(`/api/payments/${paymentId}/receipt`)
-      if (!res.ok) throw new Error("Failed to load receipt")
-      const data = await res.json()
-      setSelectedReceipt(data.receipt)
-      setReceiptModalOpen(true)
+      if (!res.ok) throw new Error("Download failed")
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const disposition = res.headers.get("Content-Disposition") || ""
+      const match = disposition.match(/filename="(.+?)"/)
+      const filename = match ? match[1] : `receipt-${paymentId}.pdf`
+      const a = document.createElement("a")
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 100)
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Failed to load receipt")
-    } finally {
-      setReceiptLoading(false)
+      console.error("Download receipt error:", err)
     }
   }
 
@@ -668,14 +706,24 @@ export default function PaymentsPage() {
                             {formatDate(payment.date || payment.createdAt)}
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => viewReceipt(payment.id)}
-                            >
-                              <Receipt className="h-4 w-4" />
-                              View
-                            </Button>
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => viewReceipt(payment.id)}
+                              >
+                                <Receipt className="h-4 w-4" />
+                                View
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDownloadReceipt(payment.id)}
+                                title="Download PDF Receipt"
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       )

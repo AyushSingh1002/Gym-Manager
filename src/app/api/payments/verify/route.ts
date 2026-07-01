@@ -5,7 +5,7 @@ import { requireAuth, logActivity } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const body = await request.json()
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body
@@ -87,6 +87,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error verifying payment:", error)
     return NextResponse.json(

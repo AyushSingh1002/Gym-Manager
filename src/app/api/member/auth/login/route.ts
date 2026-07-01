@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { createMemberToken, verifyPassword, setMemberCookie } from "@/lib/member-auth"
 import { getAppUrl } from "@/lib/constants"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function GET() {
   return NextResponse.redirect(new URL("/member/login", getAppUrl()))
@@ -9,6 +10,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 5, 60000)
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers }
+      )
+    }
+
     const { phone, password } = await request.json()
 
     if (!phone || !password) {
@@ -24,6 +33,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
+      )
+    }
+
+    if (!member.isActive || member.status === "CANCELLED") {
+      return NextResponse.json(
+        { error: "Your account has been deactivated. Please contact the gym." },
+        { status: 403 }
       )
     }
 

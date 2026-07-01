@@ -78,6 +78,9 @@ export async function requireMemberAuth() {
   if (!member) {
     throw new Error("Unauthorized")
   }
+  if (!member.isActive || member.status === "CANCELLED") {
+    throw new Error("Forbidden")
+  }
   return member
 }
 

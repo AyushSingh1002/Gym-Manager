@@ -9,7 +9,10 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "GymFlow - Gym Management System",
+  title: {
+    template: "%s | GymFlow",
+    default: "GymFlow - Gym Management System",
+  },
   description: "Modern gym management application for small to medium-sized gyms",
 }
 

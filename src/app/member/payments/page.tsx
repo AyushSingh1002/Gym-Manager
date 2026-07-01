@@ -220,21 +220,34 @@ export default function MemberPayments() {
     }
   }
 
-  async function handleDownloadReceipt(paymentId: string) {
-    try {
-      const res = await fetch(`/api/payments/${paymentId}/receipt`)
-      if (!res.ok) throw new Error("Failed to download receipt")
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const a = window.document.createElement("a")
-      a.href = url
-      a.download = `receipt-${paymentId}.pdf`
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch {
-      window.open(`/api/payments/${paymentId}/receipt`, "_blank")
+async function handleDownloadReceipt(paymentId: string) {
+  try {
+    const res = await fetch(`/api/payments/${paymentId}/receipt`)
+
+    if (!res.ok) {
+      throw new Error(await res.text())
     }
+
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const disposition = res.headers.get("Content-Disposition") || ""
+    const match = disposition.match(/filename="(.+?)"/)
+    const filename = match ? match[1] : `receipt-${paymentId}.pdf`
+
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+
+    setTimeout(() => URL.revokeObjectURL(url), 100)
+  } catch (err) {
+    console.error(err)
+    window.open(`/api/payments/${paymentId}/receipt`, "_blank")
   }
+}
 
   function getStatusIcon(status: string) {
     switch (status) {

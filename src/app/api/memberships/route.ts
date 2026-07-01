@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const plan = searchParams.get("plan") || ""
     const status = searchParams.get("status") || ""
     const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
-    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
+    const limit = Math.min(parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT)), PAGINATION.MAX_LIMIT)
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}

@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Modal } from "@/components/ui/modal"
 import { TableSkeleton } from "@/components/ui/skeleton"
+import { useDebounce } from "@/hooks/useDebounce"
 import { formatDate, getPlanLabel } from "@/lib/utils"
 
 interface MemberMembership {
@@ -93,6 +94,7 @@ export default function MembersPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState("")
+  const debouncedSearch = useDebounce(search, 300)
   const [statusFilter, setStatusFilter] = useState("")
   const [planFilter, setPlanFilter] = useState("")
   const [page, setPage] = useState(1)
@@ -109,7 +111,7 @@ export default function MembersPage() {
       setLoading(true)
       setError(null)
       const params = new URLSearchParams()
-      if (search) params.set("search", search)
+      if (debouncedSearch) params.set("search", debouncedSearch)
       if (statusFilter) params.set("status", statusFilter)
       if (planFilter) params.set("plan", planFilter)
       params.set("page", String(page))
@@ -126,7 +128,7 @@ export default function MembersPage() {
     } finally {
       setLoading(false)
     }
-  }, [search, statusFilter, planFilter, page])
+  }, [debouncedSearch, statusFilter, planFilter, page])
 
   useEffect(() => {
     fetchMembers()
@@ -589,5 +591,6 @@ export default function MembersPage() {
         </div>
       </Modal>
     </div>
+    </main>
   )
 }

@@ -67,19 +67,44 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Activate membership if it exists
+    const updates: Promise<unknown>[] = [
+      prisma.member.update({
+        where: { id: member.id },
+        data: { status: "ACTIVE" },
+      }),
+      prisma.notification.create({
+        data: {
+          memberId: member.id,
+          title: "Payment Successful",
+          message: `Your payment of ₹${payment.amount} has been received. Your membership is now active.`,
+          type: "PAYMENT",
+          link: "/member/membership",
+        },
+      }),
+    ]
+
     if (payment.membership) {
-      await Promise.all([
+      updates.push(
         prisma.membership.update({
           where: { id: payment.membership.id },
-          data: { status: "ACTIVE" },
-        }),
-        prisma.member.update({
-          where: { id: member.id },
-          data: { status: "ACTIVE" },
-        }),
-      ])
+          data: {
+            status: "ACTIVE",
+            paymentStatus: "PAID",
+          },
+        })
+      )
     }
+
+    if (payment.membershipId && (!payment.membership || payment.membershipId !== payment.membership.id)) {
+      updates.push(
+        prisma.membership.update({
+          where: { id: payment.membershipId },
+          data: { paymentStatus: "PAID" },
+        })
+      )
+    }
+
+    await Promise.all(updates)
 
     return NextResponse.json({
       success: true,

@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const dateParam = searchParams.get("date")
     const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
-    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
+    const limit = Math.min(parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT)), PAGINATION.MAX_LIMIT)
     const skip = (page - 1) * limit
 
     const today = new Date()

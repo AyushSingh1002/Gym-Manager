@@ -61,7 +61,7 @@ export function MemberSidebar({ member }: MemberSidebarProps) {
       )}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 h-full lg:relative lg:h-auto lg:z-auto lg:translate-x-0",
+          "fixed top-0 left-0 z-50 h-full w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 lg:translate-x-0 lg:static lg:z-auto",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -77,6 +77,7 @@ export function MemberSidebar({ member }: MemberSidebarProps) {
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
             className="p-1.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden"
           >
             <X className="h-4 w-4" />

@@ -45,7 +45,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 
     const member = await prisma.member.findUnique({ where: { id } })
@@ -123,6 +123,9 @@ export async function POST(
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error creating membership:", error)
     return NextResponse.json(

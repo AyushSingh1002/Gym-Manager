@@ -4,7 +4,7 @@ import { requireAuth } from "@/lib/auth"
 
 export async function GET(request: NextRequest) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const { searchParams } = new URL(request.url)
     const action = searchParams.get("action") || ""
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const from = searchParams.get("from")
     const to = searchParams.get("to")
     const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "20")
+    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100)
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
@@ -60,6 +60,9 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error fetching activity logs:", error)
     return NextResponse.json(

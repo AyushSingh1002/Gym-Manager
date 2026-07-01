@@ -172,6 +172,27 @@ export default function AnalyticsPage() {
 
   const { monthlyRevenue, memberGrowth, attendanceTrend, planDistribution, activeInactive } = data
 
+  const hasData = memberGrowth.length > 0 || monthlyRevenue.length > 0 || attendanceTrend.length > 0
+  if (!hasData) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-ink">Analytics</h1>
+          <p className="text-sm text-ink-muted mt-1">Track your gym&apos;s performance</p>
+        </div>
+        <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4 text-center">
+          <div className="w-16 h-16 rounded-full bg-surface-2 flex items-center justify-center">
+            <BarChart3 className="w-8 h-8 text-ink-tertiary" />
+          </div>
+          <h3 className="text-lg font-medium text-ink">No analytics data yet</h3>
+          <p className="text-sm text-ink-muted max-w-md">
+            Analytics will appear here once members join and payments start flowing.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   const totalMembers = memberGrowth.length > 0 ? memberGrowth[memberGrowth.length - 1].total : 0
   const activeMembers = activeInactive.active
   const totalRevenue = monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0)

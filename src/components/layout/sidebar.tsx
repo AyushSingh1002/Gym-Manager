@@ -58,6 +58,7 @@ export function Sidebar() {
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
             className="p-1.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden"
           >
             <X className="h-4 w-4" />

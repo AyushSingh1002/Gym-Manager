@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const from = searchParams.get("from")
     const to = searchParams.get("to")
     const page = parseInt(searchParams.get("page") || String(PAGINATION.DEFAULT_PAGE))
-    const limit = parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT))
+    const limit = Math.min(parseInt(searchParams.get("limit") || String(PAGINATION.DEFAULT_LIMIT)), PAGINATION.MAX_LIMIT)
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
               plan: true,
               startDate: true,
               endDate: true,
+              status: true,
             },
           },
         },
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const body = await request.json()
     const { memberId, membershipId, amount, method, notes } = body
@@ -153,6 +154,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error creating payment:", error)
     return NextResponse.json(

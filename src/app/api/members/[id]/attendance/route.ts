@@ -83,7 +83,7 @@ export async function GET(
     const from = searchParams.get("from")
     const to = searchParams.get("to")
     const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "20")
+    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100)
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = { memberId: id }

@@ -2,9 +2,18 @@ import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { createToken, setAdminCookie } from "@/lib/auth"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 5, 60000)
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers }
+      )
+    }
+
     const { email, password } = await request.json()
 
     if (!email || !password) {

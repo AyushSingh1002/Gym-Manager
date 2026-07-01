@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -15,20 +15,68 @@ interface ModalProps {
   size?: "sm" | "md" | "lg" | "xl"
 }
 
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
 export function Modal({ open, onClose, title, description, children, className, size = "md" }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+
+  const focusTrap = useCallback((e: KeyboardEvent) => {
+    if (e.key !== "Tab" || !containerRef.current) return
+
+    const focusable = containerRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+    if (focusable.length === 0) {
+      e.preventDefault()
+      return
+    }
+
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }, [])
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    if (open) {
-      document.addEventListener("keydown", handleEscape)
-      document.body.style.overflow = "hidden"
-    }
+    if (!open) return
+
+    previousFocusRef.current = document.activeElement as HTMLElement
+
+    const timer = setTimeout(() => {
+      if (containerRef.current) {
+        const firstFocusable = containerRef.current.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
+        firstFocusable?.focus()
+      }
+    }, 50)
+
+    document.addEventListener("keydown", focusTrap)
+    document.body.style.overflow = "hidden"
+
     return () => {
-      document.removeEventListener("keydown", handleEscape)
+      clearTimeout(timer)
+      document.removeEventListener("keydown", focusTrap)
       document.body.style.overflow = "unset"
+      previousFocusRef.current?.focus()
+    }
+  }, [open, focusTrap])
+
+  useEffect(() => {
+    if (open) {
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose()
+      }
+      document.addEventListener("keydown", handleEscape)
+      return () => document.removeEventListener("keydown", handleEscape)
     }
   }, [open, onClose])
 
@@ -44,6 +92,9 @@ export function Modal({ open, onClose, title, description, children, className, 
       {open && (
         <motion.div
           ref={overlayRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={title || "Dialog"}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           onClick={(e) => e.target === overlayRef.current && onClose()}
           initial={{ opacity: 0 }}
@@ -52,6 +103,7 @@ export function Modal({ open, onClose, title, description, children, className, 
           transition={{ duration: 0.2 }}
         >
           <motion.div
+            ref={containerRef}
             className={cn(
               "w-full rounded-[var(--radius-xl)] border border-hairline bg-surface-1 p-6 shadow-[var(--shadow-modal)]",
               sizes[size],

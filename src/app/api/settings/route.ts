@@ -14,10 +14,14 @@ export async function GET() {
       })
     }
 
-    return NextResponse.json(settings)
+    const { razorpayKeySecret: _, ...safeSettings } = settings
+    return NextResponse.json(safeSettings)
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error fetching settings:", error)
     return NextResponse.json(
@@ -29,10 +33,10 @@ export async function GET() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const body = await request.json()
-    const { name, address, phone, email, website, currency, timezone, razorpayKeyId, razorpayKeySecret } = body
+    const { name, tagline, address, phone, email, website, currency, timezone, gstNumber, logo, razorpayKeyId, razorpayKeySecret } = body
 
     let settings = await prisma.setting.findFirst()
 
@@ -41,12 +45,15 @@ export async function PATCH(request: NextRequest) {
         data: {
           id: "gym",
           ...(name !== undefined && { name }),
+          ...(tagline !== undefined && { tagline }),
           ...(address !== undefined && { address }),
           ...(phone !== undefined && { phone }),
           ...(email !== undefined && { email }),
           ...(website !== undefined && { website }),
           ...(currency !== undefined && { currency }),
           ...(timezone !== undefined && { timezone }),
+          ...(gstNumber !== undefined && { gstNumber }),
+          ...(logo !== undefined && { logo }),
           ...(razorpayKeyId !== undefined && { razorpayKeyId }),
           ...(razorpayKeySecret !== undefined && { razorpayKeySecret }),
         },
@@ -56,22 +63,29 @@ export async function PATCH(request: NextRequest) {
         where: { id: settings.id },
         data: {
           ...(name !== undefined && { name }),
+          ...(tagline !== undefined && { tagline }),
           ...(address !== undefined && { address }),
           ...(phone !== undefined && { phone }),
           ...(email !== undefined && { email }),
           ...(website !== undefined && { website }),
           ...(currency !== undefined && { currency }),
           ...(timezone !== undefined && { timezone }),
+          ...(gstNumber !== undefined && { gstNumber }),
+          ...(logo !== undefined && { logo }),
           ...(razorpayKeyId !== undefined && { razorpayKeyId }),
           ...(razorpayKeySecret !== undefined && { razorpayKeySecret }),
         },
       })
     }
 
-    return NextResponse.json(settings)
+    const { razorpayKeySecret: _, ...safeSettings } = settings
+    return NextResponse.json(safeSettings)
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error updating settings:", error)
     return NextResponse.json(

@@ -48,10 +48,13 @@ export async function getCurrentAdmin() {
   return admin
 }
 
-export async function requireAuth() {
+export async function requireAuth(allowedRoles?: string[]) {
   const admin = await getCurrentAdmin()
   if (!admin) {
     throw new Error("Unauthorized")
+  }
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(admin.role)) {
+    throw new Error("Forbidden")
   }
   return admin
 }

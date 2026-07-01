@@ -1,8 +1,8 @@
 export const APP_NAME = "GymFlow"
 
 export const JWT = {
-  ADMIN_SECRET: process.env.JWT_SECRET || "",
-  MEMBER_SECRET: process.env.JWT_SECRET || "",
+  ADMIN_SECRET: process.env.JWT_ADMIN_SECRET || process.env.JWT_SECRET || "",
+  MEMBER_SECRET: process.env.JWT_MEMBER_SECRET || process.env.JWT_SECRET || "",
   ADMIN_EXPIRY: "7d",
   MEMBER_EXPIRY: "30d",
   ADMIN_COOKIE: "session",
@@ -61,6 +61,7 @@ export const RECEIPT_PREFIX = "GF"
 export const PAGINATION = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 10,
+  MAX_LIMIT: 100,
 }
 
 export const CURRENCY = "INR"

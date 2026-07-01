@@ -15,10 +15,45 @@ export async function GET() {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1)
 
+    // Auto-expire memberships past their end date
+    const expiredMemberships = await prisma.membership.findMany({
+      where: {
+        memberId: member.id,
+        status: "ACTIVE",
+        endDate: { lt: now },
+      },
+    })
+
+    if (expiredMemberships.length > 0) {
+      const expiredIds = expiredMemberships.map(m => m.id)
+      await prisma.membership.updateMany({
+        where: { id: { in: expiredIds } },
+        data: { status: "EXPIRED" },
+      })
+    }
+
+    // Update member status to EXPIRED if no active membership remains
+    if (expiredMemberships.length > 0 && member.status === "ACTIVE") {
+      const hasOtherActive = await prisma.membership.findFirst({
+        where: {
+          memberId: member.id,
+          status: "ACTIVE",
+          endDate: { gte: now },
+        },
+      })
+      if (!hasOtherActive) {
+        await prisma.member.update({
+          where: { id: member.id },
+          data: { status: "EXPIRED" },
+        })
+      }
+    }
+
     const [
       todayAttendance,
       monthAttendanceCount,
       activeMembership,
+      pendingMembership,
       recentPayments,
       unreadCount,
     ] = await Promise.all([
@@ -45,6 +80,17 @@ export async function GET() {
           status: true,
         },
       }),
+      prisma.membership.findFirst({
+        where: { memberId: member.id, status: "PENDING" },
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          plan: true,
+          amount: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
       prisma.payment.findMany({
         where: { memberId: member.id },
         orderBy: { createdAt: "desc" },
@@ -67,7 +113,7 @@ export async function GET() {
       member: {
         firstName: member.firstName,
         lastName: member.lastName,
-        status: member.status,
+        status: expiredMemberships.length > 0 ? "EXPIRED" : member.status,
       },
       currentMembership: activeMembership
         ? {
@@ -75,6 +121,14 @@ export async function GET() {
             startDate: activeMembership.startDate,
             endDate: activeMembership.endDate,
             daysRemaining: getDaysRemaining(activeMembership.endDate),
+          }
+        : null,
+      pendingMembership: pendingMembership
+        ? {
+            id: pendingMembership.id,
+            plan: pendingMembership.plan,
+            amount: pendingMembership.amount,
+            createdAt: pendingMembership.createdAt,
           }
         : null,
       todayAttendance: !!todayAttendance,

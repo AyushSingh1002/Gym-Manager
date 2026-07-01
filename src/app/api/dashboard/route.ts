@@ -4,7 +4,7 @@ import { requireAuth } from "@/lib/auth"
 
 export async function GET() {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -87,6 +87,9 @@ export async function GET() {
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error fetching dashboard:", error)
     return NextResponse.json(

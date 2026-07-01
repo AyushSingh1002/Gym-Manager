@@ -30,8 +30,8 @@ interface PaymentRecord {
 
 interface DashboardResponse {
   member: { firstName: string; lastName: string; status: string }
-  activeMembership: { plan: string; startDate: string; endDate: string } | null
   currentMembership: { plan: string; startDate: string; endDate: string; daysRemaining: number } | null
+  pendingMembership: { id: string; plan: string; amount: number; createdAt: string } | null
 }
 
 interface PaymentsResponse {
@@ -77,6 +77,7 @@ function getDaysBgColor(days: number): string {
 
 export default function MemberMembership() {
   const [membership, setMembership] = useState<Membership | null>(null)
+  const [pendingMembership, setPendingMembership] = useState<{ plan: string; amount: number; createdAt: string } | null>(null)
   const [memberName, setMemberName] = useState("")
   const [paymentHistory, setPaymentHistory] = useState<PaymentRecord[]>([])
   const [loading, setLoading] = useState(true)
@@ -103,16 +104,17 @@ export default function MemberMembership() {
       const dashboardData: DashboardResponse = await dashboardRes.json()
       setMemberName(`${dashboardData.member.firstName} ${dashboardData.member.lastName}`)
 
-      const activeMem = dashboardData.activeMembership || dashboardData.currentMembership
-      if (activeMem) {
+      if (dashboardData.currentMembership) {
         setMembership({
           id: "",
-          plan: activeMem.plan,
-          startDate: activeMem.startDate,
-          endDate: activeMem.endDate,
+          plan: dashboardData.currentMembership.plan,
+          startDate: dashboardData.currentMembership.startDate,
+          endDate: dashboardData.currentMembership.endDate,
           status: "ACTIVE",
         })
       }
+
+      setPendingMembership(dashboardData.pendingMembership)
 
       if (paymentsRes.ok) {
         const paymentsData: PaymentsResponse = await paymentsRes.json()
@@ -127,7 +129,8 @@ export default function MemberMembership() {
 
   const daysRemaining = membership ? getDaysRemaining(new Date(membership.endDate)) : 0
   const memberId = `GF-${String(Math.abs(memberName.split(" ").join("").split("").reduce((a, c) => a + c.charCodeAt(0), 0)).toString().slice(0, 6)).padStart(6, "0")}`
-  const needsRenewal = !membership || daysRemaining <= 30
+  const hasPendingRenewal = pendingMembership !== null
+  const needsRenewal = !hasPendingRenewal && (!membership || daysRemaining <= 30)
   const renewalAmount = getPlanAmount(selectedPlan)
 
   async function handleRenew() {
@@ -156,7 +159,18 @@ export default function MemberMembership() {
           description: `${getPlanLabel(data.plan)} Renewal`,
           order_id: data.orderId,
           prefill: { name: memberName },
-          handler: function () {
+          handler: async function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
+            try {
+              await fetch("/api/member/payments/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              })
+            } catch {}
             fetchData()
             setShowRenewal(false)
           },
@@ -346,6 +360,23 @@ export default function MemberMembership() {
           </div>
         </div>
       </Card>
+
+      {/* Pending Payment Banner */}
+      {hasPendingRenewal && (
+        <Card className="border-amber-200 dark:border-amber-800">
+          <div className="flex items-start gap-3">
+            <div className="rounded-full bg-amber-500/10 p-2">
+              <Clock className="h-5 w-5 text-amber-500" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-ink">Payment Pending</h2>
+              <p className="mt-1 text-sm text-ink-muted">
+                Your {getPlanLabel(pendingMembership!.plan)} plan renewal of {formatCurrency(pendingMembership!.amount)} is waiting for payment confirmation.
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Renewal Section */}
       {needsRenewal && (

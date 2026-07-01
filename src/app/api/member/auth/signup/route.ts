@@ -2,9 +2,18 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { createMemberToken, hashPassword, setMemberCookie } from "@/lib/member-auth"
 import { PASSWORD_MIN_LENGTH, PHONE_MIN_LENGTH } from "@/lib/constants"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 3, 60000)
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers }
+      )
+    }
+
     const { firstName, lastName, phone, password, email } = await request.json()
 
     if (!firstName || !lastName || !phone || !password) {
@@ -36,21 +45,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const count = await prisma.member.count()
-    const memberId = `GF-${String(count + 1).padStart(6, "0")}`
     const hashedPassword = await hashPassword(password)
 
-    const member = await prisma.member.create({
-      data: {
-        memberId,
-        firstName,
-        lastName,
-        phone,
-        email: email || null,
-        password: hashedPassword,
-        status: "ACTIVE",
-        isActive: true,
-      },
+    const member = await prisma.$transaction(async (tx) => {
+      const lastMember = await tx.member.findFirst({
+        orderBy: { createdAt: "desc" },
+        select: { memberId: true },
+      })
+      const lastNum = lastMember ? parseInt(lastMember.memberId.replace("GF-", ""), 10) : 0
+      const memberId = `GF-${String(lastNum + 1).padStart(6, "0")}`
+
+      return tx.member.create({
+        data: {
+          memberId,
+          firstName,
+          lastName,
+          phone,
+          email: email || null,
+          password: hashedPassword,
+          status: "ACTIVE",
+          isActive: true,
+        },
+      })
     })
 
     prisma.notification.create({

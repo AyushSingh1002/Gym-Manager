@@ -51,7 +51,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 
     const existing = await prisma.member.findUnique({ where: { id } })
@@ -97,8 +97,11 @@ export async function PATCH(
 
     return NextResponse.json({ member })
   } catch (error) {
-    if ((error as Error).message === "Unauthorized") {
+      if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error updating member:", error)
     return NextResponse.json(
@@ -113,7 +116,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 
     const existing = await prisma.member.findUnique({ where: { id } })
@@ -135,6 +138,9 @@ export async function DELETE(
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error deactivating member:", error)
     return NextResponse.json(

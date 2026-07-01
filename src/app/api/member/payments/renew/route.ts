@@ -35,13 +35,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const [settings, activeMembership] = await Promise.all([
-      prisma.setting.findUnique({ where: { id: "gym" } }),
-      prisma.membership.findFirst({
-        where: { memberId: member.id, status: "ACTIVE" },
-        orderBy: { endDate: "desc" },
-      }),
-    ])
+    const settings = await prisma.setting.findUnique({ where: { id: "gym" } })
 
     const keyId = settings?.razorpayKeyId || process.env.RAZORPAY_KEY_ID
     const keySecret = settings?.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET
@@ -124,30 +118,29 @@ export async function POST(request: NextRequest) {
 
     const razorpayOrder = await razorpayResponse.json()
 
-    const [payment, membership] = await Promise.all([
-      prisma.payment.create({
-        data: {
-          memberId: member.id,
-          membershipId: activeMembership?.id || null,
-          amount,
-          method: "ONLINE",
-          status: "PENDING",
-          razorpayOrderId: razorpayOrder.id,
-        },
-      }),
-      prisma.membership.create({
-        data: {
-          memberId: member.id,
-          plan,
-          startDate,
-          endDate,
-          status: "PENDING",
-          amount,
-          totalAmount: amount,
-          notes: "Pending payment renewal",
-        },
-      }),
-    ])
+    const membership = await prisma.membership.create({
+      data: {
+        memberId: member.id,
+        plan,
+        startDate,
+        endDate,
+        status: "PENDING",
+        amount,
+        totalAmount: amount,
+        notes: "Pending payment renewal",
+      },
+    })
+
+    const payment = await prisma.payment.create({
+      data: {
+        memberId: member.id,
+        membershipId: membership.id,
+        amount,
+        method: "ONLINE",
+        status: "PENDING",
+        razorpayOrderId: razorpayOrder.id,
+      },
+    })
 
     return NextResponse.json({
       orderId: razorpayOrder.id,
@@ -155,6 +148,7 @@ export async function POST(request: NextRequest) {
       plan,
       razorpayKeyId: keyId,
       paymentId: payment.id,
+      membershipId: membership.id,
     })
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {

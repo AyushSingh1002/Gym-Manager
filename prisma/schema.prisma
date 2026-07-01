@@ -76,6 +76,9 @@ model Admin {
 
   activityLogs  ActivityLog[]
   workoutPlans  WorkoutPlan[]
+
+  @@index([email])
+  @@index([role])
 }
 
 model Member {
@@ -119,6 +122,13 @@ model Member {
   progressPhotos  ProgressPhoto[]
   notifications   Notification[]
   supportTickets  SupportTicket[]
+
+  @@index([memberId])
+  @@index([phone])
+  @@index([status])
+  @@index([isActive])
+  @@index([createdAt])
+  @@index([joinDate])
 }
 
 model Membership {
@@ -138,6 +148,13 @@ model Membership {
 
   member         Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
   payments       Payment[]
+
+  @@index([memberId])
+  @@index([status])
+  @@index([plan])
+  @@index([endDate])
+  @@index([startDate])
+  @@index([memberId, status])
 }
 
 model Attendance {
@@ -153,6 +170,9 @@ model Attendance {
   member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([memberId, date])
+  @@index([memberId])
+  @@index([date])
+  @@index([memberId, date])
 }
 
 model Payment {
@@ -173,6 +193,13 @@ model Payment {
 
   member         Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
   membership     Membership?    @relation(fields: [membershipId], references: [id])
+
+  @@index([memberId])
+  @@index([status])
+  @@index([method])
+  @@index([createdAt])
+  @@index([razorpayOrderId])
+  @@index([memberId, status])
 }
 
 model WorkoutPlan {
@@ -192,6 +219,11 @@ model WorkoutPlan {
   createdByAdmin Admin @relation(fields: [createdBy], references: [id])
 
   exercises   WorkoutExercise[]
+
+  @@index([memberId])
+  @@index([createdBy])
+  @@index([isActive])
+  @@index([memberId, isActive])
 }
 
 model WorkoutExercise {
@@ -208,6 +240,9 @@ model WorkoutExercise {
   completed     Boolean @default(false)
 
   workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+
+  @@index([workoutPlanId])
+  @@index([workoutPlanId, dayOfWeek])
 }
 
 model ProgressLog {
@@ -225,16 +260,9 @@ model ProgressLog {
   createdAt DateTime @default(now())
 
   member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
-}
 
-model ProgressPhoto {
-  id       String @id @default(cuid())
-  memberId String
-  url      String
-  type     String @default("front")
-  date     DateTime @default(now())
-
-  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  @@index([memberId])
+  @@index([date])
 }
 
 model Notification {
@@ -248,6 +276,11 @@ model Notification {
   createdAt DateTime         @default(now())
 
   member    Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@index([read])
+  @@index([createdAt])
+  @@index([memberId, read])
 }
 
 model SupportTicket {
@@ -261,15 +294,10 @@ model SupportTicket {
   updatedAt   DateTime     @updatedAt
 
   member      Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
-}
 
-model FAQ {
-  id        String  @id @default(cuid())
-  question  String
-  answer    String
-  order     Int     @default(0)
-  isActive  Boolean @default(true)
-  createdAt DateTime @default(now())
+  @@index([memberId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model ActivityLog {
@@ -282,17 +310,50 @@ model ActivityLog {
   createdAt DateTime @default(now())
 
   admin     Admin?   @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([action])
+  @@index([entity])
+  @@index([createdAt])
+  @@index([entity, entityId])
 }
 
 model Setting {
   id    String @id @default("gym")
   name  String @default("GymFlow")
+  tagline String?
   address String?
   phone String?
   email String?
   website String?
   currency String @default("INR")
   timezone String @default("Asia/Kolkata")
+  gstNumber String?
+  logo String?
   razorpayKeyId String?
   razorpayKeySecret String?
+}
+
+model ProgressPhoto {
+  id       String @id @default(cuid())
+  memberId String
+  url      String
+  type     String @default("front")
+  date     DateTime @default(now())
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+}
+
+model FAQ {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String
+  order     Int     @default(0)
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([isActive])
+  @@index([order])
 }

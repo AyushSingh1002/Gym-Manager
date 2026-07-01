@@ -4,7 +4,7 @@ import { requireAuth } from "@/lib/auth"
 
 export async function GET() {
   try {
-    const admin = await requireAuth()
+    const admin = await requireAuth(["ADMIN"])
 
     const [monthlyRevenueData, memberGrowthData, attendanceTrendData, planDistributionData, activeInactiveData] =
       await Promise.all([
@@ -25,6 +25,9 @@ export async function GET() {
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    if ((error as Error).message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
     console.error("Error fetching analytics:", error)
     return NextResponse.json(
