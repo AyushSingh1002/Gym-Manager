@@ -188,16 +188,16 @@ export default function AttendancePage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-ink">Attendance</h1>
-        <p className="text-sm text-ink-muted mt-1">Track and manage daily member attendance</p>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="pt-2 sm:pt-0">
+        <h1 className="text-2xl sm:text-3xl font-bold text-ink-primary leading-tight">Attendance</h1>
+        <p className="text-xs sm:text-sm text-ink-muted mt-1.5 sm:mt-2">Track and manage daily member attendance</p>
       </div>
 
       {isToday && (
-        <div className="flex items-center gap-2 text-sm text-ink-muted">
-          <CalendarCheck className="h-4 w-4" />
-          <span>
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-ink-muted">
+          <CalendarCheck className="h-4 w-4 flex-shrink-0" />
+          <span className="truncate">
             {new Date().toLocaleDateString("en-IN", {
               weekday: "long",
               day: "numeric",
@@ -209,30 +209,30 @@ export default function AttendancePage() {
       )}
 
       {!loading && !error && summary && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <CardContent>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-2">
-                  <UserCheck className="h-5 w-5 text-ink" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <div className="flex h-9 sm:h-10 w-9 sm:w-10 items-center justify-center rounded-lg bg-surface-2 flex-shrink-0">
+                  <UserCheck className="h-4 sm:h-5 w-4 sm:w-5 text-ink" />
                 </div>
-                <div>
-                  <p className="text-2xl font-bold text-ink">{summary.totalCheckedIn}</p>
-                  <p className="text-xs text-ink-muted">Checked In Today</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-lg sm:text-2xl font-bold text-ink-primary leading-tight">{summary.totalCheckedIn}</p>
+                  <p className="text-[10px] sm:text-xs text-ink-muted mt-0.5 line-clamp-2">Checked In Today</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           {Object.entries(summary.planBreakdown).map(([plan, count]) => (
             <Card key={plan}>
-              <CardContent>
-                <div className="flex items-center gap-3">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${getPlanCardColor(plan)}`}>
-                    <CalendarCheck className="h-5 w-5" />
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <div className={`flex h-9 sm:h-10 w-9 sm:w-10 items-center justify-center rounded-lg ${getPlanCardColor(plan)} flex-shrink-0`}>
+                    <CalendarCheck className="h-4 sm:h-5 w-4 sm:w-5" />
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-ink">{count}</p>
-                    <p className="text-xs text-ink-muted">{getPlanLabel(plan)}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-lg sm:text-2xl font-bold text-ink-primary leading-tight">{count}</p>
+                    <p className="text-[10px] sm:text-xs text-ink-muted mt-0.5 line-clamp-2">{getPlanLabel(plan)}</p>
                   </div>
                 </div>
               </CardContent>

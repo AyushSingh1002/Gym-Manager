@@ -67,7 +67,7 @@ function DonutChart({ active, inactive, ratio }: { active: number; inactive: num
 
   return (
     <div className="flex flex-col items-center">
-      <svg width="160" height="160" viewBox="0 0 100 100">
+      <svg width="120" height="120" viewBox="0 0 100 100" className="sm:w-40 sm:h-40">
         <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border-hairline)" strokeWidth="8" />
         <circle
           cx="50"
@@ -81,21 +81,21 @@ function DonutChart({ active, inactive, ratio }: { active: number; inactive: num
           strokeLinecap="round"
           transform="rotate(-90 50 50)"
         />
-        <text x="50" y="46" textAnchor="middle" fill="var(--text-ink)" fontSize="16" fontWeight="bold">
+        <text x="50" y="46" textAnchor="middle" fill="var(--text-ink)" fontSize="14" fontWeight="bold">
           {Math.round(ratio)}%
         </text>
-        <text x="50" y="60" textAnchor="middle" fill="var(--text-ink-muted)" fontSize="8">
+        <text x="50" y="60" textAnchor="middle" fill="var(--text-ink-muted)" fontSize="7">
           Active
         </text>
       </svg>
-      <div className="flex items-center gap-6 mt-2">
-        <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-semantic-success" />
-          <span className="text-xs text-ink-muted">Active ({active})</span>
+      <div className="flex items-center gap-3 sm:gap-6 mt-2 sm:mt-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full bg-semantic-success flex-shrink-0" />
+          <span className="text-[10px] sm:text-xs text-ink-muted">Active ({active})</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-surface-2" />
-          <span className="text-xs text-ink-muted">Inactive ({inactive})</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full bg-surface-2 flex-shrink-0" />
+          <span className="text-[10px] sm:text-xs text-ink-muted">Inactive ({inactive})</span>
         </div>
       </div>
     </div>
@@ -129,17 +129,17 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-ink">Analytics</h1>
-          <p className="text-sm text-ink-muted mt-1">Loading your gym&apos;s performance...</p>
+      <div className="space-y-6 sm:space-y-8">
+        <div className="pt-2 sm:pt-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-ink-primary leading-tight">Analytics</h1>
+          <p className="text-xs sm:text-sm text-ink-muted mt-1.5 sm:mt-2">Loading your gym&apos;s performance...</p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <CardSkeleton key={i} />
           ))}
         </div>
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           <CardSkeleton />
           <CardSkeleton />
         </div>
@@ -189,32 +189,32 @@ export default function AnalyticsPage() {
   const maxAttendance = getMaxValue(attendanceTrend.map((d) => ({ value: d.count })))
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-ink">Analytics</h1>
-        <p className="text-sm text-ink-muted mt-1">Track your gym&apos;s performance</p>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="pt-2 sm:pt-0">
+        <h1 className="text-2xl sm:text-3xl font-bold text-ink-primary leading-tight">Analytics</h1>
+        <p className="text-xs sm:text-sm text-ink-muted mt-1.5 sm:mt-2">Track your gym&apos;s performance</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
         {summaryCards.map(({ label, value, icon: Icon, color, lightColor }) => (
-          <Card key={label} hover>
-            <CardContent>
-              <div className="flex items-start justify-between">
+          <Card key={label} hover interactive>
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-start justify-between mb-3 sm:mb-4">
                 <div className={`rounded-lg p-2 ${lightColor}`}>
-                  <Icon className={`h-5 w-5 text-ink`} />
+                  <Icon className={`h-4 sm:h-5 w-4 sm:w-5 text-ink`} />
                 </div>
-                <span className={`inline-block h-2 w-2 rounded-full ${color}`} />
+                <span className={`inline-block h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full ${color}`} />
               </div>
-              <div className="mt-4">
-                <p className="text-2xl font-bold text-ink">{value}</p>
-                <p className="mt-1 text-xs text-ink-muted">{label}</p>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-ink-primary leading-tight">{value}</p>
+                <p className="mt-1 text-[10px] sm:text-xs text-ink-muted line-clamp-2">{label}</p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader title="Monthly Revenue" description="Last 6 months" />
           <CardContent>
@@ -281,7 +281,7 @@ export default function AnalyticsPage() {
       <Card>
         <CardHeader title="Attendance Trend" description="Last 30 days" />
         <CardContent>
-          <div className="flex items-end gap-[3px] h-40">
+          <div className="flex items-end gap-0.5 sm:gap-1 h-32 sm:h-40">
             {attendanceTrend.map((item) => {
               const height = maxAttendance > 0 ? (item.count / maxAttendance) * 100 : 0
               return (
@@ -302,29 +302,29 @@ export default function AnalyticsPage() {
               )
             })}
           </div>
-          <div className="flex justify-between mt-2">
-            <span className="text-xs text-ink-muted">{attendanceTrend[0]?.date}</span>
-            <span className="text-xs text-ink-muted">{attendanceTrend[attendanceTrend.length - 1]?.date}</span>
+          <div className="flex justify-between mt-2 sm:mt-3">
+            <span className="text-[10px] sm:text-xs text-ink-muted">{attendanceTrend[0]?.date}</span>
+            <span className="text-[10px] sm:text-xs text-ink-muted">{attendanceTrend[attendanceTrend.length - 1]?.date}</span>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader title="Plan Distribution" description="Members by plan type" />
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {planDistribution.map((plan) => (
                 <div key={plan.name}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm font-medium text-ink">
+                  <div className="flex items-center justify-between mb-1 sm:mb-1.5">
+                    <span className="text-xs sm:text-sm font-medium text-ink-primary truncate">
                       {planLabels[plan.name] || plan.name}
                     </span>
-                    <span className="text-sm text-ink-muted">
+                    <span className="text-[10px] sm:text-sm text-ink-muted flex-shrink-0 ml-1">
                       {plan.count} ({plan.percentage}%)
                     </span>
                   </div>
-                  <div className="h-2.5 rounded-full bg-surface-2 overflow-hidden">
+                  <div className="h-2 sm:h-2.5 rounded-full bg-surface-2 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-700 ${planColors[plan.name] || "bg-primary/50"}`}
                       style={{ width: `${plan.percentage}%` }}
