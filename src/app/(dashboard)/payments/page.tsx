@@ -523,14 +523,14 @@ export default function PaymentsPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center max-w-md">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-semantic-error/10">
-            <AlertCircle className="h-8 w-8 text-semantic-error" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+        <div className="text-center max-w-md px-4">
+          <div className="mx-auto flex h-16 sm:h-20 w-16 sm:w-20 items-center justify-center rounded-full bg-semantic-error/10">
+            <AlertCircle className="h-8 sm:h-10 w-8 sm:w-10 text-semantic-error" />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-ink">Failed to load payments</h2>
-          <p className="mt-2 text-sm text-ink-muted">{error}</p>
-          <Button onClick={() => { fetchPayments(); fetchSummary() }} className="mt-4">
+          <h2 className="mt-4 text-base sm:text-lg font-semibold text-ink">Failed to load payments</h2>
+          <p className="mt-2 text-xs sm:text-sm text-ink-muted">{error}</p>
+          <Button onClick={() => { fetchPayments(); fetchSummary() }} className="mt-6 w-full sm:w-auto">
             Try again
           </Button>
         </div>
@@ -539,33 +539,33 @@ export default function PaymentsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Payments</h1>
-          <p className="text-sm text-ink-muted mt-1">Manage payments and generate receipts</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-ink-primary text-balance">Payments</h1>
+          <p className="text-xs sm:text-sm text-ink-subtle mt-2">Manage payments and generate receipts</p>
         </div>
-        <Button onClick={openRecordModal}>
-          <Plus className="h-4 w-4" />
+        <Button onClick={openRecordModal} className="w-full sm:w-auto">
+          <Plus className="h-5 w-5" />
           Record Payment
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {summaryCards.map(({ key, label, value }) => {
           const Icon = getSummaryIcon(key)
           const colors = getSummaryColor(key)
           return (
-            <Card key={key} hover>
-              <CardContent>
-                <div className="flex items-start justify-between">
-                  <div className={`rounded-lg p-2 ${colors.bg}`}>
-                    <Icon className={`h-5 w-5 ${colors.icon}`} />
+            <Card key={key} interactive variant="elevated">
+              <CardContent className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-start justify-between mb-3 sm:mb-4">
+                  <div className={`rounded-lg p-2.5 sm:p-3 ${colors.bg}`}>
+                    <Icon className={`h-4.5 w-4.5 sm:h-5 sm:w-5 ${colors.icon}`} />
                   </div>
                 </div>
-                <div className="mt-4">
-                  <p className="text-2xl font-bold text-ink">{value}</p>
-                  <p className="mt-1 text-xs text-ink-muted">{label}</p>
+                <div>
+                  <p className="text-2xl sm:text-3xl font-bold text-ink-primary text-balance">{value}</p>
+                  <p className="mt-2 text-xs sm:text-sm text-ink-tertiary font-medium">{label}</p>
                 </div>
               </CardContent>
             </Card>

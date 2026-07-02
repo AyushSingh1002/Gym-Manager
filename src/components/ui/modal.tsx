@@ -105,7 +105,7 @@ export function Modal({ open, onClose, title, description, children, className, 
           <motion.div
             ref={containerRef}
             className={cn(
-              "w-full rounded-[var(--radius-xl)] border border-hairline bg-surface-1 p-6 shadow-[var(--shadow-modal)]",
+              "w-full rounded-[var(--radius-xl)] border border-hairline bg-surface-1 p-4 sm:p-6 shadow-[var(--shadow-modal)]",
               sizes[size],
               className
             )}
@@ -114,14 +114,14 @@ export function Modal({ open, onClose, title, description, children, className, 
             exit={{ scale: 0.95, opacity: 0, y: 10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <div className="flex items-start justify-between mb-6 pb-4 border-b border-hairline">
-              <div className="flex-1 pr-4">
-                {title && <h2 className="text-lg font-semibold text-ink-primary">{title}</h2>}
-                {description && <p className="text-sm text-ink-tertiary mt-1">{description}</p>}
+            <div className="flex items-start justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-hairline gap-4">
+              <div className="flex-1 min-w-0">
+                {title && <h2 className="text-base sm:text-lg font-semibold text-ink-primary text-balance">{title}</h2>}
+                {description && <p className="text-xs sm:text-sm text-ink-tertiary mt-1">{description}</p>}
               </div>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors flex-shrink-0"
+                className="p-2 sm:p-2.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors flex-shrink-0 min-h-10 min-w-10"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" />
