@@ -3,9 +3,15 @@ import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/auth"
 import { getDisplayName } from "@/lib/utils"
 import { PAGINATION } from "@/lib/constants"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function GET(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth()
 
     const { searchParams } = new URL(request.url)

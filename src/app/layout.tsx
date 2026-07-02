@@ -18,19 +18,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const theme = localStorage.getItem('theme') || 'dark';
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-              } catch(e) {}
-            `,
-          }}
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full bg-canvas text-ink selection:bg-primary/20">
         {children}
       </body>

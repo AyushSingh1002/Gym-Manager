@@ -104,7 +104,7 @@ export default function MembershipsPage() {
 
   const filteredMembers = members.filter(
     (m) =>
-      m.name.toLowerCase().includes(memberSearch.toLowerCase()) ||
+      (m.name ?? "").toLowerCase().includes(memberSearch.toLowerCase()) ||
       m.phone.includes(memberSearch)
   )
 
@@ -152,7 +152,7 @@ export default function MembershipsPage() {
       const res = await fetch("/api/members?limit=100")
       if (res.ok) {
         const data = await res.json()
-        setMembers(data.members)
+        setMembers((data.members ?? []).map((m: Record<string, unknown>) => ({ id: m.id, name: `${m.firstName ?? ""} ${m.lastName ?? ""}`.trim(), phone: m.phone })))
       }
     } catch {
       setMembers([])

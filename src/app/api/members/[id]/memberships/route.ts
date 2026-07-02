@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth, logActivity } from "@/lib/auth"
-import { calculateEndDate, getPlanAmount } from "@/lib/utils"
+import { calculateEndDate, getPlanAmount, generateReceiptNo } from "@/lib/utils"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
+
+const VALID_PLANS = ["MONTHLY", "QUARTERLY", "HALF_YEARLY", "YEARLY", "CUSTOM"]
+const VALID_PAYMENT_METHODS = ["CASH", "UPI", "CARD", "ONLINE"]
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth()
     const { id } = await params
 
@@ -45,6 +54,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 10, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 
@@ -59,67 +73,95 @@ export async function POST(
     const body = await request.json()
     const { plan, startDate, paymentMethod, notes } = body
 
-    if (!plan) {
+    if (!plan || !VALID_PLANS.includes(plan)) {
       return NextResponse.json(
-        { error: "Plan is required" },
+        { error: "Valid plan is required (MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY, CUSTOM)" },
+        { status: 400 }
+      )
+    }
+
+    const method = paymentMethod || "CASH"
+    if (!VALID_PAYMENT_METHODS.includes(method)) {
+      return NextResponse.json(
+        { error: "Valid payment method is required (CASH, UPI, CARD, ONLINE)" },
         { status: 400 }
       )
     }
 
     const start = startDate ? new Date(startDate) : new Date()
     const endDate = calculateEndDate(start, plan)
-
     const amount = getPlanAmount(plan)
-    const membership = await prisma.membership.create({
-      data: {
-        memberId: id,
-        plan,
-        startDate: start,
-        endDate,
-        status: "ACTIVE",
-        amount,
-        totalAmount: amount,
-        notes: notes || null,
-      },
-    })
 
-    await Promise.all([
-      prisma.member.update({
+    let razorpayOrder = null
+    if (method === "ONLINE") {
+      razorpayOrder = await createRazorpayOrder(amount)
+    }
+
+    const [membership] = await prisma.$transaction(async (tx) => {
+      const created = await tx.membership.create({
+        data: {
+          memberId: id,
+          plan,
+          startDate: start,
+          endDate,
+          status: "ACTIVE",
+          amount,
+          totalAmount: amount,
+          notes: notes || null,
+        },
+      })
+
+      await tx.member.update({
         where: { id },
         data: { status: "ACTIVE" },
-      }),
-      prisma.notification.create({
+      })
+
+      await tx.notification.create({
         data: {
           memberId: id,
           title: "Membership Assigned",
           message: `A ${plan} membership has been assigned to you. Welcome aboard!`,
           type: "ANNOUNCEMENT",
         },
-      }),
-    ])
-
-    if (paymentMethod === "ONLINE") {
-      const razorpayOrder = await createRazorpayOrder(amount)
-
-      await prisma.payment.create({
-        data: {
-          memberId: id,
-          membershipId: membership.id,
-          amount,
-          method: "ONLINE",
-          status: "PENDING",
-          razorpayOrderId: razorpayOrder.id,
-        },
       })
 
-      logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName} with online payment`).catch(err => console.error("Failed to log activity:", err))
+      if (method === "ONLINE" && razorpayOrder) {
+        await tx.payment.create({
+          data: {
+            memberId: id,
+            membershipId: created.id,
+            amount,
+            method: "ONLINE",
+            status: "PENDING",
+            razorpayOrderId: razorpayOrder.id,
+          },
+        })
+      } else if (method !== "ONLINE") {
+        await tx.payment.create({
+          data: {
+            memberId: id,
+            membershipId: created.id,
+            amount,
+            method,
+            status: "PAID",
+            receiptNo: generateReceiptNo(),
+          },
+        })
+      }
 
-      return NextResponse.json({ membership, razorpayOrder }, { status: 201 })
-    }
+      return [created]
+    })
 
-    logActivity(admin.id, "Assigned membership", "Membership", membership.id, `Assigned ${plan} membership to ${member.firstName} ${member.lastName}`).catch(err => console.error("Failed to log activity:", err))
+    const logMessage = method === "ONLINE"
+      ? `Assigned ${plan} membership to ${member.firstName} ${member.lastName} with online payment`
+      : `Assigned ${plan} membership to ${member.firstName} ${member.lastName}`
 
-    return NextResponse.json({ membership }, { status: 201 })
+    logActivity(admin.id, "Assigned membership", "Membership", membership.id, logMessage).catch(err => console.error("Failed to log activity:", err))
+
+    return NextResponse.json(
+      { membership, ...(razorpayOrder ? { razorpayOrder } : {}) },
+      { status: 201 }
+    )
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -167,11 +209,11 @@ async function createRazorpayOrder(amount: number) {
   if (!response.ok) {
     const errorText = await response.text()
     console.error(`Razorpay API error (${response.status}):`, errorText)
-    
+
     if (response.status === 401 || response.status === 403) {
       throw new Error("Razorpay credentials are invalid")
     }
-    
+
     throw new Error(`Razorpay API error: ${errorText || response.statusText}`)
   }
 

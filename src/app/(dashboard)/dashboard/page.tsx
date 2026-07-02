@@ -54,7 +54,7 @@ function getActivityIcon(action: string) {
 }
 
 function getMetricValue(metric: DashboardMetric): string {
-  if (metric.label.toLowerCase().includes("revenue")) {
+  if ((metric.label ?? "").toLowerCase().includes("revenue")) {
     return formatCurrency(Number(metric.value))
   }
   return String(metric.value)

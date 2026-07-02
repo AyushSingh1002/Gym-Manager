@@ -1,27 +1,39 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/auth"
+import { getCachedOrFetch } from "@/lib/cache"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
 
-    const [monthlyRevenueData, memberGrowthData, attendanceTrendData, planDistributionData, activeInactiveData] =
-      await Promise.all([
-        getMonthlyRevenue(),
-        getMemberGrowth(),
-        getAttendanceTrend(),
-        getPlanDistribution(),
-        getActiveInactiveRatio(),
-      ])
+    const cacheKey = `analytics:${admin.id}`
+    const data = await getCachedOrFetch(cacheKey, async () => {
+      const [monthlyRevenueData, memberGrowthData, attendanceTrendData, planDistributionData, activeInactiveData] =
+        await Promise.all([
+          getMonthlyRevenue(),
+          getMemberGrowth(),
+          getAttendanceTrend(),
+          getPlanDistribution(),
+          getActiveInactiveRatio(),
+        ])
 
-    return NextResponse.json({
-      monthlyRevenue: monthlyRevenueData,
-      memberGrowth: memberGrowthData,
-      attendanceTrend: attendanceTrendData,
-      planDistribution: planDistributionData,
-      activeInactive: activeInactiveData,
-    })
+      return {
+        monthlyRevenue: monthlyRevenueData,
+        memberGrowth: memberGrowthData,
+        attendanceTrend: attendanceTrendData,
+        planDistribution: planDistributionData,
+        activeInactive: activeInactiveData,
+      }
+    }, 60_000)
+
+    return NextResponse.json(data)
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

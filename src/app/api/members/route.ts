@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth, logActivity } from "@/lib/auth"
 import { PAGINATION } from "@/lib/constants"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function GET(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth()
 
     const { searchParams } = new URL(request.url)
@@ -77,10 +83,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 20, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
 
     const body = await request.json()
-    const { firstName, lastName, email, phone, dateOfBirth, gender, address, emergencyName, emergencyPhone, emergencyRelation, notes } = body
+    const { firstName, lastName, email, phone, dateOfBirth, gender, address, alternatePhone, city, state, pincode, emergencyName, emergencyPhone, emergencyRelation, notes } = body
 
     if (!firstName || !phone) {
       return NextResponse.json(
@@ -115,6 +126,10 @@ export async function POST(request: NextRequest) {
           dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
           gender: gender || null,
           address: address || null,
+          alternatePhone: alternatePhone || null,
+          city: city || null,
+          state: state || null,
+          pincode: pincode || null,
           emergencyName: emergencyName || null,
           emergencyPhone: emergencyPhone || null,
           emergencyRelation: emergencyRelation || null,

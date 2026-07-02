@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useAppStore } from "@/store/app-store"
-import { Menu, Sun, Moon, Bell, LogOut, ChevronDown } from "lucide-react"
+import { Menu, Bell, LogOut, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Member {
@@ -33,7 +33,7 @@ const pageTitles: Record<string, string> = {
 export function MemberNavbar({ member }: MemberNavbarProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const { toggleSidebar, theme, setTheme } = useAppStore()
+  const { toggleSidebar } = useAppStore()
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -74,14 +74,6 @@ export function MemberNavbar({ member }: MemberNavbarProps) {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-
           <button
             className="relative p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors"
             aria-label="Notifications"

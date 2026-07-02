@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
 import { requireAuth } from "@/lib/auth"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 const ALLOWED_MIME_TYPES = [
   "image/jpeg",
@@ -14,6 +15,11 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 10, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth()
 
     const formData = await request.formData()

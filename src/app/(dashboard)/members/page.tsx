@@ -179,7 +179,8 @@ export default function MembersPage() {
       }
 
       const body = {
-        name: `${form.firstName} ${form.lastName}`,
+        firstName: form.firstName,
+        lastName: form.lastName,
         email: form.email || null,
         phone: form.phone,
         alternatePhone: form.alternatePhone || null,
@@ -537,12 +538,12 @@ export default function MembersPage() {
 
       <Modal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => { setModalOpen(false); setForm(emptyForm); setFormError(null); setEditingMember(null); }}
         title={editingMember ? "Edit Member" : "Add Member"}
         description={editingMember ? "Update member details" : "Add a new member to the gym"}
         size="xl"
       >
-        <div className="space-y-5 sm:space-y-6">
+        <div className="space-y-5 sm:space-y-6 overflow-y-auto max-h-[60vh] pr-1">
           {formError && (
             <div className="flex items-start gap-3 rounded-lg bg-semantic-error/10 border border-semantic-error/20 p-3 sm:p-4 text-xs sm:text-sm text-semantic-error">
               <AlertCircle className="h-4 w-4 shrink-0 flex-shrink-0 mt-0.5" />
@@ -554,18 +555,24 @@ export default function MembersPage() {
             <h4 className="text-xs sm:text-sm font-semibold text-ink mb-3">Personal Information</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <Input
+                id="firstName"
+                name="firstName"
                 label="First Name"
                 value={form.firstName}
                 onChange={(e) => handleFormChange("firstName", e.target.value)}
                 placeholder="John"
               />
               <Input
+                id="lastName"
+                name="lastName"
                 label="Last Name"
                 value={form.lastName}
                 onChange={(e) => handleFormChange("lastName", e.target.value)}
                 placeholder="Doe"
               />
               <Input
+                id="email"
+                name="email"
                 label="Email"
                 type="email"
                 value={form.email}
@@ -573,24 +580,32 @@ export default function MembersPage() {
                 placeholder="john@example.com"
               />
               <Input
+                id="phone"
+                name="phone"
                 label="Phone"
                 value={form.phone}
                 onChange={(e) => handleFormChange("phone", e.target.value)}
                 placeholder="+91 9876543210"
               />
               <Input
+                id="alternatePhone"
+                name="alternatePhone"
                 label="Alternate Phone"
                 value={form.alternatePhone}
                 onChange={(e) => handleFormChange("alternatePhone", e.target.value)}
                 placeholder="+91 9876543210"
               />
               <Input
+                id="dateOfBirth"
+                name="dateOfBirth"
                 label="Date of Birth"
                 type="date"
                 value={form.dateOfBirth}
                 onChange={(e) => handleFormChange("dateOfBirth", e.target.value)}
               />
               <Select
+                id="gender"
+                name="gender"
                 label="Gender"
                 value={form.gender}
                 onChange={(e) => handleFormChange("gender", e.target.value)}
@@ -609,6 +624,8 @@ export default function MembersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="sm:col-span-2">
                 <Input
+                  id="address"
+                  name="address"
                   label="Address"
                   value={form.address}
                   onChange={(e) => handleFormChange("address", e.target.value)}
@@ -616,18 +633,24 @@ export default function MembersPage() {
                 />
               </div>
               <Input
+                id="city"
+                name="city"
                 label="City"
                 value={form.city}
                 onChange={(e) => handleFormChange("city", e.target.value)}
                 placeholder="Mumbai"
               />
               <Input
+                id="state"
+                name="state"
                 label="State"
                 value={form.state}
                 onChange={(e) => handleFormChange("state", e.target.value)}
                 placeholder="Maharashtra"
               />
               <Input
+                id="pincode"
+                name="pincode"
                 label="Pincode"
                 value={form.pincode}
                 onChange={(e) => handleFormChange("pincode", e.target.value)}
@@ -640,18 +663,24 @@ export default function MembersPage() {
             <h4 className="text-xs sm:text-sm font-semibold text-ink mb-3">Emergency Contact</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <Input
+                id="emergencyName"
+                name="emergencyName"
                 label="Name"
                 value={form.emergencyName}
                 onChange={(e) => handleFormChange("emergencyName", e.target.value)}
                 placeholder="Jane Doe"
               />
               <Input
+                id="emergencyPhone"
+                name="emergencyPhone"
                 label="Phone"
                 value={form.emergencyPhone}
                 onChange={(e) => handleFormChange("emergencyPhone", e.target.value)}
                 placeholder="+91 9876543210"
               />
               <Input
+                id="emergencyRelation"
+                name="emergencyRelation"
                 label="Relation"
                 value={form.emergencyRelation}
                 onChange={(e) => handleFormChange("emergencyRelation", e.target.value)}
@@ -663,6 +692,8 @@ export default function MembersPage() {
           <div>
             <h4 className="text-xs sm:text-sm font-semibold text-ink mb-3">Notes</h4>
             <Input
+              id="notes"
+              name="notes"
               value={form.notes}
               onChange={(e) => handleFormChange("notes", e.target.value)}
               placeholder="Any additional notes..."
@@ -670,7 +701,7 @@ export default function MembersPage() {
           </div>
 
           <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-4 border-t border-hairline">
-            <Button variant="secondary" onClick={() => setModalOpen(false)} className="w-full sm:w-auto">
+            <Button variant="secondary" onClick={() => { setModalOpen(false); setForm(emptyForm); setFormError(null); setEditingMember(null); }} className="w-full sm:w-auto">
               Cancel
             </Button>
             <Button onClick={handleSave} loading={saving} className="w-full sm:w-auto">

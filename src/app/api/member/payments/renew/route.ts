@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireMemberAuth } from "@/lib/member-auth"
 import { getPlanAmount, calculateEndDate } from "@/lib/utils"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 10, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const member = await requireMemberAuth()
 
     let requestBody

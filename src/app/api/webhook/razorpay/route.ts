@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { prisma } from "@/lib/prisma"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 20, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const text = await request.text()
     const signature = request.headers.get("x-razorpay-signature")
 

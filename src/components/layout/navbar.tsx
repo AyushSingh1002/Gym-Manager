@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAppStore } from "@/store/app-store"
-import { Menu, Sun, Moon, LogOut, ChevronDown } from "lucide-react"
+import { Menu, LogOut, ChevronDown } from "lucide-react"
 import { cn, getInitials } from "@/lib/utils"
 
 interface AdminUser {
@@ -20,7 +20,7 @@ interface NavbarProps {
 
 export function Navbar({ admin }: NavbarProps) {
   const router = useRouter()
-  const { toggleSidebar, theme, setTheme } = useAppStore()
+  const { toggleSidebar } = useAppStore()
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -53,14 +53,6 @@ export function Navbar({ admin }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2.5 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors min-h-10 min-w-10"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-
           <div className="relative ml-2" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
@@ -77,7 +69,7 @@ export function Navbar({ admin }: NavbarProps) {
               <div className="hidden md:flex items-center gap-1.5">
                 <div className="text-left">
                   <p className="text-sm font-medium text-ink-primary leading-tight">{admin.name}</p>
-                  <p className="text-xs text-ink-tertiary capitalize">{admin.role.toLowerCase()}</p>
+                  <p className="text-xs text-ink-tertiary capitalize">{(admin.role ?? "").toLowerCase()}</p>
                 </div>
                 <ChevronDown className={cn(
                   "h-3.5 w-3.5 text-ink-tertiary transition-transform duration-200",

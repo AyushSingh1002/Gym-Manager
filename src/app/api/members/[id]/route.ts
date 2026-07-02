@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth, logActivity } from "@/lib/auth"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth()
     const { id } = await params
 
@@ -51,6 +57,11 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 20, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 
@@ -63,7 +74,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { firstName, lastName, email, phone, dateOfBirth, gender, address, emergencyName, emergencyPhone, emergencyRelation, notes, status } = body
+    const { firstName, lastName, email, phone, dateOfBirth, gender, address, alternatePhone, city, state, pincode, emergencyName, emergencyPhone, emergencyRelation, notes, status } = body
 
     if (phone && phone !== existing.phone) {
       const phoneExists = await prisma.member.findFirst({ where: { phone } })
@@ -85,6 +96,10 @@ export async function PATCH(
         ...(dateOfBirth !== undefined && { dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null }),
         ...(gender !== undefined && { gender }),
         ...(address !== undefined && { address }),
+        ...(alternatePhone !== undefined && { alternatePhone }),
+        ...(city !== undefined && { city }),
+        ...(state !== undefined && { state }),
+        ...(pincode !== undefined && { pincode }),
         ...(emergencyName !== undefined && { emergencyName }),
         ...(emergencyPhone !== undefined && { emergencyPhone }),
         ...(emergencyRelation !== undefined && { emergencyRelation }),
@@ -112,10 +127,15 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request, 10, 60000)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
     const { id } = await params
 

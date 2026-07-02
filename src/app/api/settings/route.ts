@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/auth"
+import { getCachedOrFetch, invalidateCache } from "@/lib/cache"
 
 export async function GET() {
   try {
     const admin = await requireAuth()
 
-    let settings = await prisma.setting.findFirst()
+    const safeSettings = await getCachedOrFetch("settings", async () => {
+      let settings = await prisma.setting.findFirst()
 
-    if (!settings) {
-      settings = await prisma.setting.create({
-        data: { id: "gym" },
-      })
-    }
+      if (!settings) {
+        settings = await prisma.setting.create({
+          data: { id: "gym" },
+        })
+      }
 
-    const { razorpayKeySecret: _, ...safeSettings } = settings
+      const { razorpayKeySecret: _, ...safe } = settings
+      return safe
+    }, 300_000)
+
     return NextResponse.json(safeSettings)
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
@@ -77,6 +82,8 @@ export async function PATCH(request: NextRequest) {
         },
       })
     }
+
+    invalidateCache("settings")
 
     const { razorpayKeySecret: _, ...safeSettings } = settings
     return NextResponse.json(safeSettings)

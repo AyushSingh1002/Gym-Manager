@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireMemberAuth } from "@/lib/member-auth"
-import { getDisplayName } from "@/lib/utils"
 
 export async function GET() {
   try {

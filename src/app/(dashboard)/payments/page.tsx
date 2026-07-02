@@ -178,7 +178,7 @@ export default function PaymentsPage() {
   const [razorpayLoading, setRazorpayLoading] = useState(false)
 
   const filteredMembers = members.filter(
-    (m) => m.name.toLowerCase().includes(memberSearch.toLowerCase()) || m.phone.includes(memberSearch)
+    (m) => (m.name ?? "").toLowerCase().includes(memberSearch.toLowerCase()) || m.phone.includes(memberSearch)
   )
 
   const fetchPayments = useCallback(async () => {
@@ -251,7 +251,7 @@ export default function PaymentsPage() {
       const res = await fetch("/api/members?limit=100")
       if (res.ok) {
         const data = await res.json()
-        setMembers(data.members)
+        setMembers((data.members ?? []).map((m: Record<string, unknown>) => ({ id: m.id, name: `${m.firstName ?? ""} ${m.lastName ?? ""}`.trim(), phone: m.phone })))
       }
     } catch {
       setMembers([])

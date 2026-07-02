@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/auth"
+import { rateLimitMiddleware } from "@/lib/rate-limit"
+import { getCachedOrFetch } from "@/lib/cache"
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { allowed, headers } = rateLimitMiddleware(request)
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
+    }
+
     const admin = await requireAuth(["ADMIN"])
 
     const today = new Date()
@@ -17,73 +24,58 @@ export async function GET() {
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
     const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
 
-    const [
-      totalActiveMembers,
-      todayAttendanceCount,
-      monthlyRevenue,
-      expiringCount,
-      pendingPaymentsCount,
-      recentActivities,
-    ] = await Promise.all([
-      prisma.member.count({ where: { status: "ACTIVE" } }),
-      prisma.attendance.count({
-        where: { date: { gte: today, lt: tomorrow } },
-      }),
-      prisma.payment.aggregate({
-        where: {
-          status: "PAID",
-          createdAt: { gte: startOfMonth, lte: endOfMonth },
-        },
-        _sum: { amount: true },
-      }),
-      prisma.membership.count({
-        where: {
-          status: "ACTIVE",
-          endDate: { gte: today, lte: sevenDaysLater },
-        },
-      }),
-      prisma.payment.count({ where: { status: "PENDING" } }),
-      prisma.activityLog.findMany({
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        include: {
-          admin: {
-            select: { id: true, name: true, email: true },
+    const cacheKey = `dashboard:${admin.id}`
+    const data = await getCachedOrFetch(cacheKey, async () => {
+      const [
+        totalActiveMembers,
+        todayAttendanceCount,
+        monthlyRevenue,
+        expiringCount,
+        pendingPaymentsCount,
+        recentActivities,
+      ] = await Promise.all([
+        prisma.member.count({ where: { status: "ACTIVE" } }),
+        prisma.attendance.count({
+          where: { date: { gte: today, lt: tomorrow } },
+        }),
+        prisma.payment.aggregate({
+          where: {
+            status: "PAID",
+            createdAt: { gte: startOfMonth, lte: endOfMonth },
           },
-        },
-      }),
-    ])
+          _sum: { amount: true },
+        }),
+        prisma.membership.count({
+          where: {
+            status: "ACTIVE",
+            endDate: { gte: today, lte: sevenDaysLater },
+          },
+        }),
+        prisma.payment.count({ where: { status: "PENDING" } }),
+        prisma.activityLog.findMany({
+          take: 5,
+          orderBy: { createdAt: "desc" },
+          include: {
+            admin: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        }),
+      ])
 
-    return NextResponse.json({
-      metrics: {
-        totalActiveMembers: {
-          label: "Total Active Members",
-          value: totalActiveMembers,
-          icon: "Users",
+      return {
+        metrics: {
+          totalActiveMembers: { label: "Total Active Members", value: totalActiveMembers, icon: "Users" },
+          todayAttendance: { label: "Today's Attendance", value: todayAttendanceCount, icon: "CalendarCheck" },
+          monthlyRevenue: { label: "Monthly Revenue", value: monthlyRevenue._sum.amount || 0, icon: "IndianRupee" },
+          expiringMemberships: { label: "Expiring in 7 Days", value: expiringCount, icon: "AlertTriangle" },
+          pendingPayments: { label: "Pending Payments", value: pendingPaymentsCount, icon: "Clock" },
         },
-        todayAttendance: {
-          label: "Today's Attendance",
-          value: todayAttendanceCount,
-          icon: "CalendarCheck",
-        },
-        monthlyRevenue: {
-          label: "Monthly Revenue",
-          value: monthlyRevenue._sum.amount || 0,
-          icon: "IndianRupee",
-        },
-        expiringMemberships: {
-          label: "Expiring in 7 Days",
-          value: expiringCount,
-          icon: "AlertTriangle",
-        },
-        pendingPayments: {
-          label: "Pending Payments",
-          value: pendingPaymentsCount,
-          icon: "Clock",
-        },
-      },
-      recentActivities,
+        recentActivities,
+      }
     })
+
+    return NextResponse.json(data)
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
