@@ -41,11 +41,11 @@ export function Navbar({ admin }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-canvas-secondary/95 backdrop-blur-xl border-b border-hairline shadow-sm">
-      <div className="flex items-center justify-between h-full px-4 lg:px-8">
+      <div className="flex items-center justify-between h-full px-4 sm:px-6 lg:px-8 pr-[calc(1rem+env(safe-area-inset-right))] sm:pr-[calc(1.5rem+env(safe-area-inset-right))] lg:pr-[calc(2rem+env(safe-area-inset-right))]">
         <div className="flex items-center gap-2">
           <button
             onClick={toggleSidebar}
-            className="p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden"
+            className="p-2.5 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden min-h-10 min-w-10"
             aria-label="Toggle menu"
           >
             <Menu className="h-5 w-5" />
@@ -55,7 +55,7 @@ export function Navbar({ admin }: NavbarProps) {
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors"
+            className="p-2.5 rounded-[var(--radius-md)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors min-h-10 min-w-10"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

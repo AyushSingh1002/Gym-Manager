@@ -42,7 +42,7 @@ export function Sidebar() {
       )}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-full w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 lg:translate-x-0 lg:static lg:z-auto",
+          "fixed top-0 left-0 z-50 h-full w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 lg:translate-x-0 lg:static lg:z-auto pl-[env(safe-area-inset-left)]",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -64,7 +64,7 @@ export function Sidebar() {
             <X className="h-4 w-4" />
           </button>
         </div>
-        <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto p-3 space-y-1 pb-[env(safe-area-inset-bottom)]">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
             return (
@@ -73,7 +73,7 @@ export function Sidebar() {
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3.5 py-2.5 rounded-[var(--radius-md)] text-sm font-medium transition-all duration-150",
+                  "flex items-center gap-3 px-3.5 py-3 rounded-[var(--radius-md)] text-sm font-medium transition-all duration-150 min-h-12",
                   isActive
                     ? "bg-primary/10 text-primary border border-primary/20"
                     : "text-ink-tertiary hover:bg-surface-2 hover:text-ink-secondary border border-transparent"

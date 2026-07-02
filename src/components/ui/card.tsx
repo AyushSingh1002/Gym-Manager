@@ -12,8 +12,8 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, hover, interactive, variant = "default", children, ...props }, ref) => {
     const variants = {
-      default: "border border-hairline bg-surface-1 shadow-card",
-      elevated: "border border-hairline bg-surface-2 shadow-card hover:shadow-card-hover",
+      default: "border border-hairline bg-surface-1 shadow-card hover:shadow-card-hover hover:scale-[1.01]",
+      elevated: "border border-hairline bg-surface-2 shadow-card hover:shadow-card-hover hover:scale-[1.01]",
       outlined: "border border-hairline-strong bg-surface-1",
     }
     
@@ -21,7 +21,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-[var(--radius-lg)] p-6 transition-all duration-150",
+          "rounded-[var(--radius-lg)] p-4 sm:p-5 md:p-6 transition-all duration-200",
           variants[variant],
           hover && "hover:bg-surface-2 hover:border-hairline-strong",
           interactive && "cursor-pointer hover:bg-surface-2 hover:shadow-card-hover active:scale-[0.99]",
@@ -44,7 +44,7 @@ interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 
 function CardHeader({ className, title, description, action, children }: CardHeaderProps) {
   return (
-    <div className={cn("flex items-start justify-between mb-6 pb-4 border-b border-hairline", className)}>
+    <div className={cn("flex items-start justify-between mb-4 sm:mb-5 md:mb-6 pb-3 sm:pb-4 border-b border-hairline", className)}>
       {children || (
         <div className="flex-1">
           {title && <h3 className="text-base font-semibold text-ink-primary">{title}</h3>}

@@ -16,14 +16,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!admin) redirect("/auth/login")
 
   return (
-    <div className="flex h-screen bg-canvas">
+    <div className="flex min-h-svh bg-canvas">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:text-sm">
         Skip to main content
       </a>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar admin={admin} />
-        <main id="main-content" className="flex-1 overflow-y-auto p-5 lg:p-6">{children}</main>
+        <main id="main-content" className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 pb-[calc(1rem+env(safe-area-inset-bottom))]">{children}</main>
       </div>
     </div>
   )
