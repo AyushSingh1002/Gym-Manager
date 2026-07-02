@@ -27,10 +27,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-semantic-success text-white hover:bg-semantic-success-light active:bg-semantic-success focus:ring-semantic-success/50 shadow-sm hover:shadow-card",
     }
     const sizes = {
-      sm: "px-3 py-1.5 text-xs h-8 gap-1.5",
-      md: "px-4 py-2 text-sm h-10 gap-2",
-      lg: "px-5 py-2.5 text-sm h-11 gap-2",
-      xl: "px-6 py-3 text-base h-12 gap-2.5",
+      sm: "px-3 py-1.5 text-xs h-8 sm:h-9 gap-1.5 min-w-10 sm:min-w-10",
+      md: "px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm h-10 sm:h-11 gap-2 min-h-10",
+      lg: "px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base h-11 sm:h-12 gap-2 min-h-11",
+      xl: "px-5 sm:px-6 py-3 sm:py-3.5 text-base sm:text-lg h-12 sm:h-14 gap-2.5 min-h-12",
     }
 
     return (

@@ -327,81 +327,155 @@ export default function MembersPage() {
         </Card>
       ) : (
         <>
-          <Card variant="elevated">
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-hairline bg-surface-2/30">
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Name</th>
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Phone</th>
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Email</th>
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Plan</th>
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Status</th>
-                      <th className="text-left px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Join Date</th>
-                      <th className="text-right px-6 py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-hairline">
-                    {members.map((member) => {
-                      const plan = activePlan(member)
-                      return (
-                        <tr
-                          key={member.id}
-                          className="border-b border-hairline/50 hover:bg-surface-2 cursor-pointer transition-colors duration-150"
-                          onClick={() => router.push(`/members/${member.id}`)}
-                        >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 font-medium text-primary border border-primary/20">
-                                {(member.firstName.charAt(0) + member.lastName.charAt(0)).toUpperCase()}
+          {/* Desktop Table View */}
+          <div className="hidden md:block">
+            <Card variant="elevated">
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-hairline bg-surface-2/30">
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Name</th>
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Phone</th>
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider hidden lg:table-cell">Email</th>
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Plan</th>
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Status</th>
+                        <th className="text-left px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider hidden sm:table-cell">Join Date</th>
+                        <th className="text-right px-4 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-hairline">
+                      {members.map((member) => {
+                        const plan = activePlan(member)
+                        return (
+                          <tr
+                            key={member.id}
+                            className="border-b border-hairline/50 hover:bg-surface-2 cursor-pointer transition-colors duration-150"
+                            onClick={() => router.push(`/members/${member.id}`)}
+                          >
+                            <td className="px-4 sm:px-6 py-3 sm:py-4">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <div className="flex h-8 sm:h-9 w-8 sm:w-9 items-center justify-center rounded-full bg-primary/10 font-medium text-primary border border-primary/20 text-xs">
+                                  {(member.firstName.charAt(0) + member.lastName.charAt(0)).toUpperCase()}
+                                </div>
+                                <span className="text-xs sm:text-sm font-medium text-ink-primary truncate">
+                                  {member.firstName} {member.lastName}
+                                </span>
                               </div>
-                              <span className="font-medium text-ink-primary">
-                                {member.firstName} {member.lastName}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-ink-secondary">{member.phone}</td>
-                          <td className="px-6 py-4 text-sm text-ink-secondary">{member.email || "-"}</td>
-                          <td className="px-6 py-4 text-sm font-medium">{plan ? getPlanLabel(plan.plan) : "-"}</td>
-                          <td className="px-6 py-4">
-                            <Badge status={member.status}>{member.status}</Badge>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-ink-secondary">{formatDate(member.joinDate)}</td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  router.push(`/members/${member.id}`)
-                                }}
-                                title="View member details"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  openEditModal(member)
-                                }}
-                                title="Edit member"
-                              >
-                                <Edit2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+                            </td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-ink-secondary">{member.phone}</td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-ink-secondary hidden lg:table-cell">{member.email || "-"}</td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">{plan ? getPlanLabel(plan.plan) : "-"}</td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4">
+                              <Badge status={member.status}>{member.status}</Badge>
+                            </td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-ink-secondary hidden sm:table-cell">{formatDate(member.joinDate)}</td>
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
+                              <div className="flex items-center justify-end gap-1 sm:gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    router.push(`/members/${member.id}`)
+                                  }}
+                                  title="View member details"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    openEditModal(member)
+                                  }}
+                                  title="Edit member"
+                                >
+                                  <Edit2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {members.map((member) => {
+              const plan = activePlan(member)
+              return (
+                <Card 
+                  key={member.id} 
+                  interactive
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/members/${member.id}`)}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-medium text-primary border border-primary/20 text-xs flex-shrink-0">
+                        {(member.firstName.charAt(0) + member.lastName.charAt(0)).toUpperCase()}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-ink-primary truncate text-sm">{member.firstName} {member.lastName}</p>
+                        <p className="text-xs text-ink-tertiary truncate">{member.phone}</p>
+                      </div>
+                    </div>
+                    <Badge status={member.status} className="flex-shrink-0">{member.status}</Badge>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3 mb-3 pb-3 border-b border-hairline/50">
+                    <div>
+                      <p className="text-[10px] text-ink-tertiary font-medium uppercase tracking-wider">Plan</p>
+                      <p className="text-xs font-medium text-ink-primary mt-0.5">{plan ? getPlanLabel(plan.plan) : "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-ink-tertiary font-medium uppercase tracking-wider">Join Date</p>
+                      <p className="text-xs font-medium text-ink-primary mt-0.5">{formatDate(member.joinDate)}</p>
+                    </div>
+                  </div>
+
+                  {member.email && (
+                    <div className="mb-3 pb-3 border-b border-hairline/50">
+                      <p className="text-[10px] text-ink-tertiary font-medium uppercase tracking-wider">Email</p>
+                      <p className="text-xs text-ink-secondary mt-0.5 truncate">{member.email}</p>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        router.push(`/members/${member.id}`)
+                      }}
+                      title="View member details"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openEditModal(member)
+                      }}
+                      title="Edit member"
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between">

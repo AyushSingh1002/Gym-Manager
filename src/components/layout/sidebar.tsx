@@ -42,23 +42,23 @@ export function Sidebar() {
       )}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-full w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 lg:translate-x-0 lg:static lg:z-auto",
+          "fixed top-0 left-0 z-50 h-full w-64 bg-canvas-secondary border-r border-hairline flex flex-col transition-transform duration-250 lg:translate-x-0 lg:static lg:z-auto safe-area-inset-left",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between h-16 px-5 border-b border-hairline flex-shrink-0">
-          <Link href="/dashboard" className="flex items-center gap-3 group hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-[var(--radius-md)] bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-sm">
+        <div className="flex items-center justify-between h-16 px-4 sm:px-5 border-b border-hairline flex-shrink-0">
+          <Link href="/dashboard" className="flex items-center gap-3 group hover:opacity-80 transition-opacity min-w-0">
+            <div className="w-8 h-8 rounded-[var(--radius-md)] bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-sm flex-shrink-0">
               <Dumbbell className="h-4 w-4 text-white" />
             </div>
-            <div>
-              <span className="text-base font-bold text-ink-primary block leading-tight">GymFlow</span>
+            <div className="min-w-0">
+              <span className="text-sm sm:text-base font-bold text-ink-primary block leading-tight truncate">GymFlow</span>
               <span className="text-xs text-ink-subtle">Pro</span>
             </div>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-1.5 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden"
+            className="p-1.5 min-h-10 min-w-10 rounded-[var(--radius-sm)] text-ink-tertiary hover:text-ink hover:bg-surface-2 transition-colors lg:hidden flex-shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
@@ -72,7 +72,7 @@ export function Sidebar() {
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3.5 py-2.5 rounded-[var(--radius-md)] text-sm font-medium transition-all duration-150",
+                  "flex items-center gap-3 px-3.5 py-2.5 sm:py-3 rounded-[var(--radius-md)] text-xs sm:text-sm font-medium transition-all duration-150 min-h-10",
                   isActive
                     ? "bg-primary/10 text-primary border border-primary/20"
                     : "text-ink-tertiary hover:bg-surface-2 hover:text-ink-secondary border border-transparent"
@@ -82,7 +82,7 @@ export function Sidebar() {
                   "h-4 w-4 flex-shrink-0",
                   isActive ? "text-primary" : ""
                 )} />
-                <span className="flex-1">{item.label}</span>
+                <span className="flex-1 truncate">{item.label}</span>
                 {isActive && (
                   <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
                 )}

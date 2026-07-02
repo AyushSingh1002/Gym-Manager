@@ -87,13 +87,13 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="py-8">
-        <div className="space-y-8">
-          <div className="space-y-2">
-            <div className="h-8 w-40 rounded-lg bg-surface-2 animate-pulse" />
-            <div className="h-4 w-56 rounded-lg bg-surface-2 animate-pulse" />
+      <main>
+        <div className="space-y-6 sm:space-y-8">
+          <div className="space-y-1.5 sm:space-y-2 pt-2 sm:pt-0">
+            <div className="h-6 sm:h-8 w-32 sm:w-40 rounded-lg bg-surface-2 animate-pulse" />
+            <div className="h-3 sm:h-4 w-40 sm:w-56 rounded-lg bg-surface-2 animate-pulse" />
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="grid gap-3 sm:gap-4 lg:gap-5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {Array.from({ length: 5 }).map((_, i) => (
               <CardSkeleton key={i} />
             ))}
@@ -102,13 +102,13 @@ export default function DashboardPage() {
             <Card variant="elevated">
               <CardHeader title="Recent Activity" />
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-4">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-full bg-surface-2 animate-pulse flex-shrink-0" />
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 w-3/4 rounded-lg bg-surface-2 animate-pulse" />
-                        <div className="h-3 w-1/2 rounded-lg bg-surface-2 animate-pulse" />
+                      <div className="h-8 sm:h-9 w-8 sm:w-9 rounded-full bg-surface-2 animate-pulse flex-shrink-0" />
+                      <div className="flex-1 space-y-1.5 sm:space-y-2">
+                        <div className="h-3 sm:h-4 w-3/4 rounded-lg bg-surface-2 animate-pulse" />
+                        <div className="h-2.5 sm:h-3 w-1/2 rounded-lg bg-surface-2 animate-pulse" />
                       </div>
                     </div>
                   ))}
@@ -160,14 +160,14 @@ export default function DashboardPage() {
   const { metrics, recentActivities } = data
 
   return (
-    <main className="py-8">
-      <div className="space-y-8 animate-fade-slide-up">
-        <div>
-          <h1 className="text-3xl font-bold text-ink-primary">Dashboard</h1>
-          <p className="text-sm text-ink-subtle mt-2">Welcome back! Here&apos;s your gym&apos;s overview.</p>
+    <main>
+      <div className="space-y-6 sm:space-y-8 animate-fade-slide-up">
+        <div className="pt-2 sm:pt-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-ink-primary leading-tight">Dashboard</h1>
+          <p className="text-xs sm:text-sm text-ink-subtle mt-1.5 sm:mt-2">Welcome back! Here&apos;s your gym&apos;s overview.</p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-3 sm:gap-4 lg:gap-5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {metricConfig.map(({ key, icon: Icon, color, lightColor }, index) => {
             const metric = metrics[key]
             return (
@@ -177,17 +177,17 @@ export default function DashboardPage() {
                 style={{ animationDelay: `${index * 50}ms`, animationFillMode: "backwards" }}
               >
                 <Card interactive variant="elevated">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`rounded-[var(--radius-md)] p-3 ${lightColor}`}>
-                      <Icon className={`h-5 w-5 text-ink`} />
+                  <div className="flex items-start justify-between mb-3 sm:mb-4">
+                    <div className={`rounded-[var(--radius-md)] p-2 sm:p-3 ${lightColor}`}>
+                      <Icon className={`h-4 sm:h-5 w-4 sm:w-5 text-ink`} />
                     </div>
-                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${color}`} />
+                    <span className={`inline-block h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full ${color}`} />
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-ink-primary">
+                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-ink-primary leading-tight">
                       {getMetricValue(metric)}
                     </p>
-                    <p className="mt-1.5 text-xs font-medium text-ink-tertiary">{metric.label}</p>
+                    <p className="mt-1 sm:mt-1.5 text-[10px] sm:text-xs font-medium text-ink-tertiary line-clamp-2">{metric.label}</p>
                   </div>
                 </Card>
               </div>
